@@ -7,6 +7,7 @@ public class conditionalObjectInteract : MonoBehaviour
     public float interactionRadius; // Radius interaksi
     public GameObject player;
     public GameObject taskItem; // Referensi ke item quest
+    public GameObject dialogAsset;
     private bool isCarryingTheItem = false;
     [SerializeField] private Outline _outline;
 
@@ -14,6 +15,11 @@ public class conditionalObjectInteract : MonoBehaviour
     {
         
         _outline = GetComponent<Outline>();
+
+        if (dialogAsset != null)
+        {
+            dialogAsset.SetActive(false);
+        }
     }
 
     void Update()
@@ -31,9 +37,18 @@ public class conditionalObjectInteract : MonoBehaviour
         // Menghitung jarak pemain n objek
         float distance = Vector3.Distance(player.transform.position, transform.position);
 
-        if (distance <= interactionRadius && isCarryingTheItem && Input.GetKeyDown(KeyCode.F))
+        if (distance <= interactionRadius && Input.GetKeyDown(KeyCode.F))
         {
-            Interact();
+            if(isCarryingTheItem){
+                Interact();
+            }
+            else{
+                if (dialogAsset != null)
+                {
+                    dialogAsset.SetActive(true);
+                }
+            }
+            
         }
     }
 
@@ -49,7 +64,7 @@ public class conditionalObjectInteract : MonoBehaviour
             _outline.ApplyOutline(false);
         }
 
-        // Destroy(taskItem);
-        // Destroy(gameObject);
+        Destroy(taskItem);
+        Destroy(dialogAsset);
     }
 }
