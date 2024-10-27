@@ -4,23 +4,23 @@ using UnityEngine;
 
 public class PandaInteractMultiple : MonoBehaviour
 {
-    public float interactDistance = 5f; // Jarak di mana panda bisa berinteraksi dengan objek
-    public Transform panda; // Referensi ke posisi panda
-    public float pushForce = 5f; // Kekuatan dorongan pada objek
+    public float interactDistance = 5f; 
+    public Transform panda; 
+    public float pushForce = 5f; 
 
     void Update()
     {
-        // Mendeteksi jika ada beberapa box di sekitar panda
+        
         Collider[] hitColliders = Physics.OverlapSphere(panda.position, interactDistance);
         
-        Debug.Log("Total objek terdeteksi: " + hitColliders.Length); // Debug: Tampilkan jumlah objek yang terdeteksi
+        Debug.Log("Total objek terdeteksi: " + hitColliders.Length); 
         
-        // Hanya lanjutkan jika tombol E ditekan
+        
         if (Input.GetKeyDown(KeyCode.E))
         {
             foreach (Collider hitCollider in hitColliders)
             {
-                // Cek apakah objek memiliki tag "Interactable"
+                
                 if (hitCollider.CompareTag("Interactable"))
                 {
                     Debug.Log("Objek terdeteksi: " + hitCollider.gameObject.name); // Debug: Nama objek terdeteksi

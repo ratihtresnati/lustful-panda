@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class QuestManager : MonoBehaviour
 {
-    public static QuestManager instance;  
-
-    private List<Quest> activeQuests = new List<Quest>();  
+    public static QuestManager instance;
+    public List<Quest> activeQuests = new List<Quest>();
 
     void Awake()
     {
@@ -20,7 +19,6 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    
     public void AddQuest(Quest newQuest)
     {
         activeQuests.Add(newQuest);
@@ -28,7 +26,6 @@ public class QuestManager : MonoBehaviour
         HintManager.instance.ShowHint(newQuest.questDescription);
     }
 
-    
     public void ItemCollected(string itemName)
     {
         foreach (Quest quest in activeQuests)
@@ -36,9 +33,18 @@ public class QuestManager : MonoBehaviour
             if (quest.targetItem == itemName && !quest.isCompleted)
             {
                 quest.CompleteQuest();
-                Debug.Log("Quest Selesai: " + "Temukan Pintu Untuk Membukanya");
-                HintManager.instance.ShowHint("Temukan pintu untuk membukanya.");
+                Debug.Log("Quest Selesai: " + quest.questName);
+                HintManager.instance.ShowHint("Buka pintu menggunakan kunci.");
             }
         }
+    }
+
+    public bool AllQuestsCompleted()
+    {
+        foreach (Quest quest in activeQuests)
+        {
+            if (!quest.isCompleted) return false;
+        }
+        return true;
     }
 }

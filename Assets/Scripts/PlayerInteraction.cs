@@ -4,72 +4,95 @@ using UnityEngine;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    public float interactionRange = 2.0f;  
-    public Transform interactableObject;  
+    public float interactionRange = 2.0f;
+    public Transform interactableObject;
     private bool hasGivenQuest = false;
-    public bool isFirstQuest = true;  
+    public bool isFirstQuest = true;
 
     void Start()
     {
-        
         if (isFirstQuest && !hasGivenQuest)
         {
             GiveInitialQuest();
         }
-    }  
+    }
 
     void Update()
     {
-        
         if (Input.GetKeyDown(KeyCode.Z))
         {
             CheckForInteraction();
+        }
+
+        // Cek apakah quest pertama sudah selesai, jika ya, berikan quest berikutnya
+        if (!isFirstQuest && hasGivenQuest && QuestManager.instance.AllQuestsCompleted())
+        {
+            GiveNextQuest();
+            hasGivenQuest = false; // Reset agar quest berikutnya bisa diberikan
         }
     }
 
     void CheckForInteraction()
     {
-        
-        float distance = Vector3.Distance(transform.position, interactableObject.position);
-
-        if (distance <= interactionRange && !hasGivenQuest)
+        if (interactableObject != null)
         {
-            InteractWithObject();  
-        }
-        else if (distance > interactionRange)
-        {
-            Debug.Log("Object tidak terdeteksi");
-        }
-    }
+            float distance = Vector3.Distance(transform.position, interactableObject.position);
+            Debug.DrawLine(transform.position, interactableObject.position, Color.red, 1.0f);
 
-    void InteractWithObject()
-    {
-        Debug.Log("Interaksi dengan object");
-        GiveQuest();
+            if (distance <= interactionRange)
+            {
+                GiveQuest();
+            }
+            else if (distance > interactionRange)
+            {
+                Debug.Log("Object di luar jangkauan interaksi.");
+            }
+        }
+        else
+        {
+            Debug.LogError("interactable Object belum dihubungkan di Inspector!");
+        }
     }
 
     void GiveQuest()
     {
-        if (!hasGivenQuest)
+        if (!hasGivenQuest && QuestManager.instance != null && HintManager.instance != null)
         {
-            
-            Quest newQuest = new Quest("Temukan Kunci", "Temukan kunci untuk membuka pintu", "Kunci");
-            QuestManager.instance.AddQuest(newQuest);
-            hasGivenQuest = true;  
-            HintManager.instance.ShowHint("Cari kunci di dekat ruangan untuk membuka pintu.");
+            // Logika quest pertama
         }
         else
         {
-            Debug.Log("Tidak ada Quest");
+            HintManager.instance.ShowHint("Pintu ini terkunci, coba cari kunci di sekitar ruangan.");
         }
     }
 
     void GiveInitialQuest()
     {
-        Quest initialQuest = new Quest("Quest Awal", "Temukan Kunci pembuka pintu", "Kunci");
-        QuestManager.instance.AddQuest(initialQuest);
-        hasGivenQuest = true;
-        isFirstQuest = false;
-        HintManager.instance.ShowHint("Mulailah dengan mencari Kunci Untuk membuka pintu.");
+        if (QuestManager.instance != null && HintManager.instance != null)
+        {
+            Quest initialQuest = new Quest("Quest Awal", "Temukan kunci pembuka pintu", "Kunci");
+            QuestManager.instance.AddQuest(initialQuest);
+            hasGivenQuest = true;
+            isFirstQuest = false;
+            HintManager.instance.ShowHint("Temukan kunci agar kamu keluar dari ruangan ini.");
+        }
+        else
+        {
+            Debug.LogError("Instance QuestManager atau HintManager tidak ditemukan!");
+        }
+    }
+
+    void GiveNextQuest()
+    {
+        if (QuestManager.instance != null && HintManager.instance != null)
+        {
+            Quest nextQuest = new Quest("Quest Berikutnya", "Temukan Objek Rahasia di dalam ruangan", "ObjekRahasia");
+            QuestManager.instance.AddQuest(nextQuest);
+            HintManager.instance.ShowHint("Ada sesuatu yang misterius di ruangan ini. Coba temukan objek rahasia untuk melanjutkan!");
+        }
+        else
+        {
+            Debug.LogError("Instance QuestManager atau HintManager tidak ditemukan!");
+        }
     }
 }
