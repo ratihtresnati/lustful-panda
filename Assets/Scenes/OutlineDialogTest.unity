@@ -340,6 +340,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3672592019407111999, guid: 7a0442ee2a34e7d43a6e08bc8616168b, type: 3}
   m_PrefabInstance: {fileID: 1178463653}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &271343853 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 281686994112787757, guid: 7a0442ee2a34e7d43a6e08bc8616168b, type: 3}
+  m_PrefabInstance: {fileID: 1178463653}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 271343851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &308116537
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -792,15 +803,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 778326406}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 29}
-  m_LocalScale: {x: 0.8650897, y: 0.8650897, z: 0.8650897}
+  m_LocalPosition: {x: 0, y: 0, z: 24.748}
+  m_LocalScale: {x: 0.55087954, y: 0.55087954, z: 0.55087954}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1241446719}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 741, y: 497}
+  m_AnchoredPosition: {x: 827, y: 503.70996}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &778326408
@@ -976,6 +987,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 825929967}
+    - target: {fileID: 846098696514987179, guid: 7a0442ee2a34e7d43a6e08bc8616168b, type: 3}
+      propertyPath: outline
+      value: 
+      objectReference: {fileID: 271343853}
     - target: {fileID: 3672592019407111999, guid: 7a0442ee2a34e7d43a6e08bc8616168b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.43
@@ -1056,15 +1071,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1217458643}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 12.978747, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 4.2521}
+  m_LocalScale: {x: 9.172731, y: 0.7067501, z: 0.7067501}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1241446719}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 527, y: 496}
+  m_AnchoredPosition: {x: 731.02, y: 503}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1217458645
@@ -1754,6 +1769,7 @@ MonoBehaviour:
   taskItem: {fileID: 31331896}
   dialogAsset: {fileID: 7048687555590380004}
   _outline: {fileID: 1603353241}
+  itemOutline: {fileID: 1252878848}
   questNum: 1
 --- !u!1 &1608586946
 GameObject:
@@ -2035,6 +2051,7 @@ MonoBehaviour:
   taskItem: {fileID: 271343851}
   dialogAsset: {fileID: 1007847996}
   _outline: {fileID: 1944147728}
+  itemOutline: {fileID: 271343853}
   questNum: 2
 --- !u!65 &1944147732
 BoxCollider:

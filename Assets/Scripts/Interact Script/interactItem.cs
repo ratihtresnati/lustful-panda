@@ -67,8 +67,7 @@ public class interactItem : MonoBehaviour
         Debug.Log("membawa barang");
 
         // Matiin outline
-        if (outline != null)
-        {
+        if (outline != null){
             outline.ApplyOutline(false);
         }
 
@@ -88,9 +87,7 @@ public class interactItem : MonoBehaviour
     {
         Debug.Log("barang dilepas");
 
-        // Nyalain outline
-        if (outline != null)
-        {
+        if (outline != null){
             outline.ApplyOutline(true);
         }
 

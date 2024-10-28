@@ -10,12 +10,11 @@ public class conditionalObjectInteract : MonoBehaviour
     public GameObject dialogAsset;
     private bool isCarryingTheItem = false;
     [SerializeField] private Outline _outline;
+    [SerializeField] private Outline itemOutline;
     public int questNum;
 
     void Start()
     {
-        _outline = GetComponent<Outline>();
-
         if (dialogAsset != null)
         {
             dialogAsset.SetActive(false);
@@ -33,10 +32,8 @@ public class conditionalObjectInteract : MonoBehaviour
         {
             isCarryingTheItem = false;
         }
-
         // Menghitung jarak pemain n objek
         float distance = Vector3.Distance(player.transform.position, transform.position);
-
         if (distance <= interactionRadius && Input.GetKeyDown(KeyCode.F))
         {
             if (isCarryingTheItem)
@@ -45,18 +42,14 @@ public class conditionalObjectInteract : MonoBehaviour
             }
             else
             {
-                if (dialogAsset != null)
-                {
-                    dialogAsset.SetActive(true);
-                }
+                itemOutline.ApplyOutline(true);
+                dialogAsset.SetActive(true);
             }
         }
     }
 
     void Interact()
     {
-        Debug.Log("interaksi objek berhasil");
-
         switch (questNum) {
         case 1: //npc panda
             NPCPandaStateController npcPanda = GetComponent<NPCPandaStateController>();
@@ -64,26 +57,22 @@ public class conditionalObjectInteract : MonoBehaviour
             {
                 npcPanda._isComplete = true;
                 QuestManager.instance._questIsComplete = true;
-                if (_outline != null)
-                        {
-                            _outline.ApplyOutline(false);
-                        }
+                if (_outline != null){
+                    _outline.ApplyOutline(false);
                     }
-                    else
-                    {
-                        Debug.LogWarning("NPCPandaStateController tidak ditemukan pada objek ini.");
-                    }
-            break;
-
+            }
+            else
+            {
+                Debug.LogWarning("NPCPandaStateController tidak ditemukan pada objek ini.");
+            }
+        break;
         case 2: //final door
             BoxCollider boxCollider = GetComponent<BoxCollider>();
-        if (boxCollider != null)
-        {
-            boxCollider.enabled = false;
+            if (boxCollider != null){
+                boxCollider.enabled = false;
+            }
+        break;
         }
-            break;
-        }
-
         Destroy(taskItem);
         Destroy(dialogAsset);
     }

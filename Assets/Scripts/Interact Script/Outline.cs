@@ -1,5 +1,4 @@
 ﻿//  QuickOutline
-//
 //  Copyright © 2018 Chris Nolet. All rights reserved.
 
 using System;
