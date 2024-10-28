@@ -10,10 +10,23 @@ public class conditionalObjectInteract : MonoBehaviour
     public GameObject dialogAsset;
     private bool isCarryingTheItem = false;
     [SerializeField] private Outline _outline;
+    [SerializeField] private ObjectInfo ObjectInput;
+
+    public enum ObjectInfo {
+        PandaNPC,
+        FinalDoor
+    }
+
+    // Variabel penyimpanan internal untuk ObjectQuest
+    private ObjectInfo _objectQuest;
+
+    public ObjectInfo ObjectQuest {
+        get { return _objectQuest; }
+        set { _objectQuest = value; }
+    }
 
     void Start()
     {
-        
         _outline = GetComponent<Outline>();
 
         if (dialogAsset != null)
@@ -25,7 +38,7 @@ public class conditionalObjectInteract : MonoBehaviour
     void Update()
     {
         // Check bawaan item
-        if (taskItem.transform.parent == player.transform)
+        if (taskItem != null && taskItem.transform.parent == player.transform)
         {
             isCarryingTheItem = true;
         }
@@ -39,16 +52,17 @@ public class conditionalObjectInteract : MonoBehaviour
 
         if (distance <= interactionRadius && Input.GetKeyDown(KeyCode.F))
         {
-            if(isCarryingTheItem){
+            if (isCarryingTheItem)
+            {
                 Interact();
             }
-            else{
+            else
+            {
                 if (dialogAsset != null)
                 {
                     dialogAsset.SetActive(true);
                 }
             }
-            
         }
     }
 
@@ -56,13 +70,40 @@ public class conditionalObjectInteract : MonoBehaviour
     {
         Debug.Log("interaksi objek berhasil");
 
-        NPCPandaStateController npcPanda = GetComponent<NPCPandaStateController>();
-        npcPanda._isComplete = true;
-        QuestManager.instance._questIsComplete = true;
-        if(_outline != null)
-        {
-            _outline.ApplyOutline(false);
-        }
+        switch (ObjectQuest)
+    {
+        case ObjectInfo.PandaNPC:
+            // Only attempt to get the component if it exists
+            NPCPandaStateController npcPanda = GetComponent<NPCPandaStateController>();
+            if (npcPanda != null)
+            {
+                npcPanda._isComplete = true;
+                QuestManager.instance._questIsComplete = true;
+                if (_outline != null)
+                {
+                    _outline.ApplyOutline(false);
+                }
+            }
+            else
+            {
+                Debug.LogWarning("NPCPandaStateController tidak ditemukan pada objek ini.");
+            }
+            break;
+
+        case ObjectInfo.FinalDoor:
+            // Ensure collider is disabled only for the FinalDoor case
+            Collider objectCollider = GetComponent<Collider>();
+            if (objectCollider != null)
+            {
+                objectCollider.enabled = false;
+                Debug.Log("Collider pada FinalDoor berhasil dimatikan.");
+            }
+            else
+            {
+                Debug.LogWarning("Collider tidak ditemukan pada objek ini.");
+            }
+            break;
+    }
 
         Destroy(taskItem);
         Destroy(dialogAsset);

@@ -26,7 +26,7 @@ public class interactItem : MonoBehaviour
         // Menghitung jarak antara pemain dan objek
         float distance = Vector3.Distance(player.transform.position, transform.position);
 
-        // Mengecek apakah jarak pemain kurang dari radius pickup
+        // ngecek jarak pemain di debug
         if (distance <= pickupRadius)
         {
             if (obstacleObject != null)
