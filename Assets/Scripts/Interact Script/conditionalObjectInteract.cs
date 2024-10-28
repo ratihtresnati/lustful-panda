@@ -58,7 +58,7 @@ public class conditionalObjectInteract : MonoBehaviour
         Debug.Log("interaksi objek berhasil");
 
         switch (questNum) {
-        case 1:
+        case 1: //npc panda
             NPCPandaStateController npcPanda = GetComponent<NPCPandaStateController>();
             if (npcPanda != null)
             {
@@ -75,7 +75,7 @@ public class conditionalObjectInteract : MonoBehaviour
                     }
             break;
 
-        case 2:
+        case 2: //final door
             BoxCollider boxCollider = GetComponent<BoxCollider>();
         if (boxCollider != null)
         {
