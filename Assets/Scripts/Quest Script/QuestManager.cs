@@ -33,7 +33,7 @@ public class QuestManager : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(_currentQuest);
+       // Debug.Log(_currentQuest);
         // Quest(_currentQuest);   
 
         if(_questIsComplete == true)

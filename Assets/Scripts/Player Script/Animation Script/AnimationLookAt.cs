@@ -27,6 +27,23 @@ public class AnimationLookAt : MonoBehaviour
         switch (_currentState)
         {
             case Turn.Idle:
+
+            if(Input.GetKey("m"))
+            {
+                _currentState = Turn.Right;
+            }else
+            {
+                _currentState = Turn.StopTurn;
+            }
+
+        if(Input.GetKey("n"))
+        {
+            _currentState = Turn.Left;
+        }else
+        {
+            _currentState = Turn.StopTurn;
+        }
+
                 if(yRotation >= 25f && yRotation <= 65f || yRotation <= 330f && yRotation >= 300f)
                 {
                     if(Input.GetKey("d"))
