@@ -10,21 +10,28 @@ public class conditionalObjectInteract : MonoBehaviour
     public GameObject dialogAsset;
     private bool isCarryingTheItem = false;
     [SerializeField] private Outline _outline;
+
     [SerializeField] private Outline itemOutline;
     public int questNum;
+    
+    private PlayerHoldPosition playerHoldPosition;
 
     void Start()
     {
-        if (dialogAsset != null)
+        playerHoldPosition = FindObjectOfType<PlayerHoldPosition>();
+        _outline = GetComponent<Outline>();
+         if (dialogAsset != null)
         {
             dialogAsset.SetActive(false);
         }
+
     }
 
     void Update()
     {
         // Check bawaan item
-        if (taskItem != null && taskItem.transform.parent == player.transform)
+
+        if (taskItem != null && taskItem.transform.parent == playerHoldPosition.PositionParent())
         {
             isCarryingTheItem = true;
         }
