@@ -7,53 +7,80 @@ public class conditionalObjectInteract : MonoBehaviour
     public float interactionRadius; // Radius interaksi
     public GameObject player;
     public GameObject taskItem; // Referensi ke item quest
+    public GameObject dialogAsset;
     private bool isCarryingTheItem = false;
     [SerializeField] private Outline _outline;
+
+    [SerializeField] private Outline itemOutline;
+    public int questNum;
+    
     private PlayerHoldPosition playerHoldPosition;
 
     void Start()
     {
         playerHoldPosition = FindObjectOfType<PlayerHoldPosition>();
         _outline = GetComponent<Outline>();
+         if (dialogAsset != null)
+        {
+            dialogAsset.SetActive(false);
+        }
+
     }
 
     void Update()
     {
         // Check bawaan item
-        if (taskItem != null)
+
+        if (taskItem != null && taskItem.transform.parent == playerHoldPosition.PositionParent())
         {
-            if (taskItem.transform.parent == playerHoldPosition.PositionParent())
+            isCarryingTheItem = true;
+        }
+        else
+        {
+            isCarryingTheItem = false;
+        }
+        // Menghitung jarak pemain n objek
+        float distance = Vector3.Distance(player.transform.position, transform.position);
+        if (distance <= interactionRadius && Input.GetKeyDown(KeyCode.F))
+        {
+            if (isCarryingTheItem)
             {
-                isCarryingTheItem = true;
+                Interact();
             }
             else
             {
-                isCarryingTheItem = false;
+                itemOutline.ApplyOutline(true);
+                dialogAsset.SetActive(true);
             }
-        }
-
-        // Menghitung jarak pemain n objek
-        float distance = Vector3.Distance(player.transform.position, transform.position);
-
-        if (distance <= interactionRadius && isCarryingTheItem && Input.GetKeyDown(KeyCode.F))
-        {
-            Interact();
         }
     }
 
     void Interact()
     {
-        Debug.Log("interaksi objek berhasil");
-
-        NPCPandaStateController npcPanda = GetComponent<NPCPandaStateController>();
-        npcPanda._isComplete = true;
-        QuestManager.instance._questIsComplete = true;
-        if(_outline != null)
-        {
-            _outline.ApplyOutline(false);
+        switch (questNum) {
+        case 1: //npc panda
+            NPCPandaStateController npcPanda = GetComponent<NPCPandaStateController>();
+            if (npcPanda != null)
+            {
+                npcPanda._isComplete = true;
+                QuestManager.instance._questIsComplete = true;
+                if (_outline != null){
+                    _outline.ApplyOutline(false);
+                    }
+            }
+            else
+            {
+                Debug.LogWarning("NPCPandaStateController tidak ditemukan pada objek ini.");
+            }
+        break;
+        case 2: //final door
+            BoxCollider boxCollider = GetComponent<BoxCollider>();
+            if (boxCollider != null){
+                boxCollider.enabled = false;
+            }
+        break;
         }
-
         Destroy(taskItem);
-        // Destroy(gameObject);
+        Destroy(dialogAsset);
     }
 }

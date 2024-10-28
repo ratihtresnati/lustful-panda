@@ -80,7 +80,7 @@ public class PlayerInteraction : MonoBehaviour
 
     // void GiveInitialQuest()
     // {
-    //     Quest initialQuest = new Quest("Tutorial Rolling", "Gunakan Q untuk berguling", "Bamboo");
+    //     Quest initialQuest = new Quest("Tutorial Rolling", "Q untuk berguling", "Bamboo");
     //     QuestManager.instance.AddQuest(initialQuest);
     //     hasGivenQuest = true;
     //     isFirstQuest = false;

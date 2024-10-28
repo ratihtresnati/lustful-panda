@@ -29,7 +29,7 @@ public class interactItem : MonoBehaviour
         // Menghitung jarak antara pemain dan objek
         float distance = Vector3.Distance(player.transform.position, transform.position);
 
-        // Mengecek apakah jarak pemain kurang dari radius pickup
+        // ngecek jarak pemain di debug
         if (distance <= pickupRadius)
         {
             if (obstacleObject != null)
@@ -70,8 +70,7 @@ public class interactItem : MonoBehaviour
         Debug.Log("membawa barang");
 
         // Matiin outline
-        if (outline != null)
-        {
+        if (outline != null){
             outline.ApplyOutline(false);
         }
 
@@ -95,9 +94,7 @@ public class interactItem : MonoBehaviour
     {
         Debug.Log("barang dilepas");
 
-        // Nyalain outline
-        if (outline != null)
-        {
+        if (outline != null){
             outline.ApplyOutline(true);
         }
 
