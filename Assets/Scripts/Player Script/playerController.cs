@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -55,8 +56,14 @@ public class playerController : MonoBehaviour
 
         Keyframe roll_lastFrame = _rollCurve[_rollCurve.length - 1];
         _rollTimer = roll_lastFrame.time;
+
+        gameInput.OnRunningEvent += OnRunEvent;
+        gameInput.OnJumpingEvent += OnJumpEvent;
+        gameInput.OnRollingEvent += OnRollEvent;
+
     }
 
+  
     // Update is called once per frame
     void Update()
     {
@@ -71,17 +78,17 @@ public class playerController : MonoBehaviour
 
         _speed = _walkSpeed;
 
-        Debug.Log(inputVector.x);
 
         move = new Vector3(inputVector.x, 0, inputVector.y);
 
         //walk & run
-        _isRun = Input.GetKey(KeyCode.LeftShift);
-        _speed = _isRun ? _runSpeed : _walkSpeed; 
+        //_isRun = Input.GetKey(KeyCode.LeftShift);
+
+       // _speed = _isRun ? _runSpeed : _walkSpeed; 
         
-        if (!Input.GetKey(KeyCode.LeftShift) && _isRun)
+        if (_isRun)
         {
-            _isRun = false;
+                _isRun = false;
         }
 
         float magnitude = Mathf.Clamp01(move.magnitude) * _speed;
@@ -112,25 +119,11 @@ public class playerController : MonoBehaviour
           
         }
 
-            //Jump
+
             if (characterController.isGrounded)
             {
                 ySpeed = 0;
-                if (Input.GetKeyDown(KeyCode.Space)) 
-                { 
-                    StartCoroutine(Jumping());
-                    _currentState = JumpState.Jump;
-                }
             }
-
-            //Rolling
-            if (!_isJump) { 
-                if (Input.GetKeyDown(KeyCode.Q))
-                {
-                    if (velocity.magnitude != 0) StartCoroutine(Rolling());
-                }
-            }
-
         }
 
         //animasi
@@ -143,9 +136,30 @@ public class playerController : MonoBehaviour
         {
             StopAnimation();
         }
+        Debug.Log(isRooling);
+    }
+
+    private void OnRunEvent(object sander, EventArgs e)
+    {
+        
+        _isRun = true;
+        _speed = _runSpeed;
+
     }
 
     #region Rolling
+
+    private void OnRollEvent(object sender, EventArgs e)
+    {
+        if (!isRooling)
+        { 
+            if (!_isJump)
+            {
+                if (velocity.magnitude != 0) StartCoroutine(Rolling());
+            }
+        }
+    }
+
     IEnumerator Rolling()
     {
         //selagi jump dia gak bisa roll
@@ -172,6 +186,19 @@ public class playerController : MonoBehaviour
     #endregion
     
     #region Jumping
+
+    private void OnJumpEvent(object sander, EventArgs e)
+    {
+        if (!isRooling)
+        {
+            if (characterController.isGrounded)
+            {
+                StartCoroutine(Jumping());
+                _currentState = JumpState.Jump;
+            }
+        }
+    }
+
     IEnumerator Jumping()
     {
         _isJump = true;
@@ -179,7 +206,7 @@ public class playerController : MonoBehaviour
         yield return new WaitForSeconds(_jumpDelayDuration);
         
         ySpeed = _jumpSpeed;
-        while (ySpeed != 0) {
+        while (ySpeed >= -1) {
             _isJump = true;
 
             yield return null;
