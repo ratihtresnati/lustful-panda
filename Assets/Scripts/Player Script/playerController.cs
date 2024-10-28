@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Xml.Serialization;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class playerController : MonoBehaviour
 {
@@ -23,11 +24,15 @@ public class playerController : MonoBehaviour
     private float ySpeed;
     private bool _isRun;
 
+    [SerializeField]
+    private GameInput gameInput;
+
     private bool isRooling;
     private float _rollTimer;
     private float _speed;
     private float hInput;
     private float vInput;
+    private Vector2 inputVector;
     private Vector3 move;
     private Vector3 velocity;
 
@@ -44,6 +49,7 @@ public class playerController : MonoBehaviour
 
     void Start()
     {
+
         characterController = GetComponent<CharacterController>();
         CharacterAnimatorController = GetComponent<CharacterAnimatorController>();
 
@@ -57,12 +63,17 @@ public class playerController : MonoBehaviour
         if (!isRooling)
         {
         gameObject.tag = "PandaMC";
-        hInput = Input.GetAxis("Horizontal");
-        vInput = Input.GetAxis("Vertical");
+
+        // hInput = Input.GetAxis("Horizontal");
+        // vInput = Input.GetAxis("Vertical");
+
+        inputVector = gameInput.GetMovementControl();
 
         _speed = _walkSpeed;
 
-        move = new Vector3(hInput, 0, vInput);
+        Debug.Log(inputVector.x);
+
+        move = new Vector3(inputVector.x, 0, inputVector.y);
 
         //walk & run
         _isRun = Input.GetKey(KeyCode.LeftShift);
@@ -123,7 +134,7 @@ public class playerController : MonoBehaviour
         }
 
         //animasi
-        AnimateWalkRun(new Vector3(hInput, vInput, 0));
+        AnimateWalkRun(new Vector3(inputVector.x, inputVector.x, 0));
         AnimateJump();
         AnimateRest();
         AnimateSit();
