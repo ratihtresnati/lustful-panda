@@ -10,20 +10,7 @@ public class conditionalObjectInteract : MonoBehaviour
     public GameObject dialogAsset;
     private bool isCarryingTheItem = false;
     [SerializeField] private Outline _outline;
-    [SerializeField] private ObjectInfo ObjectInput;
-
-    public enum ObjectInfo {
-        PandaNPC,
-        FinalDoor
-    }
-
-    // Variabel penyimpanan internal untuk ObjectQuest
-    private ObjectInfo _objectQuest;
-
-    public ObjectInfo ObjectQuest {
-        get { return _objectQuest; }
-        set { _objectQuest = value; }
-    }
+    public int questNum;
 
     void Start()
     {
@@ -70,40 +57,32 @@ public class conditionalObjectInteract : MonoBehaviour
     {
         Debug.Log("interaksi objek berhasil");
 
-        switch (ObjectQuest)
-    {
-        case ObjectInfo.PandaNPC:
-            // Only attempt to get the component if it exists
+        switch (questNum) {
+        case 1:
             NPCPandaStateController npcPanda = GetComponent<NPCPandaStateController>();
             if (npcPanda != null)
             {
                 npcPanda._isComplete = true;
                 QuestManager.instance._questIsComplete = true;
                 if (_outline != null)
-                {
-                    _outline.ApplyOutline(false);
-                }
-            }
-            else
-            {
-                Debug.LogWarning("NPCPandaStateController tidak ditemukan pada objek ini.");
-            }
+                        {
+                            _outline.ApplyOutline(false);
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning("NPCPandaStateController tidak ditemukan pada objek ini.");
+                    }
             break;
 
-        case ObjectInfo.FinalDoor:
-            // Ensure collider is disabled only for the FinalDoor case
-            Collider objectCollider = GetComponent<Collider>();
-            if (objectCollider != null)
-            {
-                objectCollider.enabled = false;
-                Debug.Log("Collider pada FinalDoor berhasil dimatikan.");
-            }
-            else
-            {
-                Debug.LogWarning("Collider tidak ditemukan pada objek ini.");
-            }
+        case 2:
+            BoxCollider boxCollider = GetComponent<BoxCollider>();
+        if (boxCollider != null)
+        {
+            boxCollider.enabled = false;
+        }
             break;
-    }
+        }
 
         Destroy(taskItem);
         Destroy(dialogAsset);
