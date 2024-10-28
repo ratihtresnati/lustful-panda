@@ -25,7 +25,7 @@ public class NPCPandaStateController : MonoBehaviour
 
     [Header("Quest")]
     [SerializeField] private bool _isQuest = false;
-    [SerializeField] private bool _isComplete = false;
+    public bool _isComplete = false;
 
     void Update()
     {
@@ -59,7 +59,7 @@ public class NPCPandaStateController : MonoBehaviour
                 _animator.SetFloat("Idle", 1.1f);
 
                 //tambahin kalo quest udh beres
-                if (_isQuest == true)
+                if (_isQuest == true  && _isComplete == true)
                 {
                     VelocityCounting();
                     if (_velocity > _idleTime)
@@ -86,7 +86,7 @@ public class NPCPandaStateController : MonoBehaviour
                 {   
                     VelocityReset();
                     
-                    if(_isQuest == true && _isComplete == true)
+                    if(_isQuest == true)
                     {
                         _animator.SetBool("isIdle", false);
                         _animator.SetFloat("Idle", 0f);
@@ -137,7 +137,7 @@ public class NPCPandaStateController : MonoBehaviour
                     Quaternion tr = Quaternion.Euler(0, _targetRotation, 0);
                     transform.rotation = Quaternion.Slerp(transform.rotation, tr, Time.deltaTime * _rotationSpeed);
 
-                    if (Mathf.Abs(transform.rotation.eulerAngles.y - _targetRotation) < 0.001f)
+                    if (Mathf.Abs(transform.rotation.eulerAngles.y - tr.eulerAngles.y) < 0.001f)
                     {
                         _isQuest = false;
                         _currentState = NPCPanda.Sit;

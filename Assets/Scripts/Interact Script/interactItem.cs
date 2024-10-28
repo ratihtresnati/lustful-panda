@@ -1,16 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class interactItem : MonoBehaviour
 {
     public float pickupRadius;
     private bool canPickup = false;
-    private bool isCarryingItem = false;
+    bool isCarryingItem = false;
     public GameObject player;
     public GameObject obstacleObject; 
     public Vector3 grabOffsetPlayer; // jarak objek setelah diambil karakter
     public Vector3 dropOffsetPlayer; // jarak objek setelah ditaro karakter
+    public Outline outline;
+
+    [SerializeField] private UnityEvent _nextObject;
 
     void Start()
     {
@@ -26,58 +30,78 @@ public class interactItem : MonoBehaviour
         if (distance <= pickupRadius)
         {
             if (obstacleObject != null)
-        {
-            Debug.Log("belum bisa interact");
-            return; // Keluar dari fungsi Update jika panda masih ada
-        }
-            else{
-                canPickup = true;
-            Debug.Log("ambil barang = E");
+            {
+                Debug.Log("belum bisa interact");
+                return;
             }
-            
+            else
+            {
+                canPickup = true;
+                Debug.Log("ambil barang = E");
+            }
         }
-        else{
+        else
+        {
             canPickup = false;
         }
 
-        // Jika berada dalam radius dan tombol "E" ditekan, ambil objek
+        // Ambil item
         if (canPickup && Input.GetKeyDown(KeyCode.E))
         {
-            Pickup();  // Fungsi untuk mengambil objek
+            if (!isCarryingItem)
+            {
+                Pickup();
+            }
         }
 
-        // Jika pemain menekan tombol "R", drop objek
+        // Drop item
         if (isCarryingItem && Input.GetKeyDown(KeyCode.R))
         {
-            Drop();  // Fungsi untuk drop objek
+            Drop();
         }
     }
 
     void Pickup()
     {
+        _nextObject.Invoke();
         Debug.Log("membawa barang");
-        // Kamu bisa menambahkan logika lain di sini, seperti menambahkannya ke inventory
-        
-        // Memindahkan objek ke dekat karakter dengan offset
-        transform.position = player.transform.position + grabOffsetPlayer;
 
-        // Menjadikan objek anak dari pemain, sehingga mengikuti pemain jika diperlukan
+        // Matiin outline
+        if (outline != null)
+        {
+            outline.ApplyOutline(false);
+        }
+
+        // Positioning item
+        transform.position = player.transform.TransformPoint(grabOffsetPlayer);
+        float yPlayer = player.transform.eulerAngles.y;
+        transform.rotation = Quaternion.Euler(0, yPlayer, 0);
+
+        // Menjadikan pemain parent, biar nempel
         transform.SetParent(player.transform);
 
-        isCarryingItem = true;  // Menandakan bahwa pemain sedang membawa objek
-        canPickup = false;      // Tidak bisa mengambil objek lagi sampai dilepaskan
+        isCarryingItem = true;
+        canPickup = false;
     }
 
     void Drop()
     {
         Debug.Log("barang dilepas");
-        // Memindahkan objek ke posisi pemain saat ini
-        transform.position = player.transform.position + dropOffsetPlayer;
 
-        // Menghapus objek sebagai anak dari pemain (tidak mengikuti pemain lagi)
+        // Nyalain outline
+        if (outline != null)
+        {
+            outline.ApplyOutline(true);
+        }
+
+        // Positioning item
+        transform.position = player.transform.TransformPoint(dropOffsetPlayer);
+        transform.localRotation = Quaternion.Euler(0, 0, 0);
+
+        // Lepas parent
         transform.SetParent(null);
 
-        isCarryingItem = false;  // Menandakan bahwa pemain tidak lagi membawa objek
-        canPickup = true;        // Pemain bisa mengambil objek kembali
+        isCarryingItem = false;
+        canPickup = true;
     }
 }

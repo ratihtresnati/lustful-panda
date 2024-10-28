@@ -4,21 +4,21 @@ using UnityEngine;
 
 public class conditionalObjectInteract : MonoBehaviour
 {
-    public float interactionRadius;  // Radius interaksi dengan panda
-    public GameObject player;        // Referensi ke pemain
-    public GameObject taskItem;        // Referensi ke objek bambu yang harus dibawa
-    public GameObject floatingClue;  // Referensi ke objek melayang (clue interaksi)
-    private bool isCarryingTheItem = false; // Flag apakah pemain sedang membawa bambu
+    public float interactionRadius; // Radius interaksi
+    public GameObject player;
+    public GameObject taskItem; // Referensi ke item quest
+    private bool isCarryingTheItem = false;
+    [SerializeField] private Outline _outline;
 
     void Start()
     {
-        // Pastikan objek melayang (clue) tidak aktif di awal
-        floatingClue.SetActive(false);
+        
+        _outline = GetComponent<Outline>();
     }
 
     void Update()
     {
-        // Cek apakah pemain sedang membawa bambu (taskItem sebagai child dari player)
+        // Check bawaan item
         if (taskItem.transform.parent == player.transform)
         {
             isCarryingTheItem = true;
@@ -28,23 +28,12 @@ public class conditionalObjectInteract : MonoBehaviour
             isCarryingTheItem = false;
         }
 
-        // Menghitung jarak antara pemain dan panda (gameObject ini adalah panda)
+        // Menghitung jarak pemain n objek
         float distance = Vector3.Distance(player.transform.position, transform.position);
 
-        // Tampilkan objek melayang jika pemain membawa bambu dan dekat dengan panda
-        if (isCarryingTheItem)
-        {
-            floatingClue.SetActive(true);  // Menampilkan clue melayang di atas panda
-        }
-        else
-        {
-            floatingClue.SetActive(false); // Sembunyikan clue jika pemain terlalu jauh atau tidak membawa bambu
-        }
-
-        // Jika jarak dekat dan pemain membawa bambu, tampilkan instruksi untuk interaksi
         if (distance <= interactionRadius && isCarryingTheItem && Input.GetKeyDown(KeyCode.F))
         {
-            Interact();  // Fungsi untuk interaksi dengan panda
+            Interact();
         }
     }
 
@@ -52,10 +41,15 @@ public class conditionalObjectInteract : MonoBehaviour
     {
         Debug.Log("interaksi objek berhasil");
 
-        Destroy(taskItem);
-        Destroy(gameObject);
+        NPCPandaStateController npcPanda = GetComponent<NPCPandaStateController>();
+        npcPanda._isComplete = true;
+        QuestManager.instance._questIsComplete = true;
+        if(_outline != null)
+        {
+            _outline.ApplyOutline(false);
+        }
 
-        // Menghilangkan clue
-        floatingClue.SetActive(false);
+        // Destroy(taskItem);
+        // Destroy(gameObject);
     }
 }
