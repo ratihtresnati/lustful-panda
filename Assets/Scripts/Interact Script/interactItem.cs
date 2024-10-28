@@ -13,12 +13,15 @@ public class interactItem : MonoBehaviour
     public Vector3 grabOffsetPlayer; // jarak objek setelah diambil karakter
     public Vector3 dropOffsetPlayer; // jarak objek setelah ditaro karakter
     public Outline outline;
+    private PlayerHoldPosition playerHoldPosition;
 
     [SerializeField] private UnityEvent _nextObject;
 
+    [SerializeField] private GameObject _itemsPosition;
+
     void Start()
     {
-
+        playerHoldPosition = FindObjectOfType<PlayerHoldPosition>();
     }
 
     void Update()
@@ -72,13 +75,17 @@ public class interactItem : MonoBehaviour
             outline.ApplyOutline(false);
         }
 
+        transform.parent = playerHoldPosition.PositionParent();
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.Euler(0, 90, 0);
+
         // Positioning item
-        transform.position = player.transform.TransformPoint(grabOffsetPlayer);
-        float yPlayer = player.transform.eulerAngles.y;
-        transform.rotation = Quaternion.Euler(0, yPlayer, 0);
+        // transform.position = player.transform.TransformPoint(grabOffsetPlayer);
+        // float yPlayer = player.transform.eulerAngles.y;
+        // transform.rotation = Quaternion.Euler(0, yPlayer, 0);
 
         // Menjadikan pemain parent, biar nempel
-        transform.SetParent(player.transform);
+        // transform.SetParent(player.transform);
 
         isCarryingItem = true;
         canPickup = false;

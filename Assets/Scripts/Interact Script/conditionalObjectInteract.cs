@@ -9,23 +9,27 @@ public class conditionalObjectInteract : MonoBehaviour
     public GameObject taskItem; // Referensi ke item quest
     private bool isCarryingTheItem = false;
     [SerializeField] private Outline _outline;
+    private PlayerHoldPosition playerHoldPosition;
 
     void Start()
     {
-        
+        playerHoldPosition = FindObjectOfType<PlayerHoldPosition>();
         _outline = GetComponent<Outline>();
     }
 
     void Update()
     {
         // Check bawaan item
-        if (taskItem.transform.parent == player.transform)
+        if (taskItem != null)
         {
-            isCarryingTheItem = true;
-        }
-        else
-        {
-            isCarryingTheItem = false;
+            if (taskItem.transform.parent == playerHoldPosition.PositionParent())
+            {
+                isCarryingTheItem = true;
+            }
+            else
+            {
+                isCarryingTheItem = false;
+            }
         }
 
         // Menghitung jarak pemain n objek
@@ -49,7 +53,7 @@ public class conditionalObjectInteract : MonoBehaviour
             _outline.ApplyOutline(false);
         }
 
-        // Destroy(taskItem);
+        Destroy(taskItem);
         // Destroy(gameObject);
     }
 }

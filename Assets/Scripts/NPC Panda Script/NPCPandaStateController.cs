@@ -29,6 +29,7 @@ public class NPCPandaStateController : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(_timeBeforeIdle);
         switch (_currentState)
         {
             case NPCPanda.Idle:
@@ -47,11 +48,16 @@ public class NPCPandaStateController : MonoBehaviour
                         _currentState = NPCPanda.Rest;
                     }
 
-                    if(_isSit == true && _isQuest == true || _isSit == true)
+                    if(_isSit == true)
                     {
                         _timeBeforeIdle = 0;
                         _currentState = NPCPanda.Sit;
                     }
+                }
+
+                if(_timeBeforeIdle >= 5)
+                {
+                    _timeBeforeIdle = 0;
                 }
                 break;
             case NPCPanda.Sit:
