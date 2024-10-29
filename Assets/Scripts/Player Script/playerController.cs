@@ -61,7 +61,6 @@ public class playerController : MonoBehaviour
         gameInput.OutRunningEvent += OutRunEvent;
         gameInput.OnJumpingEvent += OnJumpEvent;
         gameInput.OnRollingEvent += OnRollEvent;
-
     }
 
    
@@ -73,7 +72,7 @@ public class playerController : MonoBehaviour
         HanddleMovements();
 
         //animasi
-        AnimateWalkRun(new Vector3(inputVector.x, inputVector.x, 0));
+        AnimateWalkRun(new Vector3(inputVector.x, inputVector.y, 0));
         AnimateJump();
         AnimateRest();
         AnimateSit();
@@ -247,7 +246,7 @@ public class playerController : MonoBehaviour
     //animasi walk & run
     private void AnimateWalkRun(Vector3 input) 
     {
-        float multiplier = Input.GetKey(KeyCode.LeftShift) ? 3 : 2f;
+        float multiplier = _isRun ? 3 : 2f;
         float targetHorizontal = input.x * multiplier;
         float targetVertical = input.y * multiplier;
 
