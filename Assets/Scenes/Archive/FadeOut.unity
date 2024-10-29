@@ -414,6 +414,50 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd8fb062f82289b4484107b033b56d4f, type: 3}
+--- !u!1 &985135085
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 985135087}
+  - component: {fileID: 985135086}
+  m_Layer: 0
+  m_Name: GameInput
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &985135086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 985135085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f92a2d0b0332164418c47debb62ed3a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &985135087
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 985135085}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.32609504, y: -7.9202585, z: 15.000886}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1054307319 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7378474372775956094, guid: 4e69d727b66b6754ea7300b064c66093, type: 3}
@@ -746,6 +790,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2848023700462769524, guid: 4e69d727b66b6754ea7300b064c66093, type: 3}
+      propertyPath: gameInput
+      value: 
+      objectReference: {fileID: 985135086}
+    - target: {fileID: 2848023700462769524, guid: 4e69d727b66b6754ea7300b064c66093, type: 3}
       propertyPath: _jumpDelayDuration
       value: 0.4
       objectReference: {fileID: 0}
@@ -842,3 +890,4 @@ SceneRoots:
   - {fileID: 1760902783}
   - {fileID: 1584957322}
   - {fileID: 906657616}
+  - {fileID: 985135087}
