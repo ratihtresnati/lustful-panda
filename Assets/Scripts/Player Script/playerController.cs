@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class playerController : MonoBehaviour
 {
@@ -23,11 +25,15 @@ public class playerController : MonoBehaviour
     private float ySpeed;
     private bool _isRun;
 
+    [SerializeField]
+    private GameInput gameInput;
+
     private bool isRooling;
     private float _rollTimer;
     private float _speed;
     private float hInput;
     private float vInput;
+    private Vector2 inputVector;
     private Vector3 move;
     private Vector3 velocity;
 
@@ -44,86 +50,30 @@ public class playerController : MonoBehaviour
 
     void Start()
     {
+
         characterController = GetComponent<CharacterController>();
         CharacterAnimatorController = GetComponent<CharacterAnimatorController>();
 
         Keyframe roll_lastFrame = _rollCurve[_rollCurve.length - 1];
         _rollTimer = roll_lastFrame.time;
+
+        gameInput.OnRunningEvent += OnRunEvent;
+        gameInput.OutRunningEvent += OutRunEvent;
+        gameInput.OnJumpingEvent += OnJumpEvent;
+        gameInput.OnRollingEvent += OnRollEvent;
+
     }
+
+   
+
 
     // Update is called once per frame
     void Update()
     {
-        if (!isRooling)
-        {
-        gameObject.tag = "PandaMC";
-        hInput = Input.GetAxis("Horizontal");
-        vInput = Input.GetAxis("Vertical");
-
-        _speed = _walkSpeed;
-
-        move = new Vector3(hInput, 0, vInput);
-
-        //walk & run
-        _isRun = Input.GetKey(KeyCode.LeftShift);
-        _speed = _isRun ? _runSpeed : _walkSpeed; 
-        
-        if (!Input.GetKey(KeyCode.LeftShift) && _isRun)
-        {
-            _isRun = false;
-        }
-
-        float magnitude = Mathf.Clamp01(move.magnitude) * _speed;
-        move.Normalize();
-
-        ySpeed += Physics.gravity.y * Time.deltaTime;
-
-
-        velocity = move * magnitude;
-        velocity.y = ySpeed;
-
-        characterController.Move(velocity * Time.deltaTime);
-        if (move != Vector3.zero)
-        {
-            Vector3 desiredDirection = new Vector3(hInput, 0, vInput);
-            if (desiredDirection.magnitude > 0) 
-            {
-                desiredDirection.Normalize();
-            }
-            float angleDiff = Vector3.Angle(transform.forward, desiredDirection);
-
-            float speedModifier = Mathf.Lerp(1f, 0.1f, Mathf.InverseLerp(45f, 135f, angleDiff));
-            _speed *= speedModifier;
-
-            Quaternion toRotation = Quaternion.LookRotation(move, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, _rotationSpeed * Time.deltaTime);
-          
-          
-        }
-
-            //Jump
-            if (characterController.isGrounded)
-            {
-                ySpeed = 0;
-                if (Input.GetKeyDown(KeyCode.Space)) 
-                { 
-                    StartCoroutine(Jumping());
-                    _currentState = JumpState.Jump;
-                }
-            }
-
-            //Rolling
-            if (!_isJump) { 
-                if (Input.GetKeyDown(KeyCode.Q))
-                {
-                    if (velocity.magnitude != 0) StartCoroutine(Rolling());
-                }
-            }
-
-        }
+        HanddleMovements();
 
         //animasi
-        AnimateWalkRun(new Vector3(hInput, vInput, 0));
+        AnimateWalkRun(new Vector3(inputVector.x, inputVector.x, 0));
         AnimateJump();
         AnimateRest();
         AnimateSit();
@@ -134,7 +84,92 @@ public class playerController : MonoBehaviour
         }
     }
 
+    private void HanddleMovements()
+    {
+        if (!isRooling)
+        {
+            gameObject.tag = "PandaMC";
+
+            inputVector = gameInput.GetMovementControl();
+
+            move = new Vector3(inputVector.x, 0, inputVector.y);
+
+            if (_isRun)
+            {
+                _speed = _runSpeed;
+            }
+            else 
+            { 
+                _speed = _walkSpeed;
+            }
+
+
+            float magnitude = Mathf.Clamp01(move.magnitude) * _speed;
+            move.Normalize();
+
+            ySpeed += Physics.gravity.y * Time.deltaTime;
+
+
+            velocity = move * magnitude;
+            velocity.y = ySpeed;
+
+            characterController.Move(velocity * Time.deltaTime);
+            if (move != Vector3.zero)
+            {
+                Vector3 desiredDirection = new Vector3(hInput, 0, vInput);
+                if (desiredDirection.magnitude > 0)
+                {
+                    desiredDirection.Normalize();
+                }
+                float angleDiff = Vector3.Angle(transform.forward, desiredDirection);
+
+                float speedModifier = Mathf.Lerp(1f, 0.1f, Mathf.InverseLerp(45f, 135f, angleDiff));
+                _speed *= speedModifier;
+
+                Quaternion toRotation = Quaternion.LookRotation(move, Vector3.up);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, _rotationSpeed * Time.deltaTime);
+
+
+            }
+
+
+            if (characterController.isGrounded)
+            {
+                ySpeed = 0;
+            }
+        }
+    }
+
+    // Running Event
+
+    // On Running
+    private void OnRunEvent(object sander, EventArgs e)
+    {
+
+        _isRun = true;
+
+    }
+
+    // Out Running
+    private void OutRunEvent(object sender, EventArgs e)
+    {
+        _isRun = false;
+    }
+
+
     #region Rolling
+
+    private void OnRollEvent(object sender, EventArgs e)
+    {
+        if (!isRooling)
+        { 
+            if (!_isJump)
+            {
+                if (velocity.magnitude != 0) StartCoroutine(Rolling());
+            }
+        }
+    }
+
     IEnumerator Rolling()
     {
         //selagi jump dia gak bisa roll
@@ -161,6 +196,19 @@ public class playerController : MonoBehaviour
     #endregion
     
     #region Jumping
+
+    private void OnJumpEvent(object sander, EventArgs e)
+    {
+        if (!isRooling)
+        {
+            if (characterController.isGrounded)
+            {
+                StartCoroutine(Jumping());
+                _currentState = JumpState.Jump;
+            }
+        }
+    }
+
     IEnumerator Jumping()
     {
         _isJump = true;
@@ -168,7 +216,7 @@ public class playerController : MonoBehaviour
         yield return new WaitForSeconds(_jumpDelayDuration);
         
         ySpeed = _jumpSpeed;
-        while (ySpeed != 0) {
+        while (ySpeed >= -1) {
             _isJump = true;
 
             yield return null;
