@@ -166,6 +166,17 @@ public partial class @PlayerInputManager: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""17fb468e-0b57-4098-9f54-c92e548ac2f4"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""e61f4983-2652-438b-8817-45749e233691"",
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",

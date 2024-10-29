@@ -58,73 +58,19 @@ public class playerController : MonoBehaviour
         _rollTimer = roll_lastFrame.time;
 
         gameInput.OnRunningEvent += OnRunEvent;
+        gameInput.OutRunningEvent += OutRunEvent;
         gameInput.OnJumpingEvent += OnJumpEvent;
         gameInput.OnRollingEvent += OnRollEvent;
 
     }
 
-  
+   
+
+
     // Update is called once per frame
     void Update()
     {
-        if (!isRooling)
-        {
-        gameObject.tag = "PandaMC";
-
-        // hInput = Input.GetAxis("Horizontal");
-        // vInput = Input.GetAxis("Vertical");
-
-        inputVector = gameInput.GetMovementControl();
-
-        _speed = _walkSpeed;
-
-
-        move = new Vector3(inputVector.x, 0, inputVector.y);
-
-        //walk & run
-        //_isRun = Input.GetKey(KeyCode.LeftShift);
-
-       // _speed = _isRun ? _runSpeed : _walkSpeed; 
-        
-        if (_isRun)
-        {
-                _isRun = false;
-        }
-
-        float magnitude = Mathf.Clamp01(move.magnitude) * _speed;
-        move.Normalize();
-
-        ySpeed += Physics.gravity.y * Time.deltaTime;
-
-
-        velocity = move * magnitude;
-        velocity.y = ySpeed;
-
-        characterController.Move(velocity * Time.deltaTime);
-        if (move != Vector3.zero)
-        {
-            Vector3 desiredDirection = new Vector3(hInput, 0, vInput);
-            if (desiredDirection.magnitude > 0) 
-            {
-                desiredDirection.Normalize();
-            }
-            float angleDiff = Vector3.Angle(transform.forward, desiredDirection);
-
-            float speedModifier = Mathf.Lerp(1f, 0.1f, Mathf.InverseLerp(45f, 135f, angleDiff));
-            _speed *= speedModifier;
-
-            Quaternion toRotation = Quaternion.LookRotation(move, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, _rotationSpeed * Time.deltaTime);
-          
-          
-        }
-
-
-            if (characterController.isGrounded)
-            {
-                ySpeed = 0;
-            }
-        }
+        HanddleMovements();
 
         //animasi
         AnimateWalkRun(new Vector3(inputVector.x, inputVector.x, 0));
@@ -136,16 +82,80 @@ public class playerController : MonoBehaviour
         {
             StopAnimation();
         }
-        Debug.Log(isRooling);
     }
 
+    private void HanddleMovements()
+    {
+        if (!isRooling)
+        {
+            gameObject.tag = "PandaMC";
+
+            inputVector = gameInput.GetMovementControl();
+
+            move = new Vector3(inputVector.x, 0, inputVector.y);
+
+            if (_isRun)
+            {
+                _speed = _runSpeed;
+            }
+            else 
+            { 
+                _speed = _walkSpeed;
+            }
+
+
+            float magnitude = Mathf.Clamp01(move.magnitude) * _speed;
+            move.Normalize();
+
+            ySpeed += Physics.gravity.y * Time.deltaTime;
+
+
+            velocity = move * magnitude;
+            velocity.y = ySpeed;
+
+            characterController.Move(velocity * Time.deltaTime);
+            if (move != Vector3.zero)
+            {
+                Vector3 desiredDirection = new Vector3(hInput, 0, vInput);
+                if (desiredDirection.magnitude > 0)
+                {
+                    desiredDirection.Normalize();
+                }
+                float angleDiff = Vector3.Angle(transform.forward, desiredDirection);
+
+                float speedModifier = Mathf.Lerp(1f, 0.1f, Mathf.InverseLerp(45f, 135f, angleDiff));
+                _speed *= speedModifier;
+
+                Quaternion toRotation = Quaternion.LookRotation(move, Vector3.up);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, _rotationSpeed * Time.deltaTime);
+
+
+            }
+
+
+            if (characterController.isGrounded)
+            {
+                ySpeed = 0;
+            }
+        }
+    }
+
+    // Running Event
+
+    // On Running
     private void OnRunEvent(object sander, EventArgs e)
     {
-        
+
         _isRun = true;
-        _speed = _runSpeed;
 
     }
+
+    // Out Running
+    private void OutRunEvent(object sender, EventArgs e)
+    {
+        _isRun = false;
+    }
+
 
     #region Rolling
 
