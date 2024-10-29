@@ -33,14 +33,10 @@ public class interactItem : MonoBehaviour
         if (distance <= pickupRadius)
         {
             if (obstacleObject != null)
-            {
-                Debug.Log("belum bisa interact");
-                return;
-            }
+            {return;}
             else
             {
                 canPickup = true;
-                Debug.Log("ambil barang = E");
             }
         }
         else
@@ -48,19 +44,15 @@ public class interactItem : MonoBehaviour
             canPickup = false;
         }
 
-        // Ambil item
-        if (canPickup && Input.GetKeyDown(KeyCode.E))
-        {
-            if (!isCarryingItem)
-            {
-                Pickup();
+        // interact item
+        if(Input.GetKeyDown(KeyCode.E)){
+            if (canPickup && !isCarryingItem)
+                {
+                    Pickup();
+                }
+            else if (isCarryingItem){
+                Drop();
             }
-        }
-
-        // Drop item
-        if (isCarryingItem && Input.GetKeyDown(KeyCode.R))
-        {
-            Drop();
         }
     }
 
@@ -74,17 +66,10 @@ public class interactItem : MonoBehaviour
             outline.ApplyOutline(false);
         }
 
+        // parent n positioning
         transform.parent = playerHoldPosition.PositionParent();
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.Euler(0, 90, 0);
-
-        // Positioning item
-        // transform.position = player.transform.TransformPoint(grabOffsetPlayer);
-        // float yPlayer = player.transform.eulerAngles.y;
-        // transform.rotation = Quaternion.Euler(0, yPlayer, 0);
-
-        // Menjadikan pemain parent, biar nempel
-        // transform.SetParent(player.transform);
 
         isCarryingItem = true;
         canPickup = false;
