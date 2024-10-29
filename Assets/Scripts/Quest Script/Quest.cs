@@ -7,7 +7,8 @@ public class Quest
     public string questName;        
     public string questDescription; 
     public string targetItem;       
-    public bool isCompleted;        
+    public bool isCompleted;   
+    public UnityEvent unityEvent;       
 
     
     public Quest(string name, string description, string item, bool completed)
@@ -28,6 +29,7 @@ public class Quest
     
     public void EndQuest()
     {
+        unityEvent.Invoke();
         Debug.Log("Ending quest: " + questName);
     }
 }
