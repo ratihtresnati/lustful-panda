@@ -6,7 +6,7 @@ public class PlayerInteraction : MonoBehaviour
 {
     public float interactionRange = 2.0f;  
     public Transform interactableObject;  
-    private bool hasGivenQuest = false;
+    // private bool hasGivenQuest = false;
     public bool isFirstQuest = true; 
 
     // void Start()
@@ -87,3 +87,4 @@ public class PlayerInteraction : MonoBehaviour
     //     HintManager.instance.ShowHint("Mulailah dengan mencari jalan keluar.");
     // }
 }
+
