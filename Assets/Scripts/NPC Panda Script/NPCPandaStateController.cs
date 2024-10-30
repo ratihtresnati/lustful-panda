@@ -29,7 +29,7 @@ public class NPCPandaStateController : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(_timeBeforeIdle);
+        //Debug.Log(_timeBeforeIdle);
         switch (_currentState)
         {
             case NPCPanda.Idle:
