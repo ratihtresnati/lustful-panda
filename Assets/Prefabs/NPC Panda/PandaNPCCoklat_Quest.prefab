@@ -376,10 +376,10 @@ PrefabInstance:
       addedObject: {fileID: 3139517663634761888}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e79a8326698de524280698fa01281e24, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1905993300760580081}
+      addedObject: {fileID: 1419714824203239807}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e79a8326698de524280698fa01281e24, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1419714824203239807}
+      addedObject: {fileID: 1905993300760580081}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e79a8326698de524280698fa01281e24, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5987928116585516336}
@@ -445,25 +445,6 @@ MonoBehaviour:
   maxDistance: 2
   _isQuest: 1
   _isComplete: 0
---- !u!114 &1905993300760580081
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5798181423970155037}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 0.89550054, b: 0, a: 1}
-  outlineWidth: 0.8
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
-  isOutlineActive: 0
 --- !u!114 &1419714824203239807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -483,6 +464,25 @@ MonoBehaviour:
   _outline: {fileID: 1905993300760580081}
   itemOutline: {fileID: 0}
   questNum: 1
+--- !u!114 &1905993300760580081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5798181423970155037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0.89550054, b: 0, a: 1}
+  outlineWidth: 0.8
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+  isOutlineActive: 0
 --- !u!195 &5987928116585516336
 NavMeshAgent:
   m_ObjectHideFlags: 0
