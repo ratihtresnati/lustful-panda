@@ -1,45 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 [System.Serializable]
 public class Quest
 {
-    public string questName;       
+    public string questName;        
     public string questDescription; 
     public string targetItem;       
-    public bool isCompleted;  
-    public UnityEvent unityEvent;      
+    public bool isCompleted;   
+    public UnityEvent unityEvent;       
 
     
-    public Quest(string name, string description, string item)
+    public Quest(string name, string description, string item, bool completed)
     {
         questName = name;
         questDescription = description;
         targetItem = item;
-        isCompleted = false;  
+        isCompleted = completed;
     }
 
-    
+   
     public void CompleteQuest()
     {
         isCompleted = true;
-        Debug.Log(questName + " completed!");
+        Debug.Log("Quest completed: " + questName);
     }
 
-    public void ResetQuest()
-    {
-        isCompleted = false;
-    }
     
     public void EndQuest()
     {
         unityEvent.Invoke();
-    }
-
-    public bool IsCompleted()
-    {
-        return isCompleted;
+        Debug.Log("Ending quest: " + questName);
     }
 }
+

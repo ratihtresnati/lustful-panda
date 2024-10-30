@@ -51,6 +51,7 @@ public class conditionalObjectInteract : MonoBehaviour
             {
                 itemOutline.ApplyOutline(true);
                 dialogAsset.SetActive(true);
+                QuestManager.instance.NextQuest();
             }
         }
     }
@@ -63,10 +64,12 @@ public class conditionalObjectInteract : MonoBehaviour
             if (npcPanda != null)
             {
                 npcPanda._isComplete = true;
-                QuestManager.instance._questIsComplete = true;
-                if (_outline != null){
+                QuestManager.instance.NextQuest();
+                if (_outline != null)
+                {
                     _outline.ApplyOutline(false);
-                    }
+                }
+                
             }
             else
             {
