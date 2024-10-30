@@ -1084,6 +1084,7 @@ GameObject:
   - component: {fileID: 8119769691267434837}
   - component: {fileID: 1798526088420547015}
   - component: {fileID: 5308396351045634098}
+  - component: {fileID: 2528977894760356875}
   m_Layer: 0
   m_Name: Panda Bayik
   m_TagString: PandaMC
@@ -1402,6 +1403,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFirstQuest: 1
   _tag: QuestTrigger
+--- !u!114 &2528977894760356875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7378474372775956094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03736f6035fdbde448a8d3bb82e66719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactDistance: 5
+  panda: {fileID: 0}
+  pushForce: 5
 --- !u!1 &7421487358037977505
 GameObject:
   m_ObjectHideFlags: 0

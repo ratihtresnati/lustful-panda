@@ -2,16 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PandaInteract : MonoBehaviour
+public class PandaInteractMultiple : MonoBehaviour
 {
     public float interactDistance = 5f; // Jarak di mana panda bisa berinteraksi dengan objek
     public Transform panda; // Referensi ke posisi panda
     public float pushForce = 5f; // Kekuatan dorongan pada objek
-
-    private void Start()
-    {
-        panda = gameObject.transform;
-    }
 
     void Update()
     {
@@ -41,7 +36,6 @@ public class PandaInteract : MonoBehaviour
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.isKinematic = false;
             // Dorongan ke depan relatif terhadap posisi panda
             Vector3 pushDirection = (obj.transform.position - panda.position).normalized;
             rb.AddForce(pushDirection * pushForce, ForceMode.Impulse);
