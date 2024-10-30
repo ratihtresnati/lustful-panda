@@ -30,9 +30,6 @@ public class GameInput : MonoBehaviour
 
         // Player Roll Input System
         playerInputManager.Player.Roll.performed += OnRoll;
-        
-        
-        playerInputManager.Player.Interact.performed += Interact;
     }
 
     private void Onjump(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -54,11 +51,6 @@ public class GameInput : MonoBehaviour
     {
         OutRunningEvent(this, EventArgs.Empty);
     } 
-    
-    private void Interact(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-    {
-        OnInteractEvent(this, EventArgs.Empty);
-    }
 
     public Vector2 GetMovementControl()
     {
