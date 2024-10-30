@@ -18,7 +18,7 @@ public class PandaInteract : MonoBehaviour
         // Mendeteksi jika ada beberapa box di sekitar panda
         Collider[] hitColliders = Physics.OverlapSphere(panda.position, interactDistance);
         
-        Debug.Log("Total objek terdeteksi: " + hitColliders.Length); // Debug: Tampilkan jumlah objek yang terdeteksi
+        // Debug.Log("Total objek terdeteksi: " + hitColliders.Length); // Debug: Tampilkan jumlah objek yang terdeteksi
         
         // Hanya lanjutkan jika tombol E ditekan
         if (Input.GetKeyDown(KeyCode.E))

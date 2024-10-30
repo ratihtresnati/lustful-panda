@@ -77,8 +77,6 @@ public class playerController : MonoBehaviour
         AnimateRest();
         AnimateSit();
 
-        Debug.Log(inputVector.y +""+ inputVector.x);
-
         if(Input.GetKeyDown(KeyCode.I))
         {
             StopAnimation();
