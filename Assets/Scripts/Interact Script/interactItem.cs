@@ -13,15 +13,12 @@ public class interactItem : MonoBehaviour
     public Vector3 grabOffsetPlayer; // jarak objek setelah diambil karakter
     public Vector3 dropOffsetPlayer; // jarak objek setelah ditaro karakter
     public Outline outline;
-    private PlayerHoldPosition playerHoldPosition;
-
-    [SerializeField] private UnityEvent _nextObject;
-
-    [SerializeField] private GameObject _itemsPosition;
+    private PlayerHoldPosition _playerHoldPosition;
 
     void Start()
     {
-        playerHoldPosition = FindObjectOfType<PlayerHoldPosition>();
+        player = GameObject.Find("Panda Bayik");
+        _playerHoldPosition = player.GetComponent<PlayerHoldPosition>();
     }
 
     void Update()
@@ -66,7 +63,6 @@ public class interactItem : MonoBehaviour
 
     void Pickup()
     {
-        _nextObject.Invoke();
         Debug.Log("membawa barang");
 
         // Matiin outline
@@ -74,7 +70,7 @@ public class interactItem : MonoBehaviour
             outline.ApplyOutline(false);
         }
 
-        transform.parent = playerHoldPosition.PositionParent();
+        transform.parent = _playerHoldPosition.PositionParent();
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.Euler(0, 90, 0);
 

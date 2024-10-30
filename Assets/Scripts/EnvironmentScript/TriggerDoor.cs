@@ -12,7 +12,7 @@ public class TriggerDoor : MonoBehaviour
     private void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
-        outline = GetComponent<Outline>();
+        outline = gameObject.GetComponent<Outline>();
     }
     private void OnTriggerEnter(Collider other)
     {
