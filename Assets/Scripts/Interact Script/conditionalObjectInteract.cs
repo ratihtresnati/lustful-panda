@@ -1,9 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class conditionalObjectInteract : MonoBehaviour
 {
+    private PlayerInputManager playarInputManager;
+
     public float interactionRadius; // Radius interaksi
     public GameObject player;
     public GameObject taskItem; // Referensi ke item quest
@@ -25,7 +29,13 @@ public class conditionalObjectInteract : MonoBehaviour
             dialogAsset.SetActive(false);
         }
 
+        // Input System
+        playarInputManager = new PlayerInputManager();
+        playarInputManager.Player.Enable(); //Mengaktifkan control mapping
+        playarInputManager.Player.Interact.performed += InteractEvent; //Mengaktifkan Action Interect
     }
+
+    
 
     void Update()
     {
@@ -40,8 +50,29 @@ public class conditionalObjectInteract : MonoBehaviour
             isCarryingTheItem = false;
         }
         // Menghitung jarak pemain n objek
+        /*
         float distance = Vector3.Distance(player.transform.position, transform.position);
-        if (distance <= interactionRadius && Input.GetKeyDown(KeyCode.F))
+        if (distance <= interactionRadius && Input.GetKeyDown(KeyCode.E))
+        {
+            if (isCarryingTheItem)
+            {
+                Interact();
+            }
+            else
+            {
+                itemOutline.ApplyOutline(true);
+                dialogAsset.SetActive(true);
+                QuestManager.instance.NextQuest();
+            }
+        }
+        */
+    }
+
+    // Menghitung jarak pemain n objek
+    private void InteractEvent(InputAction.CallbackContext context)
+    {
+        float distance = Vector3.Distance(player.transform.position, transform.position);
+        if (distance <= interactionRadius)
         {
             if (isCarryingTheItem)
             {

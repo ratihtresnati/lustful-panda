@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,13 +6,18 @@ using UnityEngine.Events;
 
 public class interactItem : MonoBehaviour
 {
+    [SerializeField] private GameInput gameInput;
+
+    private PlayerInputManager playerInputManager;
+
     public float pickupRadius;
     private bool canPickup = false;
     bool isCarryingItem = false;
     public GameObject player;
     public GameObject obstacleObject; 
     public Vector3 grabOffsetPlayer; // jarak objek setelah diambil karakter
-    public Vector3 dropOffsetPlayer; // jarak objek setelah ditaro karakter
+    public Vector3 dropOffsetPosPlayer; // jarak objek setelah ditaro karakter
+    public Vector3 dropOffsetRotPlayer; // rotasi objek setelah ditaro karakter
     public Outline outline;
     private PlayerHoldPosition playerHoldPosition;
 
@@ -22,6 +28,12 @@ public class interactItem : MonoBehaviour
     void Start()
     {
         playerHoldPosition = FindObjectOfType<PlayerHoldPosition>();
+
+        playerInputManager = new PlayerInputManager();
+        playerInputManager.Player.Enable();
+        playerInputManager.Player.Interact.performed += InteractEvent;
+
+        //gameInput.OnInteractEvent += InteractEvent;
     }
 
     void Update()
@@ -45,6 +57,7 @@ public class interactItem : MonoBehaviour
         }
 
         // interact item
+        /*
         if(Input.GetKeyDown(KeyCode.E)){
             if (canPickup && !isCarryingItem)
                 {
@@ -54,6 +67,20 @@ public class interactItem : MonoBehaviour
                 Drop();
             }
         }
+        */
+    }
+
+    private void InteractEvent(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        Debug.Log("Interact");
+            if (canPickup && !isCarryingItem)
+            {
+                Pickup();
+            }
+            else if (isCarryingItem)
+            {
+                Drop();
+            }
     }
 
     void Pickup()
@@ -84,8 +111,8 @@ public class interactItem : MonoBehaviour
         }
 
         // Positioning item
-        transform.position = player.transform.TransformPoint(dropOffsetPlayer);
-        transform.localRotation = Quaternion.Euler(0, 0, 0);
+        transform.position = player.transform.TransformPoint(dropOffsetPosPlayer);
+        transform.localRotation = Quaternion.Euler(dropOffsetRotPlayer);
 
         // Lepas parent
         transform.SetParent(null);
