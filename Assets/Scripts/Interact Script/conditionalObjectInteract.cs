@@ -41,7 +41,7 @@ public class conditionalObjectInteract : MonoBehaviour
         }
         // Menghitung jarak pemain n objek
         float distance = Vector3.Distance(player.transform.position, transform.position);
-        if (distance <= interactionRadius && Input.GetKeyDown(KeyCode.F))
+        if (distance <= interactionRadius && Input.GetKeyDown(KeyCode.E))
         {
             if (isCarryingTheItem)
             {
