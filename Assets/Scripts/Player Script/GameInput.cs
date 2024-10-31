@@ -12,7 +12,6 @@ public class GameInput : MonoBehaviour
     public event EventHandler OnRunningEvent;
     public event EventHandler OutRunningEvent;
     public event EventHandler OnRollingEvent;
-    public event EventHandler OnInteractEvent;
 
     private PlayerInputManager playerInputManager;
 
@@ -30,6 +29,7 @@ public class GameInput : MonoBehaviour
 
         // Player Roll Input System
         playerInputManager.Player.Roll.performed += OnRoll;
+   
     }
 
     private void Onjump(UnityEngine.InputSystem.InputAction.CallbackContext obj)
