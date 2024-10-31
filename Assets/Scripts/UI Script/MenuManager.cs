@@ -15,8 +15,10 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private ControlMapPopup _controlMapPopup;
     public PlayerInput PlayerInput;
 
-    [SerializeField] private GameObject _resumeButtonFirst;
-    [SerializeField] private GameObject _settingMenuFirst;
+    [SerializeField] private GameObject _resumeButton;
+    [SerializeField] private GameObject _settingButton;
+    [SerializeField] private GameObject _backButton;
+    
     private bool isPaused;
     private void Start()
     {
@@ -41,6 +43,27 @@ public class MenuManager : MonoBehaviour
                 Unpause();
             }
         }
+
+        if (InputManager.instance.ButtonClickInput)
+        {
+            GameObject selectedButton = EventSystem.current.currentSelectedGameObject;
+
+            if (selectedButton != null)
+            {
+                if (selectedButton == _settingButton)
+                {
+                    OnSettingPress();
+                }
+                else if (selectedButton == _resumeButton)
+                {
+                    OnResumePress();
+                }
+                else if (selectedButton == _backButton)
+                {
+                    OnExitPress();
+                }
+            }
+        }
     }
 
     public void Pause()
@@ -58,16 +81,17 @@ public class MenuManager : MonoBehaviour
     private void OpenMainMenu()
     {
         _mainMenu.SetActive(true);
-        _settingMenu.SetActive(false);
 
-        EventSystem.current.SetSelectedGameObject(_resumeButtonFirst);
+        EventSystem.current.SetSelectedGameObject(_resumeButton);
     }
 
     private void OpenSettingMenu()
     {
-        _controlMapPopup.popupPanel.SetActive(true);
+        // _controlMapPopup.popupPanel.SetActive(true);
+        _settingMenu.SetActive(true);
         _mainMenu.SetActive(false);
 
+        SettingsManager.instance.FirstSelected();
         // EventSystem.current.SetSelectedGameObject(_settingMenuFirst);
     }
 
