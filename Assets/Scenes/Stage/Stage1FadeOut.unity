@@ -588,11 +588,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a32793ee07263244dbd03cec11033353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameInput: {fileID: 0}
   pickupRadius: 2
   player: {fileID: 0}
   obstacleObject: {fileID: 0}
   grabOffsetPlayer: {x: 0, y: 0.3, z: 0.5}
-  dropOffsetPlayer: {x: 0, y: -1.7, z: 1.2}
+  dropOffsetPosPlayer: {x: 0, y: 0, z: 0}
+  dropOffsetRotPlayer: {x: 0, y: 0, z: 0}
   outline: {fileID: 1252878848}
 --- !u!114 &1252878850
 MonoBehaviour:
@@ -853,17 +855,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e69d727b66b6754ea7300b064c66093, type: 3}
---- !u!114 &1603353241 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 640333204013748042, guid: 83084c1f2e007104b883f1c1663262d1, type: 3}
-  m_PrefabInstance: {fileID: 1953365766648347667}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1672776215 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6624863076524377925, guid: 9b192cfc4a6bf334780a911cfb22d273, type: 3}
@@ -933,7 +924,8 @@ PrefabInstance:
       value: Stage 1 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3204002443712914703, guid: 1ba857c144bde2f49972fc478903bd9d, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ba857c144bde2f49972fc478903bd9d, type: 3}
@@ -1000,7 +992,7 @@ PrefabInstance:
     - target: {fileID: 3496816807443114854, guid: db318067870d2db439c6ab75d564f41c, type: 3}
       propertyPath: activeQuests.Array.data[2].unityEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1603353241}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
