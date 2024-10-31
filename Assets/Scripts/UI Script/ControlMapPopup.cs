@@ -9,7 +9,7 @@ public class ControlMapPopup : MonoBehaviour
    
     public Dictionary<string, KeyCode> controls = new Dictionary<string, KeyCode>(){
         { "Interact Item", KeyCode.E },
-        { "Interact Object", KeyCode.F },
+        { "Interact Object", KeyCode.E },
         { "Jump", KeyCode.Space },
         { "Roll", KeyCode.Q }
     };

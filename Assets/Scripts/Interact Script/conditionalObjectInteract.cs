@@ -14,8 +14,7 @@ public class conditionalObjectInteract : MonoBehaviour
     public GameObject dialogAsset;
     private bool isCarryingTheItem = false;
     [SerializeField] private Outline _outline;
-
-    [SerializeField] private Outline itemOutline;
+    [SerializeField] private Outline _itemOutline;
     public int questNum;
     
     private PlayerHoldPosition playerHoldPosition;
@@ -23,11 +22,13 @@ public class conditionalObjectInteract : MonoBehaviour
     void Start()
     {
         playerHoldPosition = FindObjectOfType<PlayerHoldPosition>();
-        _outline = GetComponent<Outline>();
+        _outline = gameObject.GetComponent<Outline>();
+        _itemOutline = taskItem.GetComponent<Outline>();
          if (dialogAsset != null)
         {
             dialogAsset.SetActive(false);
         }
+        player = GameObject.Find("Panda Bayik");
 
         // Input System
         playarInputManager = new PlayerInputManager();
@@ -80,7 +81,7 @@ public class conditionalObjectInteract : MonoBehaviour
             }
             else
             {
-                itemOutline.ApplyOutline(true);
+                _itemOutline.ApplyOutline(true);
                 dialogAsset.SetActive(true);
                 QuestManager.instance.NextQuest();
             }
@@ -96,11 +97,7 @@ public class conditionalObjectInteract : MonoBehaviour
             {
                 npcPanda._isComplete = true;
                 QuestManager.instance.NextQuest();
-                if (_outline != null)
-                {
-                    _outline.ApplyOutline(false);
-                }
-                
+                _outline.ApplyOutline(false);
             }
             else
             {
