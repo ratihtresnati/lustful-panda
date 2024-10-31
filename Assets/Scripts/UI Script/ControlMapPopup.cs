@@ -26,10 +26,10 @@ public class ControlMapPopup : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            ToggleControlMappingPanel();
-        }
+        // if (Input.GetKeyDown(KeyCode.Escape))
+        // {
+        //     ToggleControlMappingPanel();
+        // }
         // Deteksi tombol baru untuk mapping
         if (!string.IsNullOrEmpty(waitingForInput))
         {
