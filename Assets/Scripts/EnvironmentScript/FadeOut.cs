@@ -31,6 +31,7 @@ public class FadeOut : MonoBehaviour
         }
     }
 
+    /*
     private void OnTriggerEnter(Collider other)
     {
         
@@ -49,6 +50,8 @@ public class FadeOut : MonoBehaviour
             DoFade = false;
         }
     }
+
+    */
 
     void FadeNow()
     {

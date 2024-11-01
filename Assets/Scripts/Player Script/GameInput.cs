@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.InputSystem;
 
 public class GameInput : MonoBehaviour
 {
-
     public event EventHandler OnJumpingEvent;
     public event EventHandler OnRunningEvent;
     public event EventHandler OutRunningEvent;
@@ -17,6 +17,7 @@ public class GameInput : MonoBehaviour
 
     private void Awake()
     {
+
         playerInputManager = new PlayerInputManager();
         playerInputManager.Player.Enable();
 
@@ -29,6 +30,7 @@ public class GameInput : MonoBehaviour
 
         // Player Roll Input System
         playerInputManager.Player.Roll.performed += OnRoll;
+   
     }
 
     private void Onjump(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -49,7 +51,7 @@ public class GameInput : MonoBehaviour
     private void OutRun(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         OutRunningEvent(this, EventArgs.Empty);
-    }
+    } 
 
     public Vector2 GetMovementControl()
     {

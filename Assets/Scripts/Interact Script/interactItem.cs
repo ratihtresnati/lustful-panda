@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,23 +6,31 @@ using UnityEngine.Events;
 
 public class interactItem : MonoBehaviour
 {
+    [SerializeField] private GameInput gameInput;
+
+    private PlayerInputManager playerInputManager;
+
     public float pickupRadius;
     private bool canPickup = false;
     bool isCarryingItem = false;
     public GameObject player;
     public GameObject obstacleObject; 
     public Vector3 grabOffsetPlayer; // jarak objek setelah diambil karakter
-    public Vector3 dropOffsetPlayer; // jarak objek setelah ditaro karakter
+    public Vector3 dropOffsetPosPlayer; // jarak objek setelah ditaro karakter
+    public Vector3 dropOffsetRotPlayer; // rotasi objek setelah ditaro karakter
     public Outline outline;
-    private PlayerHoldPosition playerHoldPosition;
-
-    [SerializeField] private UnityEvent _nextObject;
-
-    [SerializeField] private GameObject _itemsPosition;
+    private PlayerHoldPosition _playerHoldPosition;
 
     void Start()
     {
-        playerHoldPosition = FindObjectOfType<PlayerHoldPosition>();
+        player = GameObject.Find("Panda Bayik");
+        _playerHoldPosition = player.GetComponent<PlayerHoldPosition>();
+
+        playerInputManager = new PlayerInputManager();
+        playerInputManager.Player.Enable();
+        playerInputManager.Player.Interact.performed += InteractEvent;
+
+        //gameInput.OnInteractEvent += InteractEvent;
     }
 
     void Update()
@@ -33,14 +42,10 @@ public class interactItem : MonoBehaviour
         if (distance <= pickupRadius)
         {
             if (obstacleObject != null)
-            {
-                Debug.Log("belum bisa interact");
-                return;
-            }
+            {return;}
             else
             {
                 canPickup = true;
-                Debug.Log("ambil barang = E");
             }
         }
         else
@@ -48,25 +53,35 @@ public class interactItem : MonoBehaviour
             canPickup = false;
         }
 
-        // Ambil item
-        if (canPickup && Input.GetKeyDown(KeyCode.E))
-        {
-            if (!isCarryingItem)
+        // interact item
+        /*
+        if(Input.GetKeyDown(KeyCode.E)){
+            if (canPickup && !isCarryingItem)
+                {
+                    Pickup();
+                }
+            else if (isCarryingItem){
+                Drop();
+            }
+        }
+        */
+    }
+
+    private void InteractEvent(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        Debug.Log("Interact");
+            if (canPickup && !isCarryingItem)
             {
                 Pickup();
             }
-        }
-
-        // Drop item
-        if (isCarryingItem && Input.GetKeyDown(KeyCode.R))
-        {
-            Drop();
-        }
+            else if (isCarryingItem)
+            {
+                Drop();
+            }
     }
 
     void Pickup()
     {
-        _nextObject.Invoke();
         Debug.Log("membawa barang");
 
         // Matiin outline
@@ -74,17 +89,9 @@ public class interactItem : MonoBehaviour
             outline.ApplyOutline(false);
         }
 
-        transform.parent = playerHoldPosition.PositionParent();
+        transform.parent = _playerHoldPosition.PositionParent();
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.Euler(0, 90, 0);
-
-        // Positioning item
-        // transform.position = player.transform.TransformPoint(grabOffsetPlayer);
-        // float yPlayer = player.transform.eulerAngles.y;
-        // transform.rotation = Quaternion.Euler(0, yPlayer, 0);
-
-        // Menjadikan pemain parent, biar nempel
-        // transform.SetParent(player.transform);
 
         isCarryingItem = true;
         canPickup = false;
@@ -99,8 +106,8 @@ public class interactItem : MonoBehaviour
         }
 
         // Positioning item
-        transform.position = player.transform.TransformPoint(dropOffsetPlayer);
-        transform.localRotation = Quaternion.Euler(0, 0, 0);
+        transform.position = player.transform.TransformPoint(dropOffsetPosPlayer);
+        transform.localRotation = Quaternion.Euler(dropOffsetRotPlayer);
 
         // Lepas parent
         transform.SetParent(null);
