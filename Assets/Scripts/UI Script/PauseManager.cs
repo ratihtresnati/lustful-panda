@@ -5,6 +5,9 @@ using UnityEngine;
 public class PauseManager : MonoBehaviour
 {
     public static PauseManager instance;
+    public interactItem interactItems;
+    public PandaQuest pandaQuest;
+    public conditionalObjectInteract conditionalObjectInteract;
 
     public bool IsPause { get; private set; }
 
@@ -14,6 +17,10 @@ public class PauseManager : MonoBehaviour
         {
             instance = this;
         }
+
+        interactItems = FindObjectOfType<interactItem>();
+        conditionalObjectInteract = FindObjectOfType<conditionalObjectInteract>();
+        pandaQuest = FindObjectOfType<PandaQuest>();
     }
 
     public void PauseGame()
@@ -22,6 +29,11 @@ public class PauseManager : MonoBehaviour
         Time.timeScale = 0f;
 
         InputManager.PlayerInput.SwitchCurrentActionMap("UI");
+
+        interactItems.enabled = false;
+        pandaQuest.enabled = false;
+        conditionalObjectInteract.enabled = false;
+
         // InputManager.PlayerInputManager.Player.Disable();
         // InputManager.PlayerInputManager.UI.Enable();
     }
