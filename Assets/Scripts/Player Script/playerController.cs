@@ -81,6 +81,9 @@ public class playerController : MonoBehaviour
         {
             StopAnimation();
         }
+
+        //Debug.Log(ySpeed);
+        Debug.Log(_isJump);
     }
 
     private void HanddleMovements()
@@ -200,7 +203,7 @@ public class playerController : MonoBehaviour
     {
         if (!isRooling)
         {
-            if (characterController.isGrounded)
+            if (characterController.isGrounded && !_isJump)
             {
                 StartCoroutine(Jumping());
                 _currentState = JumpState.Jump;
@@ -211,11 +214,12 @@ public class playerController : MonoBehaviour
     IEnumerator Jumping()
     {
         _isJump = true;
+
         //pake delay, biar animasi jump jalan dulu sebelum character jump 
         yield return new WaitForSeconds(_jumpDelayDuration);
         
         ySpeed = _jumpSpeed;
-        while (ySpeed >= -1) {
+        while (ySpeed > -0.05) {
             _isJump = true;
 
             yield return null;
