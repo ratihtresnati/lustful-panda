@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &1438794274992174436
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: dd947baa5c0c3884684ce386757367c7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.2509765
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dd947baa5c0c3884684ce386757367c7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.010000229
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dd947baa5c0c3884684ce386757367c7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.807417
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dd947baa5c0c3884684ce386757367c7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dd947baa5c0c3884684ce386757367c7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dd947baa5c0c3884684ce386757367c7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dd947baa5c0c3884684ce386757367c7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dd947baa5c0c3884684ce386757367c7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dd947baa5c0c3884684ce386757367c7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dd947baa5c0c3884684ce386757367c7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7066273955583439972, guid: dd947baa5c0c3884684ce386757367c7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: aec0f4f726cc5584f86c12b96c42e48f, type: 2}
+    - target: {fileID: 919132149155446097, guid: dd947baa5c0c3884684ce386757367c7, type: 3}
+      propertyPath: m_Name
+      value: PandaNPCBasic_ANM
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: dd947baa5c0c3884684ce386757367c7, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 96fb31746fafba54e926acf434e23334, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: dd947baa5c0c3884684ce386757367c7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 729428342082952251}
+  m_SourcePrefab: {fileID: 100100000, guid: dd947baa5c0c3884684ce386757367c7, type: 3}
+--- !u!1 &2249255632996337717 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: dd947baa5c0c3884684ce386757367c7, type: 3}
+  m_PrefabInstance: {fileID: 1438794274992174436}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &729428342082952251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2249255632996337717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbe3c1d900ccd174fb72614a74f8cdcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _acceleration: 1
+  _currentState: 0
+  _animator: {fileID: 4800004240477423861}
+  _idleTime: 6
+  _isIdleWithTime: 0
+  _isRest: 0
+  _isSit: 0
+  _targetMove: {fileID: 0}
+  _agent: {fileID: 0}
+  _targetRotation: 0
+  _rotationSpeed: 0
+  maxDistance: 1
+  _isQuest: 0
+  _isComplete: 0
+--- !u!95 &4800004240477423861 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: dd947baa5c0c3884684ce386757367c7, type: 3}
+  m_PrefabInstance: {fileID: 1438794274992174436}
+  m_PrefabAsset: {fileID: 0}
