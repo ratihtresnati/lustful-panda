@@ -18,7 +18,7 @@ public class AISensor : MonoBehaviour
     
     void Start()
     {
-        playerRef = GameObject.FindGameObjectWithTag("Player");
+        playerRef = GameObject.FindGameObjectWithTag("PandaMC");
         StartCoroutine(FOVRoutine());
     }
 
@@ -51,8 +51,9 @@ public class AISensor : MonoBehaviour
                 else
                     canSeePlayer = false;
             }
-            else
-                canSeePlayer = false;
+            
         }
+        else
+            canSeePlayer = false;
     }
 }
