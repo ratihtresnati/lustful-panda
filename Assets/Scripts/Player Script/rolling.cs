@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class rolling : MonoBehaviour
 {
-
     public Transform _orientation;
     public Transform _camera;
     private Rigidbody rb;
@@ -29,7 +28,7 @@ public class rolling : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (InputManager.instance.RollInput)
         {
             Rolling();
         }
@@ -43,7 +42,6 @@ public class rolling : MonoBehaviour
 
         Invoke(nameof(ResetRoll), rollDuration);
     }
-
     private void ResetRoll()
     {
 

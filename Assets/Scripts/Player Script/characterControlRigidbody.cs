@@ -43,7 +43,7 @@ public class characterControlRigidbody : MonoBehaviour
 
 
         //Run
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (InputManager.instance.RunPressed)
         {
             _speed = _runSpeed;
         }

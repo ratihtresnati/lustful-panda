@@ -8,9 +8,9 @@ public class conditionalObjectInteract : MonoBehaviour
 {
     private PlayerInputManager playarInputManager;
 
-    public float interactionRadius; // Radius interaksi
+    public float interactionRadius;
     public GameObject player;
-    public GameObject taskItem; // Referensi ke item quest
+    public GameObject taskItem;
     public GameObject dialogAsset;
     private bool isCarryingTheItem = false;
     [SerializeField] private Outline _outline;
@@ -24,6 +24,7 @@ public class conditionalObjectInteract : MonoBehaviour
         playerHoldPosition = FindObjectOfType<PlayerHoldPosition>();
         _outline = gameObject.GetComponent<Outline>();
         _itemOutline = taskItem.GetComponent<Outline>();
+
          if (dialogAsset != null)
         {
             dialogAsset.SetActive(false);
@@ -31,17 +32,14 @@ public class conditionalObjectInteract : MonoBehaviour
         player = GameObject.Find("Panda Bayik");
 
         // Input System
-        playarInputManager = new PlayerInputManager();
-        playarInputManager.Player.Enable(); //Mengaktifkan control mapping
-        playarInputManager.Player.Interact.performed += InteractEvent; //Mengaktifkan Action Interect
+        // playarInputManager = new PlayerInputManager();
+        // playarInputManager.Player.Enable(); //Mengaktifkan control mapping
+        // playarInputManager.Player.Interact.performed += InteractEvent; //Mengaktifkan Action Interect
     }
-
-    
 
     void Update()
     {
         // Check bawaan item
-
         if (taskItem != null && taskItem.transform.parent == playerHoldPosition.PositionParent())
         {
             isCarryingTheItem = true;
@@ -51,9 +49,8 @@ public class conditionalObjectInteract : MonoBehaviour
             isCarryingTheItem = false;
         }
         // Menghitung jarak pemain n objek
-        /*
         float distance = Vector3.Distance(player.transform.position, transform.position);
-        if (distance <= interactionRadius && Input.GetKeyDown(KeyCode.E))
+        if (distance <= interactionRadius && InputManager.instance.InteractInput)
         {
             if (isCarryingTheItem)
             {
@@ -61,16 +58,14 @@ public class conditionalObjectInteract : MonoBehaviour
             }
             else
             {
-                itemOutline.ApplyOutline(true);
+                _itemOutline.ApplyOutline(true);
                 dialogAsset.SetActive(true);
                 QuestManager.instance.NextQuest();
             }
         }
-        */
     }
 
-    // Menghitung jarak pemain n objek
-    private void InteractEvent(InputAction.CallbackContext context)
+    /*private void InteractEvent(InputAction.CallbackContext context)
     {
         float distance = Vector3.Distance(player.transform.position, transform.position);
         if (distance <= interactionRadius)
@@ -86,7 +81,7 @@ public class conditionalObjectInteract : MonoBehaviour
                 QuestManager.instance.NextQuest();
             }
         }
-    }
+    }*/
 
     void Interact()
     {

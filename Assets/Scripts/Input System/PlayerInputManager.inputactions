@@ -15,18 +15,18 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Jump",
+                    "name": "Run",
                     "type": "Button",
-                    "id": "918e1096-1944-41f9-b438-e4a198fc1b1c",
+                    "id": "64743bf6-f7fe-42a3-9083-9c48a1700ce7",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Run",
+                    "name": "Jump",
                     "type": "Button",
-                    "id": "64743bf6-f7fe-42a3-9083-9c48a1700ce7",
+                    "id": "918e1096-1944-41f9-b438-e4a198fc1b1c",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -51,7 +51,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "MenuOpen",
+                    "name": "Pause",
                     "type": "Button",
                     "id": "977e0ce1-fcdd-4a85-b77f-f890658b4096",
                     "expectedControlType": "Button",
@@ -151,28 +151,6 @@
                 },
                 {
                     "name": "",
-                    "id": "2cc1e4c3-eb95-4219-864b-21c7fae45ce5",
-                    "path": "<Keyboard>/leftShift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard",
-                    "action": "Run",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "17fb468e-0b57-4098-9f54-c92e548ac2f4",
-                    "path": "<Gamepad>/rightShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Run",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "e61f4983-2652-438b-8817-45749e233691",
                     "path": "<Keyboard>/q",
                     "interactions": "",
@@ -222,7 +200,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "MenuOpen",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2cc1e4c3-eb95-4219-864b-21c7fae45ce5",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Run",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "17fb468e-0b57-4098-9f54-c92e548ac2f4",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Run",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

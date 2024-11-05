@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 
 public class GameInput : MonoBehaviour
 {
+    /*
     public event EventHandler OnJumpingEvent;
     public event EventHandler OnRunningEvent;
     public event EventHandler OutRunningEvent;
@@ -60,5 +61,5 @@ public class GameInput : MonoBehaviour
         inputVector = inputVector.normalized;
 
         return inputVector;
-    }
+    }*/
 }

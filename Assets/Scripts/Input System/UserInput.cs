@@ -3,49 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputManager : MonoBehaviour
+public class UserInput : MonoBehaviour
 {
-    public static InputManager instance;
-    public static PlayerInput PlayerInput;
-    public static PlayerInputManager PlayerInputManager;
-    public bool MenuCloseInput { get; private set; }
-    public bool ButtonClickInput { get; private set; }
+    public static UserInput instance;
     public Vector2 MoveInput { get; private set; }
-    public bool RunPressed { get; private set; }
-    public bool RunReleased { get; private set; }
+    public bool RunInput { get; private set; }
     public bool JumpInput { get; private set; }
     public bool RollInput { get; private set; }
     public bool InteractInput { get; private set; }
     public bool PauseInput { get; private set; }
-    private InputAction _menuCloseAction;
-    private InputAction _selectAction;
+    public static PlayerInput PlayerInput;
     private InputAction _moveAction;
     private InputAction _runAction;
     private InputAction _jumpAction;
     private InputAction _rollAction;
     private InputAction _interactAction;
     private InputAction _pauseAction;
-    
+
     private void Awake()
     {
         if(instance == null)
         {
             instance = this;
         }
-
-        PlayerInputManager = new PlayerInputManager(); 
+        
         PlayerInput = gameObject.GetComponent<PlayerInput>();
-
         SetupInputAction();
     }
+
     private void Update() {
         UpdateInputs();
     }
     
     private void SetupInputAction(){
-        _menuCloseAction = PlayerInput.actions["MenuClose"];
-        _selectAction = PlayerInput.actions["Click"];
-
         _moveAction = PlayerInput.actions["Move"];
         _runAction = PlayerInput.actions["Run"];
         _jumpAction = PlayerInput.actions["Jump"];
@@ -54,12 +44,8 @@ public class InputManager : MonoBehaviour
         _pauseAction = PlayerInput.actions["Pause"];
     }
     private void UpdateInputs(){
-        MenuCloseInput = _menuCloseAction.WasPressedThisFrame();
-        ButtonClickInput = _selectAction.WasPressedThisFrame();
-
         MoveInput = _moveAction.ReadValue<Vector2>();
-        RunPressed = _runAction.WasPressedThisFrame();
-        RunReleased = _runAction.WasReleasedThisFrame();
+        RunInput = _runAction.WasPressedThisFrame();
         JumpInput = _jumpAction.WasPressedThisFrame();
         RollInput = _rollAction.WasPressedThisFrame();
         InteractInput = _interactAction.WasPressedThisFrame();

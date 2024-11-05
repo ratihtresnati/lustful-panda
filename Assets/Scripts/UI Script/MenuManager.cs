@@ -28,7 +28,7 @@ public class MenuManager : MonoBehaviour
 
     private void Update()
     {
-        if(InputManager.instance.MenuOpenInput)
+        if(InputManager.instance.PauseInput)
         {
             if(!PauseManager.instance.IsPause)
             {
