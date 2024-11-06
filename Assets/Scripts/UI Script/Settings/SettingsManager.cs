@@ -45,45 +45,4 @@ public class SettingsManager : MonoBehaviour
     {
         EventSystem.current.SetSelectedGameObject(Buttons[0]);
     }
-    // [SerializeField] private Image[] navImage;
-
-    // [SerializeField] private Sprite navClose, navOpen;
-
-    // void Start()
-    // {
-    //     ShowNav(0);
-    // }
-
-    // public void ShowNav(int tutorialNum)
-    // {
-
-    //     foreach (var item in navImage)
-    //     {
-    //         item.sprite = navClose;
-    //     } 
-        
-    //    if (tutorialNum == tutorialSO.Count)
-    //     {
-    //         tutorialNum = 0;
-    //     }
-
-    //     navImage[tutorialNum].sprite = navOpen;
-    // }
-
-    // public void SwitchTab(int tabNo)
-    // {
-    //     foreach (GameObject tab in Tabs)
-    //     {
-    //         tab.SetActive(false);
-    //     }
-
-        // Tabs[tabNo].SetActive(true);
-
-        // foreach (Image image in buttonImage)
-        // {
-        //     image.sprite 
-        // }
-    // }
-
-    
 }

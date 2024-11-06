@@ -6,10 +6,6 @@ using UnityEngine.Events;
 
 public class interactItem : MonoBehaviour
 {
-    [SerializeField] private GameInput gameInput;
-
-    private PlayerInputManager playerInputManager;
-
     public float pickupRadius;
     private bool canPickup = false;
     bool isCarryingItem = false;
@@ -25,12 +21,6 @@ public class interactItem : MonoBehaviour
     {
         player = GameObject.Find("Panda Bayik");
         _playerHoldPosition = player.GetComponent<PlayerHoldPosition>();
-
-        playerInputManager = new PlayerInputManager();
-        playerInputManager.Player.Enable();
-        playerInputManager.Player.Interact.performed += InteractEvent;
-
-        //gameInput.OnInteractEvent += InteractEvent;
     }
 
     void Update()
@@ -54,22 +44,8 @@ public class interactItem : MonoBehaviour
         }
 
         // interact item
-        /*
-        if(Input.GetKeyDown(KeyCode.E)){
-            if (canPickup && !isCarryingItem)
-                {
-                    Pickup();
-                }
-            else if (isCarryingItem){
-                Drop();
-            }
-        }
-        */
-    }
-
-    private void InteractEvent(UnityEngine.InputSystem.InputAction.CallbackContext context)
-    {
-        Debug.Log("Interact");
+        if(InputManager.instance.InteractClickInput)
+        {
             if (canPickup && !isCarryingItem)
             {
                 Pickup();
@@ -78,7 +54,21 @@ public class interactItem : MonoBehaviour
             {
                 Drop();
             }
+        }
     }
+
+    // private void InteractEvent(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    // {
+    //     Debug.Log("Interact");
+    //         if (canPickup && !isCarryingItem)
+    //         {
+    //             Pickup();
+    //         }
+    //         else if (isCarryingItem)
+    //         {
+    //             Drop();
+    //         }
+    // }
 
     void Pickup()
     {

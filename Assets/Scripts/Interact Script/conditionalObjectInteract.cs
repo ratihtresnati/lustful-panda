@@ -6,8 +6,6 @@ using UnityEngine.InputSystem;
 
 public class conditionalObjectInteract : MonoBehaviour
 {
-    private PlayerInputManager playarInputManager;
-
     public float interactionRadius; // Radius interaksi
     public GameObject player;
     public GameObject taskItem; // Referensi ke item quest
@@ -29,15 +27,7 @@ public class conditionalObjectInteract : MonoBehaviour
             dialogAsset.SetActive(false);
         }
         player = GameObject.Find("Panda Bayik");
-
-        // Input System
-        playarInputManager = new PlayerInputManager();
-        playarInputManager.Player.Enable(); //Mengaktifkan control mapping
-        playarInputManager.Player.Interact.performed += InteractEvent; //Mengaktifkan Action Interect
     }
-
-    
-
     void Update()
     {
         // Check bawaan item
@@ -50,40 +40,22 @@ public class conditionalObjectInteract : MonoBehaviour
         {
             isCarryingTheItem = false;
         }
-        // Menghitung jarak pemain n objek
-        /*
-        float distance = Vector3.Distance(player.transform.position, transform.position);
-        if (distance <= interactionRadius && Input.GetKeyDown(KeyCode.E))
-        {
-            if (isCarryingTheItem)
-            {
-                Interact();
-            }
-            else
-            {
-                itemOutline.ApplyOutline(true);
-                dialogAsset.SetActive(true);
-                QuestManager.instance.NextQuest();
-            }
-        }
-        */
-    }
 
-    // Menghitung jarak pemain n objek
-    private void InteractEvent(InputAction.CallbackContext context)
-    {
-        float distance = Vector3.Distance(player.transform.position, transform.position);
-        if (distance <= interactionRadius)
+        if (InputManager.instance.InteractClickInput)
         {
-            if (isCarryingTheItem)
+            float distance = Vector3.Distance(player.transform.position, transform.position);
+            if (distance <= interactionRadius)
             {
-                Interact();
-            }
-            else
-            {
-                _itemOutline.ApplyOutline(true);
-                dialogAsset.SetActive(true);
-                QuestManager.instance.NextQuest();
+                if (isCarryingTheItem)
+                {
+                    Interact();
+                }
+                else
+                {
+                    _itemOutline.ApplyOutline(true);
+                    dialogAsset.SetActive(true);
+                    QuestManager.instance.NextQuest();
+                }
             }
         }
     }

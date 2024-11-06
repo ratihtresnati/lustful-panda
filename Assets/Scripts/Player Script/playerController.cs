@@ -7,138 +7,106 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class playerController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField]
-    private float _jumpSpeed = 3f;
-    [SerializeField]
-    private float _walkSpeed = 3f;
-    [SerializeField]
-    private float _runSpeed = 6f;
-    [SerializeField]
-    private float _rotationSpeed = 90f;
-    [SerializeField]
-    AnimationCurve _rollCurve;
-
-    private CharacterController characterController;
-    private float ySpeed;
-    private bool _isRun;
-
-    [SerializeField]
-    private GameInput gameInput;
-
-    private bool isRooling;
+    [SerializeField] private float _jumpSpeed = 3f;
+    [SerializeField] private float _walkSpeed = 3f;
+    [SerializeField] private float _runSpeed = 6f;
+    [SerializeField] private float _rotationSpeed = 90f;
     private float _rollTimer;
     private float _speed;
-    private float hInput;
-    private float vInput;
-    private Vector2 inputVector;
-    private Vector3 move;
-    private Vector3 velocity;
-
-    [Header("Animasi")]
-    public CharacterAnimatorController CharacterAnimatorController;
-    // public AnimationLookAt AnimationLookAt;
-    [SerializeField] private float _animeSmoothSpeed = 2;
-    [SerializeField] private float _animHorizontal, _animVertical;
-    private JumpState _currentState = JumpState.Grounded;
-    private bool _isJump = false;
-    [SerializeField] private float _jumpDelayDuration = 2f;
-    private bool _isTurnRight;
-
+    private float _ySpeed;
+    [SerializeField] private float _jumpDelayDuration = 0.2f;
+    [SerializeField] AnimationCurve _rollCurve;
+    private CharacterController _characterController;
+    
+    [SerializeField]
+    private GameInput _gameInput;
+    private Vector2 _inputVector;
+    private Vector3 _velocity;
+    public Vector3 move { get; private set; } 
+    public bool IsJump { get; private set; }
+    public bool IsRun { get; private set; }
+    public bool IsRooling { get; private set; }
+    public bool isGrounded { get; private set; }
+    public bool isRotating { get; private set; }
 
     void Start()
     {
-
-        characterController = GetComponent<CharacterController>();
-        CharacterAnimatorController = GetComponent<CharacterAnimatorController>();
+        _characterController = GetComponent<CharacterController>();
+        _gameInput = GetComponentInChildren<GameInput>();
 
         Keyframe roll_lastFrame = _rollCurve[_rollCurve.length - 1];
         _rollTimer = roll_lastFrame.time;
 
-        gameInput.OnRunningEvent += OnRunEvent;
-        gameInput.OutRunningEvent += OutRunEvent;
-        gameInput.OnJumpingEvent += OnJumpEvent;
-        gameInput.OnRollingEvent += OnRollEvent;
+        _gameInput.OnRunningEvent += OnRunEvent;
+        _gameInput.OutRunningEvent += OutRunEvent;
+        _gameInput.OnJumpingEvent += OnJumpEvent;
+        _gameInput.OnRollingEvent += OnRollEvent;
     }
-
-   
-
-
     // Update is called once per frame
     void Update()
     {
         HanddleMovements();
-
-        //animasi
-        AnimateWalkRun(new Vector3(inputVector.x, inputVector.y, 0));
-        AnimateJump();
-        AnimateRest();
-        AnimateSit();
-
-        if(Input.GetKeyDown(KeyCode.I))
-        {
-            StopAnimation();
-        }
-
-        //Debug.Log(ySpeed);
-        Debug.Log(_isJump);
+        // //Debug.Log(_ySpeed);
+        // Debug.Log(IsJump);
     }
 
-    private void HanddleMovements()
+      private void HanddleMovements()
     {
-        if (!isRooling)
+        if (!IsRooling)
         {
-            gameObject.tag = "PandaMC";
+        gameObject.tag = "PandaMC";
 
-            inputVector = gameInput.GetMovementControl();
+        _inputVector = _gameInput.GetMovementControl();
+        move = new Vector3(_inputVector.x, 0, _inputVector.y);
 
-            move = new Vector3(inputVector.x, 0, inputVector.y);
+        if (IsRun)
+        {
+            _speed = _runSpeed;
+        }
+        else
+        {
+            IsRun = false;
+            _speed = _walkSpeed;
+        }
 
-            if (_isRun)
-            {
-                _speed = _runSpeed;
-            }
-            else 
-            { 
-                _speed = _walkSpeed;
-            }
+        float magnitude = Mathf.Clamp01(move.magnitude) * _speed;
+        move.Normalize();
 
+        _ySpeed += Physics.gravity.y * Time.deltaTime;
 
-            float magnitude = Mathf.Clamp01(move.magnitude) * _speed;
-            move.Normalize();
+        _velocity = move * magnitude;
 
-            ySpeed += Physics.gravity.y * Time.deltaTime;
+        _velocity.y = _ySpeed;
 
+        _characterController.Move(_velocity * Time.deltaTime);
 
-            velocity = move * magnitude;
-            velocity.y = ySpeed;
+        if (move != Vector3.zero)
+        {
+            Quaternion toRotation = Quaternion.LookRotation(move, Vector3.up);
+            // float angleDifference = Quaternion.Angle(transform.rotation, toRotation);
+            
+            // if (angleDifference > 0.1f)
+            // {
+                float rotationStep = _rotationSpeed * Time.deltaTime;
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationStep);
+            //     isRotating = true; 
+            // }
+            // else
+            // {
+            //     isRotating = false;
+            // }
 
-            characterController.Move(velocity * Time.deltaTime);
-            if (move != Vector3.zero)
-            {
-                Vector3 desiredDirection = new Vector3(hInput, 0, vInput);
-                if (desiredDirection.magnitude > 0)
-                {
-                    desiredDirection.Normalize();
-                }
-                float angleDiff = Vector3.Angle(transform.forward, desiredDirection);
+            // Debug.Log(isRotating);
+        }
 
-                float speedModifier = Mathf.Lerp(1f, 0.1f, Mathf.InverseLerp(45f, 135f, angleDiff));
-                _speed *= speedModifier;
-
-                Quaternion toRotation = Quaternion.LookRotation(move, Vector3.up);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, _rotationSpeed * Time.deltaTime);
-
-
-            }
-
-
-            if (characterController.isGrounded)
-            {
-                ySpeed = 0;
-            }
+        if (_characterController.isGrounded)
+        {
+            isGrounded = true;
+            _ySpeed = 0;
+        }
         }
     }
 
@@ -148,26 +116,23 @@ public class playerController : MonoBehaviour
     private void OnRunEvent(object sander, EventArgs e)
     {
 
-        _isRun = true;
+        IsRun = true;
 
     }
 
     // Out Running
     private void OutRunEvent(object sender, EventArgs e)
     {
-        _isRun = false;
+        IsRun = false;
     }
-
-
-    #region Rolling
 
     private void OnRollEvent(object sender, EventArgs e)
     {
-        if (!isRooling)
+        if (!IsRooling)
         { 
-            if (!_isJump)
+            if (!IsJump)
             {
-                if (velocity.magnitude != 0) StartCoroutine(Rolling());
+                if (_velocity.magnitude != 0) StartCoroutine(Rolling());
             }
         }
     }
@@ -175,125 +140,48 @@ public class playerController : MonoBehaviour
     IEnumerator Rolling()
     {
         //selagi jump dia gak bisa roll
-        if (_isJump == true) 
+        if (IsJump == true) 
         { 
             yield return null;
         }
 
-        isRooling = true;
+        IsRooling = true;
         gameObject.tag = "PandaRolling";
-        CharacterAnimatorController.Roll();
         float timer = 0;
         while (timer < _rollTimer) {
             float _rollSpeed = _rollCurve.Evaluate(timer);
             Vector3 dir = (transform.forward * _rollSpeed);
-            characterController.Move(dir * Time.deltaTime);
+            _characterController.Move(dir * Time.deltaTime);
             timer += Time.deltaTime;
             yield return null;
         }
-        CharacterAnimatorController.StopRoll();
-        isRooling = false;
+        IsRooling = false;
     }
-
-    #endregion
-    
-    #region Jumping
 
     private void OnJumpEvent(object sander, EventArgs e)
     {
-        if (!isRooling)
+        if (!IsRooling)
         {
-            if (characterController.isGrounded && !_isJump)
+            if (_characterController.isGrounded && !IsJump)
             {
                 StartCoroutine(Jumping());
-                _currentState = JumpState.Jump;
             }
         }
     }
 
     IEnumerator Jumping()
     {
-        _isJump = true;
-
+        IsJump = true;
         //pake delay, biar animasi jump jalan dulu sebelum character jump 
         yield return new WaitForSeconds(_jumpDelayDuration);
         
-        ySpeed = _jumpSpeed;
-        while (ySpeed > -0.05) {
-            _isJump = true;
+        _ySpeed = _jumpSpeed;
+        while (_ySpeed > -0.05) {
+            IsJump = true;
 
             yield return null;
         }
-        _isJump = false;
+        IsJump = false;
     }
-    #endregion
-
-    #region animation
-    //animasi jump
-    private void AnimateJump()
-    {
-        switch (_currentState)
-        {
-            case JumpState.Grounded:
-                break;
-            case JumpState.Jump:
-                CharacterAnimatorController.Jump();
-                _currentState = JumpState.Falling;
-                break;
-            case JumpState.Falling:
-                CharacterAnimatorController.Land();
-                _currentState = JumpState.Grounded;
-                break;
-        }
-    }
-
-    //animasi walk & run
-    private void AnimateWalkRun(Vector3 input) 
-    {
-        float multiplier = _isRun ? 3 : 2f;
-        float targetHorizontal = input.x * multiplier;
-        float targetVertical = input.y * multiplier;
-
-        _animHorizontal = Mathf.Lerp(_animHorizontal, targetHorizontal, Time.deltaTime * _animeSmoothSpeed);
-        _animVertical = Mathf.Lerp(_animVertical, targetVertical, Time.deltaTime * _animeSmoothSpeed);
-
-        CharacterAnimatorController.WalkSpeed(_animHorizontal, _animVertical);
-    }
-
-    //animasi sit
-    private void AnimateSit()
-    {
-        if(Input.GetKeyDown(KeyCode.Y))
-        {
-            CharacterAnimatorController.Sit();
-        }
-    }
-
-    //animasi rest
-    private void AnimateRest()
-    {
-        if(Input.GetKeyDown(KeyCode.U))
-        {
-            CharacterAnimatorController.Rest();
-        }
-    }
-
-    private void StopAnimation()
-    {
-        CharacterAnimatorController.UpSit();
-        CharacterAnimatorController.UpRest();
-    }
-
-    public Vector3 PlayerControlMovement()
-    {
-        return move;
-    }
-#endregion
 }
 
-public enum JumpState
-{
-    Grounded,
-    Jump,
-    Falling
-}

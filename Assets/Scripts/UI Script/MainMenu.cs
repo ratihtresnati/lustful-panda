@@ -14,15 +14,17 @@ public class MainMenu : MonoBehaviour
         public int sceneIndex = -1;  // Indeks scene tujuan di Build Settings (-1 jika tombol ini adalah tombol keluar)
         public bool isExitButton;    // True jika tombol ini adalah tombol keluar
     }
+    
+    public GameObject menuGameObject;
 
     // Daftar tombol dan scene yang akan dimuat
     public SceneButton[] sceneButtons;
-
     void Start()
     {
         // Menambahkan listener ke setiap tombol
         foreach (SceneButton sceneButton in sceneButtons)
         {
+            int index = sceneButton.sceneIndex; // Simpan indeks lokal untuk digunakan dalam lambda
             if (sceneButton.isExitButton)
             {
                 sceneButton.button.onClick.AddListener(ExitApplication);
@@ -30,16 +32,42 @@ public class MainMenu : MonoBehaviour
             else
             {
                 // Jika bukan tombol keluar, tambahkan listener untuk memuat scene
-                int index = sceneButton.sceneIndex; // Simpan indeks lokal untuk digunakan dalam lambda
+                // int index = sceneButton.sceneIndex; // Simpan indeks lokal untuk digunakan dalam lambda
                 sceneButton.button.onClick.AddListener(() => LoadScene(index));
             }
         }
     }
 
-    // Fungsi untuk memuat scene berdasarkan indeks
-    private void LoadScene(int sceneIndex)
+    private void Update()
     {
-        SceneManager.LoadScene(sceneIndex);
+        bool pressed = false;
+        foreach (SceneButton sceneButton in sceneButtons)
+        {
+            int index = sceneButton.sceneIndex; // Simpan indeks lokal untuk digunakan dalam lambda
+            if (InputManager.instance.ButtonClickInput)
+            {
+                if (sceneButton.isExitButton == true)
+                {
+                    ExitApplication();
+                    pressed = true;
+                    break;
+                }
+                else
+                {
+                    LoadScene(index);
+                    menuGameObject.SetActive(false);
+                    pressed = true; 
+                    break;
+                }
+            }
+        }
+    }
+
+    // Fungsi untuk memuat scene berdasarkan indeks
+    public void LoadScene(int sceneIndex)
+    {
+        // SceneManager.LoadScene(sceneIndex);
+        Loading.instance.LoadScene(sceneIndex);
     }
 
     // Fungsi untuk keluar dari aplikasi
