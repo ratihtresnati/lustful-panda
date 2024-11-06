@@ -13,8 +13,6 @@ GameObject:
   - component: {fileID: 2630059407848515532}
   - component: {fileID: 6789284445588187806}
   - component: {fileID: 3509370447413529161}
-  - component: {fileID: 748401429654358634}
-  - component: {fileID: 4441337211312655702}
   - component: {fileID: 334584410330302043}
   - component: {fileID: 1594665960598457718}
   - component: {fileID: 1625988219996183031}
@@ -136,52 +134,6 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &748401429654358634
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7276022016859574408}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4bef800bd003bd4fbdcc7fd583d852e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Sensor: {fileID: 4441337211312655702}
-  AIAnimatorController: {fileID: 334584410330302043}
-  player: {fileID: 0}
-  walkSpeed: 3
-  runSpeed: 4
-  patrolPoint:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  idleTime: 2
-  idleTimeAfterLosePlayer: 5
---- !u!114 &4441337211312655702
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7276022016859574408}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60e6ab31644662a42abaaca438b6b0a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius: 7
-  angle: 160
-  playerRef: {fileID: 0}
-  targetMask:
-    serializedVersion: 2
-    m_Bits: 256
-  obstructionMask:
-    serializedVersion: 2
-    m_Bits: 128
-  canSeePlayer: 0
 --- !u!114 &334584410330302043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,9 +159,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 436a14892d706e74ba924076eca0609f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sensor: {fileID: 0}
-  GroupTriger: {fileID: 0}
-  AIAnimatorController: {fileID: 0}
+  Sensor: {fileID: 1625988219996183031}
+  GroupTrigger: {fileID: 0}
+  AIAnimatorController: {fileID: 334584410330302043}
   player: {fileID: 0}
   walkSpeed: 3
   runSpeed: 4
@@ -230,7 +182,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius: 0
   angle: 0
-  GroupTriger: {fileID: 0}
   playerRef: {fileID: 0}
   targetMask:
     serializedVersion: 2

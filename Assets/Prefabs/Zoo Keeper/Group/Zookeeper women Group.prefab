@@ -146,9 +146,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 436a14892d706e74ba924076eca0609f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sensor: {fileID: 0}
-  GroupTriger: {fileID: 0}
-  AIAnimatorController: {fileID: 0}
+  Sensor: {fileID: 2251850721100821328}
+  GroupTrigger: {fileID: 0}
+  AIAnimatorController: {fileID: 8017050364953579992}
   player: {fileID: 0}
   walkSpeed: 3
   runSpeed: 4
@@ -169,7 +169,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius: 0
   angle: 0
-  GroupTriger: {fileID: 0}
   playerRef: {fileID: 0}
   targetMask:
     serializedVersion: 2
@@ -190,7 +189,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fae6c40d7afcfd949b0645189922daec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
+  animator: {fileID: 2671888775671366748}
 --- !u!1001 &8394394173817387469
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -256,6 +255,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b8658fb09c0c52749881bd5b2e7dc3d2, type: 3}
+--- !u!95 &2671888775671366748 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: b8658fb09c0c52749881bd5b2e7dc3d2, type: 3}
+  m_PrefabInstance: {fileID: 8394394173817387469}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8355400497947156006 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b8658fb09c0c52749881bd5b2e7dc3d2, type: 3}

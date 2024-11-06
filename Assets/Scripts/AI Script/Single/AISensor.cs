@@ -8,6 +8,7 @@ public class AISensor : MonoBehaviour
     public float radius;
     [Range(0, 360)]
     public float angle;
+    
 
     public GameObject playerRef;
 
@@ -15,6 +16,7 @@ public class AISensor : MonoBehaviour
     public LayerMask obstructionMask;
 
     public bool canSeePlayer;
+   
     
     void Start()
     {
@@ -32,6 +34,8 @@ public class AISensor : MonoBehaviour
             FieldOfViewCheck();
         }
     }
+    
+   
 
     private void FieldOfViewCheck()
     {
@@ -56,4 +60,6 @@ public class AISensor : MonoBehaviour
         else
             canSeePlayer = false;
     }
+    
+    
 }

@@ -151,11 +151,7 @@ MonoBehaviour:
   player: {fileID: 0}
   walkSpeed: 3
   runSpeed: 4
-  patrolPoint:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  patrolPoint: []
   idleTime: 2
   idleTimeAfterLosePlayer: 5
 --- !u!114 &4441337211312655702
@@ -192,7 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fae6c40d7afcfd949b0645189922daec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
+  animator: {fileID: 4842556204818526733}
 --- !u!1001 &1323674148082470812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -261,5 +257,10 @@ PrefabInstance:
 --- !u!4 &1572912829960267895 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 67a977dbe5611b84ab0e0066af7ae214, type: 3}
+  m_PrefabInstance: {fileID: 1323674148082470812}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &4842556204818526733 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 67a977dbe5611b84ab0e0066af7ae214, type: 3}
   m_PrefabInstance: {fileID: 1323674148082470812}
   m_PrefabAsset: {fileID: 0}
