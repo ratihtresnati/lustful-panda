@@ -9,6 +9,10 @@ public class SettingsManager : MonoBehaviour
     public static SettingsManager instance;
     public GameObject[] Tabs;
     public GameObject[] Buttons;
+    [SerializeField] private GameObject _controlMapBtn;
+    [SerializeField] private GameObject _settingMenu;
+    [SerializeField] private GameObject _controlMapMenu;
+    [SerializeField] private GameObject _firstButton;
 
     private void Awake()
     {
@@ -30,6 +34,10 @@ public class SettingsManager : MonoBehaviour
                 {
                     Tabs[i].SetActive(selectedButton == Buttons[i]);
                 }
+                if (selectedButton == _controlMapBtn && InputManager.instance.ButtonClickInput)
+                {
+                    OpenControlMap();
+                }
             }
     }
 
@@ -45,6 +53,15 @@ public class SettingsManager : MonoBehaviour
     {
         EventSystem.current.SetSelectedGameObject(Buttons[0]);
     }
+
+    private void OpenControlMap(){
+        _settingMenu.SetActive(false);
+        _controlMapMenu.SetActive(true);
+
+        EventSystem.current.SetSelectedGameObject(_firstButton);
+    }
+
+
     // [SerializeField] private Image[] navImage;
 
     // [SerializeField] private Sprite navClose, navOpen;

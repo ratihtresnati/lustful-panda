@@ -10,9 +10,9 @@ public class MenuManager : MonoBehaviour
 {
     [SerializeField] private GameObject _mainMenu;
     [SerializeField] private GameObject _settingMenu;
-    [SerializeField] private bool _isMenuOpen = false;
+    [SerializeField] private GameObject _controlMap;
+    //[SerializeField] private bool _isMenuOpen = false;
     private PlayerInputManager _playerInputManager;
-    [SerializeField] private ControlMapPopup _controlMapPopup;
     public PlayerInput PlayerInput;
 
     [SerializeField] private GameObject _resumeButton;
@@ -24,6 +24,7 @@ public class MenuManager : MonoBehaviour
     {
         _mainMenu.SetActive(false);
         _settingMenu.SetActive(false);
+        _controlMap.SetActive(false);
     }
 
     private void Update()
@@ -87,7 +88,6 @@ public class MenuManager : MonoBehaviour
 
     private void OpenSettingMenu()
     {
-        // _controlMapPopup.popupPanel.SetActive(true);
         _settingMenu.SetActive(true);
         _mainMenu.SetActive(false);
 
@@ -99,6 +99,7 @@ public class MenuManager : MonoBehaviour
     {
         _mainMenu.SetActive(false);
         _settingMenu.SetActive(false);
+        _controlMap.SetActive(false);
 
         EventSystem.current.SetSelectedGameObject(null);
     }
