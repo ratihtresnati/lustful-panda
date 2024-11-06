@@ -7,7 +7,7 @@ public class Loading : MonoBehaviour
 {
     public static Loading instance;
     public GameObject LoadingScreen;
-    public bool IsLoading { get; private set; }
+    public bool IsLoading;
     private void Awake()
     {
         if(instance == null)
@@ -19,6 +19,8 @@ public class Loading : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        Debug.Log(IsLoading);
     }
 
     public void LoadScene (int i )
@@ -37,12 +39,11 @@ public class Loading : MonoBehaviour
 
         while(!operation.isDone)
         {
-            float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
+            float progressValue = Mathf.Clamp01(operation.progress / 0.2f);
 
             yield return null;
         }
-
-        IsLoading = false;
+        
         LoadingScreen.SetActive(false);
     }
 }

@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 
 public class GameInput : MonoBehaviour
 {
+    /*
     public event EventHandler OnJumpingEvent;
     public event EventHandler OnRunningEvent;
     public event EventHandler OutRunningEvent;
@@ -63,7 +64,7 @@ public class GameInput : MonoBehaviour
         _currentInputVector = Vector2.SmoothDamp(_currentInputVector, inputVector, ref _smoothInputVector, _smoothInputSpeed);
          
         inputVector = inputVector.normalized;
-        
-        return _currentInputVector;
-    }
+
+        return inputVector;
+    }*/
 }

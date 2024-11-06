@@ -46,9 +46,9 @@ public class CharacterAnimatorController : MonoBehaviour
         if (_playerController.isGrounded == true) 
         {
             if (_playerController.IsRooling == true) return LockState(Roll, _rollAnimationDuration);
-            if (_playerController.IsRun == true && _playerController.move != Vector3.zero) return Run;
+            if (_playerController.IsRun == true && _playerController.Move != Vector3.zero) return Run;
 
-            return _playerController.move == Vector3.zero ? Idle : Walk;
+            return _playerController.Move == Vector3.zero ? Idle : Walk;
         }
 
         return Idle;

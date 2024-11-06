@@ -6,9 +6,11 @@ using UnityEngine.InputSystem;
 
 public class conditionalObjectInteract : MonoBehaviour
 {
-    public float interactionRadius; // Radius interaksi
+    private PlayerInputManager playarInputManager;
+
+    public float interactionRadius;
     public GameObject player;
-    public GameObject taskItem; // Referensi ke item quest
+    public GameObject taskItem;
     public GameObject dialogAsset;
     private bool isCarryingTheItem = false;
     [SerializeField] private Outline _outline;
@@ -22,6 +24,7 @@ public class conditionalObjectInteract : MonoBehaviour
         playerHoldPosition = FindObjectOfType<PlayerHoldPosition>();
         _outline = gameObject.GetComponent<Outline>();
         _itemOutline = taskItem.GetComponent<Outline>();
+
          if (dialogAsset != null)
         {
             dialogAsset.SetActive(false);
@@ -31,7 +34,6 @@ public class conditionalObjectInteract : MonoBehaviour
     void Update()
     {
         // Check bawaan item
-
         if (taskItem != null && taskItem.transform.parent == playerHoldPosition.PositionParent())
         {
             isCarryingTheItem = true;
@@ -40,8 +42,27 @@ public class conditionalObjectInteract : MonoBehaviour
         {
             isCarryingTheItem = false;
         }
+        // Menghitung jarak pemain n objek
+        float distance = Vector3.Distance(player.transform.position, transform.position);
+        if (distance <= interactionRadius && InputManager.instance.InteractInput)
+        {
+            if (isCarryingTheItem)
+            {
+                Interact();
+            }
+            else
+            {
+                _itemOutline.ApplyOutline(true);
+                dialogAsset.SetActive(true);
+                QuestManager.instance.NextQuest();
+            }
+        }
+    }
 
-        if (InputManager.instance.InteractClickInput)
+    /*private void InteractEvent(InputAction.CallbackContext context)
+    {
+        float distance = Vector3.Distance(player.transform.position, transform.position);
+        if (distance <= interactionRadius)
         {
             float distance = Vector3.Distance(player.transform.position, transform.position);
             if (distance <= interactionRadius)
@@ -58,7 +79,7 @@ public class conditionalObjectInteract : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
 
     void Interact()
     {

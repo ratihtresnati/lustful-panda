@@ -13,6 +13,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject _resumeButton;
     [SerializeField] private GameObject _settingButton;
     [SerializeField] private GameObject _backButton;
+    [SerializeField] private GameObject _controlMap;
     
     private bool _isPaused;
 
@@ -29,11 +30,12 @@ public class MenuManager : MonoBehaviour
     {
         _mainMenu.SetActive(false);
         _settingMenu.SetActive(false);
+        _controlMap.SetActive(false);
     }
 
     private void Update()
     {
-        if(InputManager.instance.MenuOpenInput)
+        if(InputManager.instance.PauseInput)
         {
             if(!PauseManager.instance.IsPause)
             {
@@ -100,7 +102,6 @@ public class MenuManager : MonoBehaviour
 
     private void OpenSettingMenu()
     {
-        // _controlMapPopup.popupPanel.SetActive(true);
         _settingMenu.SetActive(true);
         _mainMenu.SetActive(false);
 
@@ -114,6 +115,7 @@ public class MenuManager : MonoBehaviour
     {
         _mainMenu.SetActive(false);
         _settingMenu.SetActive(false);
+        _controlMap.SetActive(false);
 
         EventSystem.current.SetSelectedGameObject(null);
     }

@@ -10,7 +10,6 @@ public class AnimationLookAt : MonoBehaviour
     [SerializeField] private float _resetDelay = 0.2f;
     public Rig rightTurn;
     public Rig leftTurn;
-    private GameInput _gameInput;
     private static Vector2 _previousDirection;
     private float _angleDifference;
     private Vector2 _currentDirection;
@@ -20,8 +19,6 @@ public class AnimationLookAt : MonoBehaviour
 
     private void Awake()
     {
-        _gameInput = GetComponentInChildren<GameInput>();
-
         _previousDirection = Vector2.zero;
     }
 
@@ -88,7 +85,7 @@ public class AnimationLookAt : MonoBehaviour
     }
     public Turn TurnDirection()
     {
-        _currentDirection = _gameInput.GetMovementControl();
+        _currentDirection = InputManager.instance.GetMovementControl();
         
         // world direction berdasarkan input
         float angleInRadians = transform.eulerAngles.y * Mathf.Deg2Rad;

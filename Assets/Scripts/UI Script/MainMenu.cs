@@ -18,6 +18,8 @@ public class MainMenu : MonoBehaviour
     
     public GameObject menuGameObject;
     private bool exit = false;
+    private float _resetTimer = 0f;
+    [SerializeField] private float _resetDelay = 0.5f;
     
 
     // Daftar tombol dan scene yang akan dimuat
@@ -43,7 +45,14 @@ public class MainMenu : MonoBehaviour
 
     private void Update()
     {
-        if (Loading.instance.IsLoading == true) return;
+        if (Loading.instance.IsLoading == true) 
+        {
+            _resetTimer += Time.deltaTime; 
+            if (_resetTimer < _resetDelay) return;
+
+            Loading.instance.IsLoading = false;
+        }
+
             foreach (SceneButton sceneButton in sceneButtons)
             {
                 int index = sceneButton.sceneIndex; // Simpan indeks lokal untuk digunakan dalam lambda

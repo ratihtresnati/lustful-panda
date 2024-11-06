@@ -8,16 +8,29 @@ public class InputManager : MonoBehaviour
     public static InputManager instance;
     public static PlayerInput PlayerInput;
     public static PlayerInputManager PlayerInputManager;
-    public bool MenuOpenInput { get; private set; }
     public bool MenuCloseInput { get; private set; }
     public bool ButtonClickInput { get; private set; }
     public bool InteractClickInput { get; private set; }
     public bool MainMenu { get; private set; }
     public bool _interact { get; private set; }
+    public Vector2 MoveInput { get; private set; }
+    public bool RunPressed { get; private set; }
+    public bool RunReleased { get; private set; }
+    public bool JumpInput { get; private set; }
+    public bool RollInput { get; private set; }
+    public bool InteractInput { get; private set; }
+    public bool PauseInput { get; private set; }
+    
     private InputAction _menuOpenAction;
     private InputAction _menuCloseAction;
     private InputAction _selectAction;
+    private InputAction _moveAction;
+    private InputAction _runAction;
+    private InputAction _jumpAction;
+    private InputAction _rollAction;
     private InputAction _interactAction;
+    private InputAction _pauseAction;
+    
     private void Awake()
     {
         if(instance == null)
@@ -27,34 +40,52 @@ public class InputManager : MonoBehaviour
 
         PlayerInputManager = new PlayerInputManager(); 
         PlayerInput = gameObject.GetComponent<PlayerInput>();
-        _menuOpenAction = PlayerInput.actions["MenuOpen"];
+
+        SetupInputAction();
+    }
+    private void Update() 
+    {
+        UpdateInputs();
+    }
+    
+    private void SetupInputAction()
+    {
         _menuCloseAction = PlayerInput.actions["MenuClose"];
         _selectAction = PlayerInput.actions["Click"];
         _interactAction = PlayerInput.actions["Interact"];
+        _moveAction = PlayerInput.actions["Move"];
+        _runAction = PlayerInput.actions["Run"];
+        _jumpAction = PlayerInput.actions["Jump"];
+        _rollAction = PlayerInput.actions["Roll"];
+        _interactAction = PlayerInput.actions["Interact"];
+        _pauseAction = PlayerInput.actions["Pause"];
     }
-
-    private void Update()
+    private void UpdateInputs()
     {
-        MenuOpenInput = _menuOpenAction.WasPressedThisFrame();
         MenuCloseInput = _menuCloseAction.WasPressedThisFrame();
         ButtonClickInput = _selectAction.WasPressedThisFrame();
         InteractClickInput = _interactAction.WasPressedThisFrame();
-
-        // if (ButtonClickInput && _interact == false)
-        // {
-        //     InteractUI();
-        // }
+        MoveInput = _moveAction.ReadValue<Vector2>();
+        RunPressed = _runAction.WasPressedThisFrame();
+        RunReleased = _runAction.WasReleasedThisFrame();
+        JumpInput = _jumpAction.WasPressedThisFrame();
+        RollInput = _rollAction.WasPressedThisFrame();
+        InteractInput = _interactAction.WasPressedThisFrame();
+        PauseInput = _pauseAction.WasPressedThisFrame();
     }
 
-    public void InteractUI ()
-    {
-        _interact = true;
-        StartCoroutine(ResetInteract());
-    }
+    private Vector2 _currentInputVector;
+    private Vector2 _smoothInputVector;
+    public float _smoothInputSpeed = 0.2f;
 
-    private IEnumerator ResetInteract()
+    public Vector2 GetMovementControl()
     {
-        yield return new WaitForSeconds(5f);
-        _interact = false;
+        Vector2 inputVector = MoveInput;
+
+        _currentInputVector = Vector2.SmoothDamp(_currentInputVector, inputVector, ref _smoothInputVector, _smoothInputSpeed);
+         
+        inputVector = inputVector.normalized;
+
+        return inputVector;
     }
 }
