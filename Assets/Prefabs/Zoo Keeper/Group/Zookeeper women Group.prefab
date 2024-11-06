@@ -13,11 +13,11 @@ GameObject:
   - component: {fileID: 6326635766716895169}
   - component: {fileID: 258857100893978658}
   - component: {fileID: 6407669877574831638}
-  - component: {fileID: 6111877862922978464}
-  - component: {fileID: 9126522496128940839}
-  - component: {fileID: 4787094560626511306}
+  - component: {fileID: 9143939826023030255}
+  - component: {fileID: 2251850721100821328}
+  - component: {fileID: 8017050364953579992}
   m_Layer: 0
-  m_Name: Zookeeper women
+  m_Name: Zookeeper women Group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,7 +134,7 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &6111877862922978464
+--- !u!114 &9143939826023030255
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,22 +143,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 549531410437874402}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4bef800bd003bd4fbdcc7fd583d852e, type: 3}
+  m_Script: {fileID: 11500000, guid: 436a14892d706e74ba924076eca0609f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Sensor: {fileID: 0}
+  GroupTriger: {fileID: 0}
   AIAnimatorController: {fileID: 0}
   player: {fileID: 0}
   walkSpeed: 3
   runSpeed: 4
-  patrolPoint:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  patrolPoint: []
   idleTime: 2
-  idleTimeAfterLosePlayer: 5
---- !u!114 &9126522496128940839
+  idleTimeAfterLosePlayer: 3
+--- !u!114 &2251850721100821328
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -167,20 +164,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 549531410437874402}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60e6ab31644662a42abaaca438b6b0a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f3869dcd9552f74dae2b5ed558c91c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 7
-  angle: 160
+  radius: 0
+  angle: 0
+  GroupTriger: {fileID: 0}
   playerRef: {fileID: 0}
   targetMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 0
   obstructionMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 0
   canSeePlayer: 0
---- !u!114 &4787094560626511306
+--- !u!114 &8017050364953579992
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -252,7 +250,7 @@ PrefabInstance:
     - target: {fileID: 5866666021909216657, guid: b8658fb09c0c52749881bd5b2e7dc3d2, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 540ecd94e02f2b349a8e77671e534177, type: 2}
+      objectReference: {fileID: 9100000, guid: 622f29cbd4de19646af1efd2165c4e5a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
