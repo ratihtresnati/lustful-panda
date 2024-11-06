@@ -129,9 +129,10 @@ public class MenuManager : MonoBehaviour
     }
 
     public void OnBackPress()
-    {
-        Debug.Log("back to menu");
+    { 
+        PauseManager.instance.UnpauseGame();
+        // InputManager.PlayerInput.enabled = false;
+
         Loading.instance.LoadScene(0);
-        Unpause();
     }
 }

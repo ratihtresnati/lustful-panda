@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class MainMenu : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class MainMenu : MonoBehaviour
     }
     
     public GameObject menuGameObject;
+    private bool exit = false;
+    
 
     // Daftar tombol dan scene yang akan dimuat
     public SceneButton[] sceneButtons;
@@ -40,32 +43,38 @@ public class MainMenu : MonoBehaviour
 
     private void Update()
     {
-        bool pressed = false;
-        foreach (SceneButton sceneButton in sceneButtons)
-        {
-            int index = sceneButton.sceneIndex; // Simpan indeks lokal untuk digunakan dalam lambda
-            if (InputManager.instance.ButtonClickInput)
+        if (Loading.instance.IsLoading == true) return;
+            foreach (SceneButton sceneButton in sceneButtons)
             {
-                if (sceneButton.isExitButton == true)
+                int index = sceneButton.sceneIndex; // Simpan indeks lokal untuk digunakan dalam lambda
+                if (InputManager.instance.ButtonClickInput )//&& InputManager.instance._interact == true)
                 {
-                    ExitApplication();
-                    pressed = true;
-                    break;
-                }
-                else
-                {
-                    LoadScene(index);
-                    menuGameObject.SetActive(false);
-                    pressed = true; 
-                    break;
+                    GameObject selectedButton = EventSystem.current.currentSelectedGameObject;
+                    if (selectedButton == sceneButton.button.gameObject)
+                    {
+                        if (sceneButton.isExitButton == true )
+                        {
+                            ExitApplication();
+                            Debug.Log("exit");
+                            exit = true;
+                        }
+                        else
+                        {
+                            LoadScene(index);
+                            Debug.Log("load");
+                        }
+                    }
                 }
             }
-        }
     }
 
     // Fungsi untuk memuat scene berdasarkan indeks
     public void LoadScene(int sceneIndex)
     {
+        // InputManager.PlayerInput.enabled = false; 
+        // isLoading = true;
+        menuGameObject.SetActive(false);
+
         // SceneManager.LoadScene(sceneIndex);
         Loading.instance.LoadScene(sceneIndex);
     }
@@ -73,6 +82,7 @@ public class MainMenu : MonoBehaviour
     // Fungsi untuk keluar dari aplikasi
     private void ExitApplication()
     {
+        // InputManager.PlayerInput.enabled = false; 
         Application.Quit();
         Debug.Log("Application has been exited."); // Hanya berfungsi di editor atau build yang didukung
     }

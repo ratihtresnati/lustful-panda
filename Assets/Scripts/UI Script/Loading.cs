@@ -7,11 +7,13 @@ public class Loading : MonoBehaviour
 {
     public static Loading instance;
     public GameObject LoadingScreen;
+    public bool IsLoading { get; private set; }
     private void Awake()
     {
         if(instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         } 
         else
         {
@@ -21,6 +23,8 @@ public class Loading : MonoBehaviour
 
     public void LoadScene (int i )
     {
+        // InputManager.PlayerInput.enabled = false; 
+        IsLoading = true;
         StartCoroutine(LoadSceneAsync(i));
     }
 
@@ -38,9 +42,7 @@ public class Loading : MonoBehaviour
             yield return null;
         }
 
-        if (LoadingScreen != null)
-        {
-            LoadingScreen.SetActive(false);
-        }
+        IsLoading = false;
+        LoadingScreen.SetActive(false);
     }
 }
