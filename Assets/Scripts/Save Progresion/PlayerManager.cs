@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public int currentQuestID;  // ID quest yang sedang dikerjakan
-    public bool hintDisplayed;  // Status hint
+    public int currentQuestID;  
+    public bool hintDisplayed;  
 
     private void Start()
     {
