@@ -207,7 +207,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             // Give listeners a chance to configure UI in response.
             m_UpdateBindingUIEvent?.Invoke(this, displayString, deviceLayoutName, controlPath);
         }
-
         /// <summary>
         /// Remove currently applied binding overrides.
         /// </summary>
@@ -238,7 +237,9 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             if (!ResolveActionAndBinding(out var action, out var bindingIndex))
                 return;
 
-            // If the binding is a composite, we need to rebind each part in turn.
+            if (m_BindingText != null)
+                m_BindingText.text = "Waiting for input...";
+
             if (action.bindings[bindingIndex].isComposite)
             {
                 var firstPartIndex = bindingIndex + 1;
@@ -270,21 +271,17 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                     {
                         action.Enable();
                         m_RebindStopEvent?.Invoke(this, operation);
-                        m_RebindOverlay?.SetActive(false);
-                        UpdateBindingDisplay();
+                        UpdateBindingDisplay(); // Reset the display to the previous binding if canceled
                         CleanUp();
                     })
                 .OnComplete(
                     operation =>
                     {
                         action.Enable();
-                        m_RebindOverlay?.SetActive(false);
                         m_RebindStopEvent?.Invoke(this, operation);
-                        UpdateBindingDisplay();
+                        UpdateBindingDisplay(); // Update to the new binding value
                         CleanUp();
 
-                        // If there's more composite parts we should bind, initiate a rebind
-                        // for the next part.
                         if (allCompositeParts)
                         {
                             var nextBindingIndex = bindingIndex + 1;
@@ -292,29 +289,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                                 PerformInteractiveRebind(action, nextBindingIndex, true);
                         }
                     });
-
-            // If it's a part binding, show the name of the part in the UI.
-            var partName = default(string);
-            if (action.bindings[bindingIndex].isPartOfComposite)
-                partName = $"Binding '{action.bindings[bindingIndex].name}'. ";
-
-            // Bring up rebind overlay, if we have one.
-            m_RebindOverlay?.SetActive(true);
-            if (m_RebindText != null)
-            {
-                var text = !string.IsNullOrEmpty(m_RebindOperation.expectedControlType)
-                    ? $"{partName}Waiting for {m_RebindOperation.expectedControlType} input..."
-                    : $"{partName}Waiting for input...";
-                m_RebindText.text = text;
-            }
-
-            // If we have no rebind overlay and no callback but we have a binding text label,
-            // temporarily set the binding text label to "<Waiting>".
-            if (m_RebindOverlay == null && m_RebindText == null && m_RebindStartEvent == null && m_BindingText != null)
-                m_BindingText.text = "<Waiting...>";
-
-            // Give listeners a chance to act on the rebind starting.
-            m_RebindStartEvent?.Invoke(this, m_RebindOperation);
 
             m_RebindOperation.Start();
         }

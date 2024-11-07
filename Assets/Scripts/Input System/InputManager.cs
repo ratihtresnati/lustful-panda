@@ -8,7 +8,8 @@ public class InputManager : MonoBehaviour
     public static InputManager instance;
     public static PlayerInput PlayerInput;
     public static PlayerInputManager PlayerInputManager;
-    public bool MenuCloseInput { get; private set; }
+    public bool PauseInput { get; private set; }
+    public bool ResumeInput { get; private set; }
     public bool ButtonClickInput { get; private set; }
     public Vector2 MoveInput { get; private set; }
     public bool RunPressed { get; private set; }
@@ -16,15 +17,15 @@ public class InputManager : MonoBehaviour
     public bool JumpInput { get; private set; }
     public bool RollInput { get; private set; }
     public bool InteractInput { get; private set; }
-    public bool PauseInput { get; private set; }
-    private InputAction _menuCloseAction;
+    private InputAction _pauseAction;
+    private InputAction _resumeAction;
     private InputAction _selectAction;
     private InputAction _moveAction;
     private InputAction _runAction;
     private InputAction _jumpAction;
     private InputAction _rollAction;
     private InputAction _interactAction;
-    private InputAction _pauseAction;
+    
     
     private void Awake()
     {
@@ -43,7 +44,8 @@ public class InputManager : MonoBehaviour
     }
     
     private void SetupInputAction(){
-        _menuCloseAction = PlayerInput.actions["MenuClose"];
+        _resumeAction = PlayerInput.actions["Resume"];
+        _pauseAction = PlayerInput.actions["Pause"];
         _selectAction = PlayerInput.actions["Click"];
 
         _moveAction = PlayerInput.actions["Move"];
@@ -51,10 +53,11 @@ public class InputManager : MonoBehaviour
         _jumpAction = PlayerInput.actions["Jump"];
         _rollAction = PlayerInput.actions["Roll"];
         _interactAction = PlayerInput.actions["Interact"];
-        _pauseAction = PlayerInput.actions["Pause"];
+        
     }
     private void UpdateInputs(){
-        MenuCloseInput = _menuCloseAction.WasPressedThisFrame();
+        PauseInput = _pauseAction.WasPressedThisFrame();
+        ResumeInput = _resumeAction.WasPressedThisFrame();
         ButtonClickInput = _selectAction.WasPressedThisFrame();
 
         MoveInput = _moveAction.ReadValue<Vector2>();

@@ -37,7 +37,7 @@ public class MenuManager : MonoBehaviour
             }
         }
 
-        else if (InputManager.instance.MenuCloseInput)
+        else if (InputManager.instance.ResumeInput)
         {
             if(PauseManager.instance.IsPause)
             {

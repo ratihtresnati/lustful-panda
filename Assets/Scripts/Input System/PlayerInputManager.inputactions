@@ -323,9 +323,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "MenuClose",
+                    "name": "Resume",
                     "type": "Button",
                     "id": "13519b34-134d-4cc3-b422-5943cdcdb426",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "d54d0bfb-4b25-4b93-b2ae-38e1a4e15a37",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -780,7 +789,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "MenuClose",
+                    "action": "Resume",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "066d7e42-4caa-45ed-b4ce-20b2eebd16e1",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

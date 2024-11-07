@@ -15,32 +15,13 @@ public class ControlMapping : MonoBehaviour
         {
             GameObject selectedButton = EventSystem.current.currentSelectedGameObject;
 
-            if (selectedButton != null && Buttons.Length >= 5)
+            if (selectedButton != null)
             {
-                Button BComponent = selectedButton.GetComponent<Button>();
-                if (selectedButton == Buttons[0])
+                int index = System.Array.IndexOf(Buttons, selectedButton);
+                if (index >= 0 && index < Buttons.Length)
                 {
-                    BComponent.onClick.Invoke();
-                }
-                else if (selectedButton == Buttons[1])
-                {
-                    BComponent.onClick.Invoke();
-                }
-                else if (selectedButton == Buttons[2])
-                {
-                    BComponent.onClick.Invoke();
-                }
-                else if (selectedButton == Buttons[3])
-                {
-                    BComponent.onClick.Invoke();
-                }
-                else if (selectedButton == Buttons[4])
-                {
-                    BComponent.onClick.Invoke();
-                }
-                else if (selectedButton == Buttons[5])
-                {
-                    BComponent.onClick.Invoke();
+                    Button BComponent = selectedButton.GetComponent<Button>();
+                    BComponent?.onClick.Invoke();
                 }
             }
         }
