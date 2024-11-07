@@ -47,7 +47,6 @@ public class playerController : MonoBehaviour
     [SerializeField] private float _jumpDelayDuration = 2f;
     private bool _isTurnRight;
 
-
     void Start()
     {
 
@@ -57,19 +56,39 @@ public class playerController : MonoBehaviour
         Keyframe roll_lastFrame = _rollCurve[_rollCurve.length - 1];
         _rollTimer = roll_lastFrame.time;
 
-        gameInput.OnRunningEvent += OnRunEvent;
-        gameInput.OutRunningEvent += OutRunEvent;
-        gameInput.OnJumpingEvent += OnJumpEvent;
-        gameInput.OnRollingEvent += OnRollEvent;
+        // gameInput.OnRunningEvent += OnRunEvent;
+        // gameInput.OutRunningEvent += OutRunEvent;
+        // gameInput.OnJumpingEvent += OnJumpEvent;
+        // gameInput.OnRollingEvent += OnRollEvent;
     }
-
    
-
-
-    // Update is called once per frame
     void Update()
     {
         HanddleMovements();
+
+        //moveset
+        if(InputManager.instance.JumpInput){
+            if (!isRooling){
+                if (characterController.isGrounded && !_isJump){
+                    StartCoroutine(Jumping());
+                    _currentState = JumpState.Jump;
+                }
+            }
+        }
+        if(InputManager.instance.RollInput){
+            if (!isRooling){ 
+                if (!_isJump){
+                    if (velocity.magnitude != 0) StartCoroutine(Rolling());
+                }
+            }
+        }
+        if(InputManager.instance.RunPressed){
+            _isRun = true;
+        }
+        if(InputManager.instance.RunReleased){
+            _isRun = false;
+        }
+
 
         //animasi
         AnimateWalkRun(new Vector3(inputVector.x, inputVector.y, 0));
@@ -92,7 +111,8 @@ public class playerController : MonoBehaviour
         {
             gameObject.tag = "PandaMC";
 
-            inputVector = gameInput.GetMovementControl();
+            //inputVector = gameInput.GetMovementControl();
+            inputVector = InputManager.instance.MoveInput;
 
             move = new Vector3(inputVector.x, 0, inputVector.y);
 
@@ -130,10 +150,7 @@ public class playerController : MonoBehaviour
 
                 Quaternion toRotation = Quaternion.LookRotation(move, Vector3.up);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, _rotationSpeed * Time.deltaTime);
-
-
             }
-
 
             if (characterController.isGrounded)
             {
@@ -142,7 +159,7 @@ public class playerController : MonoBehaviour
         }
     }
 
-    // Running Event
+    /* Running Event
 
     // On Running
     private void OnRunEvent(object sander, EventArgs e)
@@ -156,12 +173,11 @@ public class playerController : MonoBehaviour
     private void OutRunEvent(object sender, EventArgs e)
     {
         _isRun = false;
-    }
-
+    }*/
 
     #region Rolling
 
-    private void OnRollEvent(object sender, EventArgs e)
+    /*private void OnRollEvent(object sender, EventArgs e)
     {
         if (!isRooling)
         { 
@@ -170,7 +186,7 @@ public class playerController : MonoBehaviour
                 if (velocity.magnitude != 0) StartCoroutine(Rolling());
             }
         }
-    }
+    }*/
 
     IEnumerator Rolling()
     {
@@ -199,7 +215,7 @@ public class playerController : MonoBehaviour
     
     #region Jumping
 
-    private void OnJumpEvent(object sander, EventArgs e)
+    /*private void OnJumpEvent(object sander, EventArgs e)
     {
         if (!isRooling)
         {
@@ -209,7 +225,7 @@ public class playerController : MonoBehaviour
                 _currentState = JumpState.Jump;
             }
         }
-    }
+    }*/
 
     IEnumerator Jumping()
     {

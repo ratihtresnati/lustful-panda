@@ -8,12 +8,25 @@ public class InputManager : MonoBehaviour
     public static InputManager instance;
     public static PlayerInput PlayerInput;
     public static PlayerInputManager PlayerInputManager;
-    public bool MenuOpenInput { get; private set; }
-    public bool MenuCloseInput { get; private set; }
+    public bool PauseInput { get; private set; }
+    public bool ResumeInput { get; private set; }
     public bool ButtonClickInput { get; private set; }
-    private InputAction _menuOpenAction;
-    private InputAction _menuCloseAction;
+    public Vector2 MoveInput { get; private set; }
+    public bool RunPressed { get; private set; }
+    public bool RunReleased { get; private set; }
+    public bool JumpInput { get; private set; }
+    public bool RollInput { get; private set; }
+    public bool InteractInput { get; private set; }
+    private InputAction _pauseAction;
+    private InputAction _resumeAction;
     private InputAction _selectAction;
+    private InputAction _moveAction;
+    private InputAction _runAction;
+    private InputAction _jumpAction;
+    private InputAction _rollAction;
+    private InputAction _interactAction;
+    
+    
     private void Awake()
     {
         if(instance == null)
@@ -23,15 +36,36 @@ public class InputManager : MonoBehaviour
 
         PlayerInputManager = new PlayerInputManager(); 
         PlayerInput = gameObject.GetComponent<PlayerInput>();
-        _menuOpenAction = PlayerInput.actions["MenuOpen"];
-        _menuCloseAction = PlayerInput.actions["MenuClose"];
-        _selectAction = PlayerInput.actions["Click"];
-    }
 
-    private void Update()
-    {
-        MenuOpenInput = _menuOpenAction.WasPressedThisFrame();
-        MenuCloseInput = _menuCloseAction.WasPressedThisFrame();
+        SetupInputAction();
+    }
+    private void Update() {
+        UpdateInputs();
+    }
+    
+    private void SetupInputAction(){
+        _resumeAction = PlayerInput.actions["Resume"];
+        _pauseAction = PlayerInput.actions["Pause"];
+        _selectAction = PlayerInput.actions["Click"];
+
+        _moveAction = PlayerInput.actions["Move"];
+        _runAction = PlayerInput.actions["Run"];
+        _jumpAction = PlayerInput.actions["Jump"];
+        _rollAction = PlayerInput.actions["Roll"];
+        _interactAction = PlayerInput.actions["Interact"];
+        
+    }
+    private void UpdateInputs(){
+        PauseInput = _pauseAction.WasPressedThisFrame();
+        ResumeInput = _resumeAction.WasPressedThisFrame();
         ButtonClickInput = _selectAction.WasPressedThisFrame();
+
+        MoveInput = _moveAction.ReadValue<Vector2>();
+        RunPressed = _runAction.WasPressedThisFrame();
+        RunReleased = _runAction.WasReleasedThisFrame();
+        JumpInput = _jumpAction.WasPressedThisFrame();
+        RollInput = _rollAction.WasPressedThisFrame();
+        InteractInput = _interactAction.WasPressedThisFrame();
+        PauseInput = _pauseAction.WasPressedThisFrame();
     }
 }
