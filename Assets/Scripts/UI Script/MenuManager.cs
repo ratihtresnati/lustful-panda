@@ -24,6 +24,7 @@ public class MenuManager : MonoBehaviour
         _resumeButton = GameObject.Find("Resume");
         _settingButton = GameObject.Find("Settings");
         _backButton = GameObject.Find("Back");
+        _controlMap = GameObject.Find("ControlMapUI");
     }
 
     private void Start()
@@ -50,6 +51,7 @@ public class MenuManager : MonoBehaviour
                 if(_isPaused == true)
                 {
                     OpenMainMenu();
+                    _isPaused = false;
                 }
                 else
                 {
@@ -96,6 +98,7 @@ public class MenuManager : MonoBehaviour
     {
         _mainMenu.SetActive(true);
         _settingMenu.SetActive(false);
+        _controlMap.SetActive(false);
 
         EventSystem.current.SetSelectedGameObject(_resumeButton);
     }
