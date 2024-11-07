@@ -24,7 +24,7 @@ public class MenuManager : MonoBehaviour
         _resumeButton = GameObject.Find("Resume");
         _settingButton = GameObject.Find("Settings");
         _backButton = GameObject.Find("Back");
-        _controlMap = GameObject.Find("ControlMapUI");
+        _controlMap = GameObject.Find("ControlMap UI");
     }
 
     private void Start()
