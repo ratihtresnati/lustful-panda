@@ -1076,7 +1076,6 @@ GameObject:
   - component: {fileID: 5318836251764185894}
   - component: {fileID: 2947408819826029014}
   - component: {fileID: 7666687678626233171}
-  - component: {fileID: 8858870772213534030}
   - component: {fileID: 3899540702996311528}
   - component: {fileID: 2848023700462769524}
   - component: {fileID: 2141231924799314659}
@@ -1228,18 +1227,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.5, z: -0.15}
---- !u!114 &8858870772213534030
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7378474372775956094}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97664f77090f3df47a5926aa141f216e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3899540702996311528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1252,7 +1239,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f588fd0daf59514e845da0623a7174e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 7328085280334079434}
+  _playerController: {fileID: 0}
+  _jumpAnimationDuration: 0.1
+  _rollAnimationDuration: 0.1
 --- !u!114 &2848023700462769524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1269,6 +1258,7 @@ MonoBehaviour:
   _walkSpeed: 3
   _runSpeed: 6
   _rotationSpeed: 150
+  _jumpDelayDuration: 0.4
   _rollCurve:
     serializedVersion: 2
     m_Curve:
@@ -1293,12 +1283,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  gameInput: {fileID: 8176449740710936246}
-  CharacterAnimatorController: {fileID: 3899540702996311528}
-  _animeSmoothSpeed: 10
-  _animHorizontal: 0
-  _animVertical: 0
-  _jumpDelayDuration: 0.4
+  _gameInput: {fileID: 0}
 --- !u!114 &2141231924799314659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1374,6 +1359,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 3
+  _resetDelay: 0.2
   rightTurn: {fileID: 4728978327612269910}
   leftTurn: {fileID: 6789345371010044103}
 --- !u!114 &1798526088420547015
@@ -1944,14 +1930,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3921137720819005909, guid: 116f1ef75806385498c722225ce63304, type: 3}
   m_PrefabInstance: {fileID: 8457781396670156726}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8176449740710936246 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 295134113403662592, guid: 116f1ef75806385498c722225ce63304, type: 3}
-  m_PrefabInstance: {fileID: 8457781396670156726}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f92a2d0b0332164418c47debb62ed3a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

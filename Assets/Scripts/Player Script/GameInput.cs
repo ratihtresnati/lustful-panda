@@ -14,23 +14,26 @@ public class GameInput : MonoBehaviour
     public event EventHandler OutRunningEvent;
     public event EventHandler OnRollingEvent;
 
-    private PlayerInputManager playerInputManager;
+    public PlayerInputManager PlayerInputManager;
+    private Vector2 _currentInputVector;
+    private Vector2 _smoothInputVector;
+    public float _smoothInputSpeed = 0.2f;
 
     private void Awake()
     {
 
-        playerInputManager = new PlayerInputManager();
-        playerInputManager.Player.Enable();
+        PlayerInputManager = new PlayerInputManager();
+        PlayerInputManager.Player.Enable();
 
         // Player Run Input System
-        playerInputManager.Player.Run.performed += OnRun;
-        playerInputManager.Player.Run.canceled += OutRun;
+        PlayerInputManager.Player.Run.performed += OnRun;
+        PlayerInputManager.Player.Run.canceled += OutRun;
 
         // Player Jump Input System
-        playerInputManager.Player.Jump.performed += Onjump;
+        PlayerInputManager.Player.Jump.performed += Onjump;
 
         // Player Roll Input System
-        playerInputManager.Player.Roll.performed += OnRoll;
+        PlayerInputManager.Player.Roll.performed += OnRoll;
    
     }
 
@@ -56,8 +59,10 @@ public class GameInput : MonoBehaviour
 
     public Vector2 GetMovementControl()
     {
-        Vector2 inputVector = playerInputManager.Player.Move.ReadValue<Vector2>();
+        Vector2 inputVector = PlayerInputManager.Player.Move.ReadValue<Vector2>();
 
+        _currentInputVector = Vector2.SmoothDamp(_currentInputVector, inputVector, ref _smoothInputVector, _smoothInputSpeed);
+         
         inputVector = inputVector.normalized;
 
         return inputVector;

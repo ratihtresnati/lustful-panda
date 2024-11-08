@@ -18,25 +18,22 @@ public class conditionalObjectInteract : MonoBehaviour
     public int questNum;
     
     private PlayerHoldPosition playerHoldPosition;
+    private ParentPosition _parentPosition;
+
 
     void Start()
     {
         playerHoldPosition = FindObjectOfType<PlayerHoldPosition>();
         _outline = gameObject.GetComponent<Outline>();
         _itemOutline = taskItem.GetComponent<Outline>();
+        _parentPosition = gameObject.GetComponent<ParentPosition>();
 
-         if (dialogAsset != null)
+        if (dialogAsset != null)
         {
             dialogAsset.SetActive(false);
         }
         player = GameObject.Find("Panda Bayik");
-
-        // Input System
-        // playarInputManager = new PlayerInputManager();
-        // playarInputManager.Player.Enable(); //Mengaktifkan control mapping
-        // playarInputManager.Player.Interact.performed += InteractEvent; //Mengaktifkan Action Interect
     }
-
     void Update()
     {
         // Check bawaan item
@@ -59,6 +56,8 @@ public class conditionalObjectInteract : MonoBehaviour
             else
             {
                 _itemOutline.ApplyOutline(true);
+
+                dialogAsset.transform.SetParent(_parentPosition.PositionParent());
                 dialogAsset.SetActive(true);
                 QuestManager.instance.NextQuest();
             }
@@ -70,15 +69,19 @@ public class conditionalObjectInteract : MonoBehaviour
         float distance = Vector3.Distance(player.transform.position, transform.position);
         if (distance <= interactionRadius)
         {
-            if (isCarryingTheItem)
+            float distance = Vector3.Distance(player.transform.position, transform.position);
+            if (distance <= interactionRadius)
             {
-                Interact();
-            }
-            else
-            {
-                _itemOutline.ApplyOutline(true);
-                dialogAsset.SetActive(true);
-                QuestManager.instance.NextQuest();
+                if (isCarryingTheItem)
+                {
+                    Interact();
+                }
+                else
+                {
+                    _itemOutline.ApplyOutline(true);
+                    dialogAsset.SetActive(true);
+                    QuestManager.instance.NextQuest();
+                }
             }
         }
     }*/

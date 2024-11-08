@@ -11,6 +11,7 @@ public static class SaveSystem
     {
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(savePath, json);
+        Debug.Log(savePath);
     }
 
     public static PlayerData LoadPlayerData()

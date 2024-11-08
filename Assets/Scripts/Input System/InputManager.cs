@@ -11,6 +11,9 @@ public class InputManager : MonoBehaviour
     public bool PauseInput { get; private set; }
     public bool ResumeInput { get; private set; }
     public bool ButtonClickInput { get; private set; }
+    public bool InteractClickInput { get; private set; }
+    public bool MainMenu { get; private set; }
+    public bool _interact { get; private set; }
     public Vector2 MoveInput { get; private set; }
     public bool RunPressed { get; private set; }
     public bool RunReleased { get; private set; }
@@ -39,7 +42,8 @@ public class InputManager : MonoBehaviour
 
         SetupInputAction();
     }
-    private void Update() {
+    private void Update() 
+    {
         UpdateInputs();
     }
     
@@ -47,7 +51,7 @@ public class InputManager : MonoBehaviour
         _resumeAction = PlayerInput.actions["Resume"];
         _pauseAction = PlayerInput.actions["Pause"];
         _selectAction = PlayerInput.actions["Click"];
-
+        _interactAction = PlayerInput.actions["Interact"];
         _moveAction = PlayerInput.actions["Move"];
         _runAction = PlayerInput.actions["Run"];
         _jumpAction = PlayerInput.actions["Jump"];
@@ -59,7 +63,7 @@ public class InputManager : MonoBehaviour
         PauseInput = _pauseAction.WasPressedThisFrame();
         ResumeInput = _resumeAction.WasPressedThisFrame();
         ButtonClickInput = _selectAction.WasPressedThisFrame();
-
+        InteractClickInput = _interactAction.WasPressedThisFrame();
         MoveInput = _moveAction.ReadValue<Vector2>();
         RunPressed = _runAction.WasPressedThisFrame();
         RunReleased = _runAction.WasReleasedThisFrame();
@@ -67,5 +71,20 @@ public class InputManager : MonoBehaviour
         RollInput = _rollAction.WasPressedThisFrame();
         InteractInput = _interactAction.WasPressedThisFrame();
         PauseInput = _pauseAction.WasPressedThisFrame();
+    }
+
+    private Vector2 _currentInputVector;
+    private Vector2 _smoothInputVector;
+    public float _smoothInputSpeed = 0.2f;
+
+    public Vector2 GetMovementControl()
+    {
+        Vector2 inputVector = MoveInput;
+
+        _currentInputVector = Vector2.SmoothDamp(_currentInputVector, inputVector, ref _smoothInputVector, _smoothInputSpeed);
+         
+        inputVector = inputVector.normalized;
+
+        return inputVector;
     }
 }
