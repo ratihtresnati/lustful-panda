@@ -9,7 +9,12 @@ public class SettingsManager : MonoBehaviour
     public static SettingsManager instance;
     public GameObject[] Tabs;
     public GameObject[] Buttons;
+    [SerializeField] private GameObject _controlMapBtn;
+    [SerializeField] private GameObject _settingMenu;
+    [SerializeField] private GameObject _controlMapMenu;
+    [SerializeField] private GameObject _firstButton;
 
+    private bool _isControlMap = false;
     private void Awake()
     {
         if (instance == null)
@@ -30,6 +35,15 @@ public class SettingsManager : MonoBehaviour
                 {
                     Tabs[i].SetActive(selectedButton == Buttons[i]);
                 }
+                
+                if (selectedButton == _controlMapBtn && InputManager.instance.ButtonClickInput && _isControlMap == false)
+                {
+                    OpenControlMap();
+                    
+                }else if (selectedButton == _controlMapBtn && _isControlMap == true)
+                {
+                    CloseControlMap();
+                }
             }
     }
 
@@ -45,45 +59,16 @@ public class SettingsManager : MonoBehaviour
     {
         EventSystem.current.SetSelectedGameObject(Buttons[0]);
     }
-    // [SerializeField] private Image[] navImage;
 
-    // [SerializeField] private Sprite navClose, navOpen;
+    private void OpenControlMap(){
+        _controlMapMenu.SetActive(true);
+        _isControlMap = true;
 
-    // void Start()
-    // {
-    //     ShowNav(0);
-    // }
+        EventSystem.current.SetSelectedGameObject(_firstButton);
+    }
 
-    // public void ShowNav(int tutorialNum)
-    // {
-
-    //     foreach (var item in navImage)
-    //     {
-    //         item.sprite = navClose;
-    //     } 
-        
-    //    if (tutorialNum == tutorialSO.Count)
-    //     {
-    //         tutorialNum = 0;
-    //     }
-
-    //     navImage[tutorialNum].sprite = navOpen;
-    // }
-
-    // public void SwitchTab(int tabNo)
-    // {
-    //     foreach (GameObject tab in Tabs)
-    //     {
-    //         tab.SetActive(false);
-    //     }
-
-        // Tabs[tabNo].SetActive(true);
-
-        // foreach (Image image in buttonImage)
-        // {
-        //     image.sprite 
-        // }
-    // }
-
-    
+    private void CloseControlMap(){
+        _controlMapMenu.SetActive(false);
+        _isControlMap = false;
+    }
 }
