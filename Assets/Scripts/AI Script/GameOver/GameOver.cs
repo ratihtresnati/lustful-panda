@@ -7,13 +7,15 @@ public class GameOver : MonoBehaviour
 {
 
     public CatchSensor catchSensor;
+    public bool GameEnd = false;
 
     private void Update()
     {
         if (catchSensor.catchPlayer)
         {
-            
-            SceneManager.LoadScene(2);
+            GameEnd = true;
+
+            //SceneManager.LoadScene(2);
         }
     }
 }
