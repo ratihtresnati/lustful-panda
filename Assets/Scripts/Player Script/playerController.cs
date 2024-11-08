@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 // using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class playerController : MonoBehaviour
 {
@@ -47,6 +48,12 @@ public class playerController : MonoBehaviour
     [SerializeField] private float _jumpDelayDuration = 2f;
     private bool _isTurnRight;
 
+    public Image StaminaBar;
+    public float Stamina, MaxStamina;
+    public float RunCost;
+    public float ChargeRate;
+
+    private Coroutine recharge;
 
     void Start()
     {
@@ -83,7 +90,7 @@ public class playerController : MonoBehaviour
         }
 
         //Debug.Log(ySpeed);
-        Debug.Log(_isJump);
+        //Debug.Log(_isJump);
     }
 
     private void HanddleMovements()
@@ -96,15 +103,8 @@ public class playerController : MonoBehaviour
 
             move = new Vector3(inputVector.x, 0, inputVector.y);
 
-            if (_isRun)
-            {
-                _speed = _runSpeed;
-            }
-            else 
-            { 
-                _speed = _walkSpeed;
-            }
-
+            // Running Methode
+            Running();
 
             float magnitude = Mathf.Clamp01(move.magnitude) * _speed;
             move.Normalize();
@@ -130,10 +130,7 @@ public class playerController : MonoBehaviour
 
                 Quaternion toRotation = Quaternion.LookRotation(move, Vector3.up);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, _rotationSpeed * Time.deltaTime);
-
-
             }
-
 
             if (characterController.isGrounded)
             {
@@ -149,6 +146,7 @@ public class playerController : MonoBehaviour
     {
 
         _isRun = true;
+        StopCoroutine(recharge);
 
     }
 
@@ -156,7 +154,51 @@ public class playerController : MonoBehaviour
     private void OutRunEvent(object sender, EventArgs e)
     {
         _isRun = false;
+        recharge = StartCoroutine(RechargeStamina());
+
     }
+
+    void Running()
+    {
+        if (_isRun && Stamina > 0)
+        {
+            _speed = _runSpeed;
+            Stamina -= RunCost * Time.deltaTime;
+            if (Stamina < 0)
+            {
+                Stamina = 0;
+            }
+            else
+            {
+                StaminaBar.fillAmount = Stamina / MaxStamina;
+            }
+
+        }
+        else
+        {
+            _speed = _walkSpeed;
+        }
+    }
+
+    private IEnumerator RechargeStamina()
+    {
+        yield return new WaitForSeconds(1f);
+
+        while(Stamina < MaxStamina)
+        {
+            Stamina += ChargeRate * Time.deltaTime;
+            if (Stamina > MaxStamina)
+            {
+                Stamina = MaxStamina;
+            }
+            else
+            {
+                StaminaBar.fillAmount = Stamina / MaxStamina;
+            }
+            yield return new WaitForSeconds(.1f);
+        }
+    }
+
 
 
     #region Rolling
@@ -250,7 +292,7 @@ public class playerController : MonoBehaviour
     //animasi walk & run
     private void AnimateWalkRun(Vector3 input) 
     {
-        float multiplier = _isRun ? 3 : 2f;
+        float multiplier = _isRun && Stamina > 0 ? 3 : 2f;
         float targetHorizontal = input.x * multiplier;
         float targetVertical = input.y * multiplier;
 
