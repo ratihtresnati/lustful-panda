@@ -2,10 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using UnityEditor.ShaderGraph.Drawing;
+
 // using System.Xml.Serialization;
 // using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -29,6 +32,13 @@ public class PlayerController : MonoBehaviour
     public bool IsRun { get; private set; }
     public bool IsRooling { get; private set; }
     public bool isGrounded { get; private set; }
+
+    public Image StaminaBar;
+    public float Stamina, MaxStamina;
+    public float RunCost;
+    public float ChargeRate;
+
+    private Coroutine recharge;
 
     void Start()
     {
@@ -55,6 +65,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+
         if(InputManager.instance.RollInput){
             if (!IsRooling){ 
                 if (!IsJump){
@@ -62,11 +73,18 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+
         if(InputManager.instance.RunPressed){
             IsRun = true;
+            if (recharge != null)
+            {
+                StopCoroutine(recharge);
+            }
         }
+
         if(InputManager.instance.RunReleased){
             IsRun = false;
+            recharge = StartCoroutine(RechargeStamina());
         }
 
         //Debug.Log(ySpeed);
@@ -84,10 +102,19 @@ public class PlayerController : MonoBehaviour
 
         Move = new Vector3(_inputVector.x, 0, _inputVector.y);
 
-        if (IsRun)
+        if (IsRun && Stamina > 0)
         {
             _speed = _runSpeed;
-        }
+                Stamina -= RunCost * Time.deltaTime;
+                if (Stamina < 0)
+                {
+                    Stamina = 0;
+                }
+                else
+                {
+                    StaminaBar.fillAmount = Stamina / MaxStamina;
+                }
+            }
         else
         {
             IsRun = false;
@@ -120,6 +147,26 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    private IEnumerator RechargeStamina()
+    {
+        yield return new WaitForSeconds(1f);
+
+        while (Stamina < MaxStamina)
+        {
+            Stamina += ChargeRate * Time.deltaTime;
+            if (Stamina > MaxStamina)
+            {
+                Stamina = MaxStamina;
+            }
+            else
+            {
+                StaminaBar.fillAmount = Stamina / MaxStamina;
+            }
+            yield return new WaitForSeconds(.1f);
+        }
+    }
+
 
     IEnumerator Rolling()
     {
