@@ -1,63 +1,70 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class CharacterAnimatorController : MonoBehaviour
 {
-    [SerializeField] private Animator _animator;
+    private Animator _animator;
+    [SerializeField] private PlayerController _playerController;
+    [SerializeField] private float _jumpAnimationDuration = 0.1f;
+    [SerializeField] private float _rollAnimationDuration = 0.1f;
+    private float _lockedTill;
+    private bool _landed;
 
-    public void WalkSpeed(float horizontal,float vertical)
+    private void Awake()
     {
-        _animator.SetFloat("horizontal", horizontal);
-        _animator.SetFloat("vertical", vertical);
+        _animator = GetComponent<Animator>();
+
+        _playerController = GetComponent<PlayerController>();
     }
 
-    public void Jump()
+    private void Update()
     {
-        _animator.SetBool("isJump", true);
+        var state = GetState();
+
+        if(state == _currentState) return;
+        _animator.CrossFade(state, 0.2f, 0);
+        _currentState = state;
     }
 
-    public void Land()
+    private int GetState()
     {
-        _animator.SetBool("isJump", false);
+        if(Time.time < _lockedTill) return _currentState;
+
+        if (_playerController.IsJump == true) 
+        {
+            _landed = true;
+            return Jump;
+        }
+        if (_landed == true)
+        {
+            _landed = false;
+            return LockState(Land, _jumpAnimationDuration);
+        }
+       
+        if (_playerController.isGrounded == true) 
+        {
+            if (_playerController.IsRooling == true) return LockState(Roll, _rollAnimationDuration);
+            if (_playerController.IsRun == true && _playerController.Move != Vector3.zero) return Run;
+
+            return _playerController.Move == Vector3.zero ? Idle : Walk;
+        }
+
+        return Idle;
     }
 
-    public void Roll()
+    private int LockState(int state, float time)
     {
-        _animator.SetBool("isRolling", true);
+        _lockedTill = Time.time + time;
+        return state;
     }
 
-    public void StopRoll()
-    {
-        _animator.SetBool("isRolling", false);
-    }
-
-    public void Sneak()
-    {
-        _animator.SetBool("isSneak", true);
-    }
-
-    public void Rest()
-    {
-        _animator.SetBool("Action", true);
-        _animator.SetBool("isRest", true);
-    }
-
-    public void UpRest()
-    {
-        _animator.SetBool("isRest", false);
-        _animator.SetBool("Action", false);
-    }
-
-    public void Sit()
-    {
-        _animator.SetBool("Action", true);
-        _animator.SetBool("isSit", true);
-    }
-
-    public void UpSit()
-    {
-        _animator.SetBool("isSit", false);
-        _animator.SetBool("Action", false);
-    }
+    private int _currentState;
+    private static readonly int Idle = Animator.StringToHash("Idle");
+    private static readonly int Roll = Animator.StringToHash("Rolling");
+    private static readonly int Jump = Animator.StringToHash("JumpStart");
+    private static readonly int Land = Animator.StringToHash("Land");
+    private static readonly int Run = Animator.StringToHash("Run");
+    private static readonly int Walk = Animator.StringToHash("Walking");
 }
