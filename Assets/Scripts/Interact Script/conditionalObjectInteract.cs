@@ -18,14 +18,17 @@ public class conditionalObjectInteract : MonoBehaviour
     public int questNum;
     
     private PlayerHoldPosition playerHoldPosition;
+    private ParentPosition _parentPosition;
+
 
     void Start()
     {
         playerHoldPosition = FindObjectOfType<PlayerHoldPosition>();
         _outline = gameObject.GetComponent<Outline>();
         _itemOutline = taskItem.GetComponent<Outline>();
+        _parentPosition = gameObject.GetComponent<ParentPosition>();
 
-         if (dialogAsset != null)
+        if (dialogAsset != null)
         {
             dialogAsset.SetActive(false);
         }
@@ -53,6 +56,8 @@ public class conditionalObjectInteract : MonoBehaviour
             else
             {
                 _itemOutline.ApplyOutline(true);
+
+                dialogAsset.transform.SetParent(_parentPosition.PositionParent());
                 dialogAsset.SetActive(true);
                 QuestManager.instance.NextQuest();
             }
