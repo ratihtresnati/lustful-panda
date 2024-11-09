@@ -23,12 +23,8 @@ public class SetGetImage : MonoBehaviour
         texture2D.ReadPixels(new Rect(0, 0, RT.width, RT.height), 0, 0);
         texture2D.Apply();
 
-        StaticData.StaticTexture2D = texture2D;
-
         //string Path = Application.persistentDataPath + "/" + Filename + ".png";
         byte[] bytes = texture2D.EncodeToPNG();
-
-        //StaticData.StaticBytes = bytes;
 
        // File.WriteAllBytes(Path, bytes);
     }
