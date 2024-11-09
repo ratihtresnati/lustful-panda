@@ -7,8 +7,8 @@ public class CharacterAnimatorController : MonoBehaviour
 {
     private Animator _animator;
     [SerializeField] private PlayerController _playerController;
-    [SerializeField] private float _jumpAnimationDuration = 0.1f;
-    [SerializeField] private float _rollAnimationDuration = 0.1f;
+    [SerializeField] private float _jumpAnimationDuration = 0.6f;
+    [SerializeField] private float _rollAnimationDuration = 0.8f;
     private float _lockedTill;
     private bool _landed;
 

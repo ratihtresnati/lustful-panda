@@ -55,8 +55,11 @@ public class conditionalObjectInteract : MonoBehaviour
             }
             else
             {
-                _itemOutline.ApplyOutline(true);
-
+                if(_itemOutline != null)
+                {
+                    _itemOutline.ApplyOutline(true);
+                }   
+                
                 dialogAsset.transform.SetParent(_parentPosition.PositionParent());
                 dialogAsset.SetActive(true);
                 QuestManager.instance.NextQuest();

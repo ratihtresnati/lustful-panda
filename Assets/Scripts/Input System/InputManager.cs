@@ -75,7 +75,7 @@ public class InputManager : MonoBehaviour
 
     private Vector2 _currentInputVector;
     private Vector2 _smoothInputVector;
-    public float _smoothInputSpeed = 0.2f;
+    public float _smoothInputSpeed = 0.04f;
 
     public Vector2 GetMovementControl()
     {
@@ -85,6 +85,6 @@ public class InputManager : MonoBehaviour
          
         inputVector = inputVector.normalized;
 
-        return inputVector;
+        return _currentInputVector;
     }
 }
