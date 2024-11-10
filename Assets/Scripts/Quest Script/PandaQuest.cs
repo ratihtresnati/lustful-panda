@@ -10,13 +10,16 @@ public class PandaQuest : MonoBehaviour
     public bool isFirstQuest = true; 
     [SerializeField] private String _tag;
 
-    void Update()
+     void Update()
     {
-        if(Input.GetKey(KeyCode.Q) && isFirstQuest == true)
+        if (Input.GetKey(KeyCode.Q) && isFirstQuest)
         {
-            QuestManager.instance._questIsComplete = true;
-            isFirstQuest = false;
+            QuestManager.instance.InteractWithDoorGuard(); 
         }
-    }
+
+        if (Input.GetKey(KeyCode.E)) 
+        {
+            QuestManager.instance.CollectBamboo(); 
+    }   }
 }
 

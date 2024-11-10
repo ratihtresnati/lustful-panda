@@ -9,6 +9,8 @@ public class QuestManager : MonoBehaviour
 
     [SerializeField] private List<Quest> activeQuests = new List<Quest>(); 
     public bool _questIsComplete = false;
+    private bool bambooCollected = false;
+    private bool hasInteractedWithGuard = false;
     public UnityEvent unityEvent;
 
     void Awake()
@@ -71,5 +73,37 @@ public class QuestManager : MonoBehaviour
     {
         HintManager.instance.ShowHint(hint);
         Debug.Log("Hint ditampilkan: " + hint);
+    }
+
+    public void InteractWithDoorGuard()
+    {
+        if (!hasInteractedWithGuard)
+        {
+            ShowHint("Cari bambu untuk diberikan kepada penjaga pintu.");
+            hasInteractedWithGuard = true;
+        }
+        else if (bambooCollected)
+        {
+            ShowHint("Quest selesai! Anda telah memberikan bambu.");
+            _questIsComplete = true;
+            NextQuest();
+        }
+        else
+        {
+            ShowHint("Ambil bambu untuk diberikan.");
+        }
+    }
+
+    public void CollectBamboo()
+    {
+        bambooCollected = true;
+        if (hasInteractedWithGuard)
+        {
+            ShowHint("Bambu siap diberikan kepada penjaga pintu.");
+        }
+        else
+        {
+            ShowHint("Kembali dan berinteraksilah dengan penjaga pintu.");
+        }
     }
 }
