@@ -27,7 +27,9 @@ public class GameOver : MonoBehaviour
 
             float singleStep = speed * Time.deltaTime;
 
-            Vector3 newDir = Vector3.RotateTowards(Panda.forward, targetDir, singleStep, 0);
+            Vector3 newDir = Vector3.RotateTowards(Panda.forward, -targetDir, singleStep, 0);
+
+            newDir.y = 0;
 
             Panda.rotation = Quaternion.LookRotation(newDir);
         }
