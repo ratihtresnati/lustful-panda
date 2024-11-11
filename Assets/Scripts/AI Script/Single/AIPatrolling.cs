@@ -12,7 +12,8 @@ public class AIPatrolling : MonoBehaviour
 
     [SerializeField] private Transform player;
     [SerializeField] private float walkSpeed = 3f;
-    [SerializeField] private float runSpeed = 4f;
+    
+    public float RunSpeed = 4f;
 
     NavMeshAgent agent;
     public Transform[] patrolPoint;
@@ -83,7 +84,7 @@ public class AIPatrolling : MonoBehaviour
 
     void Chase()
     {
-        GetComponent<NavMeshAgent>().speed = runSpeed;
+        GetComponent<NavMeshAgent>().speed = RunSpeed;
         agent.SetDestination(player.position);
         if (!Sensor.canSeePlayer)
         {
