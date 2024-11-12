@@ -14,6 +14,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject _settingButton;
     [SerializeField] private GameObject _backButton;
     [SerializeField] private GameObject _controlMap;
+    [SerializeField] private GameObject _controlDisplay;
     
     private bool _isPaused;
 
@@ -25,6 +26,7 @@ public class MenuManager : MonoBehaviour
         _settingButton = GameObject.Find("Settings");
         _backButton = GameObject.Find("Back");
         _controlMap = GameObject.Find("ControlMap UI");
+        _controlDisplay = GameObject.Find("ControlDisplay UI");
     }
 
     private void Start()
@@ -32,6 +34,7 @@ public class MenuManager : MonoBehaviour
         _mainMenu.SetActive(false);
         _settingMenu.SetActive(false);
         _controlMap.SetActive(false);
+        _controlDisplay.SetActive(false);
     }
 
     private void Update()
@@ -99,6 +102,7 @@ public class MenuManager : MonoBehaviour
         _mainMenu.SetActive(true);
         _settingMenu.SetActive(false);
         _controlMap.SetActive(false);
+        _controlDisplay.SetActive(false);
 
         EventSystem.current.SetSelectedGameObject(_resumeButton);
     }
@@ -119,6 +123,7 @@ public class MenuManager : MonoBehaviour
         _mainMenu.SetActive(false);
         _settingMenu.SetActive(false);
         _controlMap.SetActive(false);
+        _controlDisplay.SetActive(false);
 
         EventSystem.current.SetSelectedGameObject(null);
     }
