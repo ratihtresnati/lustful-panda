@@ -49,7 +49,7 @@ public class AIPatrolling : MonoBehaviour
                 break;
             case ZooKeeperState.Search:
                 Search();
-                AIAnimatorController.Idle();
+                AIAnimatorController.Search();
                 break;
             case ZooKeeperState.Patrol:
                 Patrol();
@@ -73,7 +73,7 @@ public class AIPatrolling : MonoBehaviour
         if (GetComponent<NavMeshAgent>().speed <= 0)
         {
             idleTimer = idleTimeAfterLosePlayer;
-            currentState = ZooKeeperState.Idle;
+            currentState = ZooKeeperState.Search;
         }
         if (Sensor.canSeePlayer)
         {
@@ -119,7 +119,6 @@ public class AIPatrolling : MonoBehaviour
     private void Search()
     {
 
-        GetComponent<NavMeshAgent>().speed = walkSpeed;
         idleTimer -= Time.deltaTime;
 
         if (idleTimer <= 0f)

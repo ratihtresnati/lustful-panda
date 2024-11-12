@@ -23,6 +23,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _jumpDelayDuration = 0.2f;
     [SerializeField] AnimationCurve _rollCurve;
     private CharacterController _characterController;
+
+    public GameObject panda;
+    public GameObject box;
+
+    public bool InBox;
     
     [SerializeField]
     private Vector2 _inputVector;
@@ -44,8 +49,11 @@ public class PlayerController : MonoBehaviour
     {
         _characterController = GetComponent<CharacterController>();
 
+
         Keyframe roll_lastFrame = _rollCurve[_rollCurve.length - 1];
         _rollTimer = roll_lastFrame.time;
+
+        
 
         // gameInput.OnRunningEvent += OnRunEvent;
         // gameInput.OutRunningEvent += OutRunEvent;
@@ -56,6 +64,9 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HanddleMovements();
+
+        TransformBox();
+
 
         //moveset
         if(InputManager.instance.JumpInput){
@@ -91,7 +102,28 @@ public class PlayerController : MonoBehaviour
         // Debug.Log(_IsJump);
     }
 
-      private void HanddleMovements()
+    private void TransformBox()
+    {
+        if (Input.GetKey(KeyCode.F))
+        {
+            InBox = true;
+            panda.SetActive(false);
+            box.SetActive(true);
+            transform.gameObject.layer = 0;
+
+        }
+        
+        if (Input.GetKey(KeyCode.J))
+        {
+            InBox = false;
+            panda.SetActive(true);
+            box.SetActive(false);
+            transform.gameObject.layer = 10;
+
+        }
+    }
+
+    private void HanddleMovements()
     {
         if (!IsRooling)
         {

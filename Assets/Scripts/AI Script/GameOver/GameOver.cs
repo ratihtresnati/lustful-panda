@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,7 +20,7 @@ public class GameOver : MonoBehaviour
     {
         if (catchSensor.catchPlayer)
         {
-            GameEnd = false;
+            GameEnd = true;
 
             ZookeeperSet.RunSpeed = 0f;
 
