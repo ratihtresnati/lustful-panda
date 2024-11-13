@@ -7,13 +7,11 @@ using UnityEngine.Events;
 public class interactItem : MonoBehaviour
 {
     [SerializeField] private GameInput gameInput;
-
-    private PlayerInputManager playerInputManager;
-
     public float pickupRadius;
     private bool canPickup = false;
     bool isCarryingItem = false;
     public GameObject player;
+    public GameObject destinedObject;
     public GameObject obstacleObject; 
     public Vector3 grabOffsetPlayer; // jarak objek setelah diambil karakter
     public Vector3 dropOffsetPosPlayer; // jarak objek setelah ditaro karakter
@@ -21,73 +19,56 @@ public class interactItem : MonoBehaviour
     public Outline outline;
     private PlayerHoldPosition _playerHoldPosition;
 
+    public bool IsTakeItems { get; private set; }
+
     void Start()
     {
         player = GameObject.Find("Panda Bayik");
         _playerHoldPosition = player.GetComponent<PlayerHoldPosition>();
 
-        playerInputManager = new PlayerInputManager();
-        playerInputManager.Player.Enable();
-        playerInputManager.Player.Interact.performed += InteractEvent;
-
-        //gameInput.OnInteractEvent += InteractEvent;
+        IsTakeItems = false;
     }
 
     void Update()
     {
-        // Menghitung jarak antara pemain dan objek
         float distance = Vector3.Distance(player.transform.position, transform.position);
+        float distance2 = Vector3.Distance(player.transform.position, destinedObject.transform.position);
 
         // ngecek jarak pemain di debug
-        if (distance <= pickupRadius)
-        {
+        if (distance <= pickupRadius){
             if (obstacleObject != null)
-            {return;}
+            {
+                return;
+            }
             else
             {
                 canPickup = true;
             }
         }
-        else
-        {
+        else{
             canPickup = false;
         }
 
         // interact item
-        /*
-        if(Input.GetKeyDown(KeyCode.E)){
-            if (canPickup && !isCarryingItem)
-                {
-                    Pickup();
-                }
+        if(InputManager.instance.InteractInput){
+            if (canPickup && !isCarryingItem){
+                Pickup();
+            }
+            else if (isCarryingItem && distance2 <= pickupRadius){
+                
+            }
             else if (isCarryingItem){
                 Drop();
             }
         }
-        */
     }
-
-    private void InteractEvent(UnityEngine.InputSystem.InputAction.CallbackContext context)
-    {
-        Debug.Log("Interact");
-            if (canPickup && !isCarryingItem)
-            {
-                Pickup();
-            }
-            else if (isCarryingItem)
-            {
-                Drop();
-            }
-    }
-
     void Pickup()
     {
-        Debug.Log("membawa barang");
-
-        // Matiin outline
         if (outline != null){
             outline.ApplyOutline(false);
         }
+        IsTakeItems = true;
+
 
         transform.parent = _playerHoldPosition.PositionParent();
         transform.localPosition = Vector3.zero;
@@ -96,14 +77,12 @@ public class interactItem : MonoBehaviour
         isCarryingItem = true;
         canPickup = false;
     }
-
     void Drop()
     {
-        Debug.Log("barang dilepas");
-
         if (outline != null){
             outline.ApplyOutline(true);
         }
+        IsTakeItems = false;
 
         // Positioning item
         transform.position = player.transform.TransformPoint(dropOffsetPosPlayer);
