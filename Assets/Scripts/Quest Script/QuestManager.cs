@@ -3,15 +3,13 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class QuestManager : MonoBehaviour
-{
-    public static QuestManager instance;
+{ 
+     public static QuestManager instance;
     private int _currentQuest;
 
-    [SerializeField] private List<Quest> activeQuests = new List<Quest>(); 
-    public bool _questIsComplete = false;
-    private bool bambooCollected = false;
+    [SerializeField] private List<Quest> activeQuests = new List<Quest>();
     private bool hasInteractedWithGuard = false;
-    public UnityEvent unityEvent;
+    private bool isDoorOpen = false; // Menyimpan status pintu
 
     void Awake()
     {
@@ -27,15 +25,19 @@ public class QuestManager : MonoBehaviour
 
     private void Start()
     {
+        InitializeQuests();
         StartQuest();
     }
 
     private void Update()
     {
-        if (_questIsComplete == true)
-        {
-            CompleteCurrentQuest(); 
-        }
+        // Hapus kondisi _questIsComplete dari Update agar tidak otomatis mengganti quest.
+    }
+
+    private void InitializeQuests()
+    {
+        // activeQuests.Add(new Quest("Keluar dari kandang", "Pergilah keluar dari kandang untuk menuju kafetaria.", false));
+        // activeQuests.Add(new Quest("Masuk ke kafetaria", "Temukan jalan ke kafetaria dan masuk ke dalamnya.", false));
     }
 
     private void StartQuest()
@@ -49,13 +51,11 @@ public class QuestManager : MonoBehaviour
 
     public void CompleteCurrentQuest()
     {
-        
         if (_currentQuest < activeQuests.Count)
         {
             activeQuests[_currentQuest].CompleteQuest();
-            activeQuests[_currentQuest].EndQuest();
-            _questIsComplete = false;
-            // NextQuest(); 
+            Debug.Log("Quest selesai: " + activeQuests[_currentQuest].questName);
+            NextQuest();
         }
     }
 
@@ -64,46 +64,40 @@ public class QuestManager : MonoBehaviour
         _currentQuest++;
         if (_currentQuest < activeQuests.Count)
         {
-            Debug.Log("Melanjutkan ke quest: " + activeQuests[_currentQuest].questName);
             ShowHint(activeQuests[_currentQuest].questDescription);
+            Debug.Log("Melanjutkan ke quest: " + activeQuests[_currentQuest].questName);
         }
     }
 
     public void ShowHint(string hint)
     {
         HintManager.instance.ShowHint(hint);
-        Debug.Log("Hint ditampilkan: " + hint);
     }
 
     public void InteractWithDoorGuard()
     {
-        if (!hasInteractedWithGuard)
+        if (!hasInteractedWithGuard && _currentQuest == 0)
         {
-            ShowHint("Cari bambu untuk diberikan kepada penjaga pintu.");
+            ShowHint("Quest selesai! Anda telah keluar dari kandang.");
             hasInteractedWithGuard = true;
+            CompleteCurrentQuest(); 
         }
-        else if (bambooCollected)
+        else if (_currentQuest == 1 && isDoorOpen) 
         {
-            ShowHint("Quest selesai! Anda telah memberikan bambu.");
-            _questIsComplete = true;
-            NextQuest();
-        }
-        else
-        {
-            ShowHint("Ambil bambu untuk diberikan.");
+            ShowHint("Sekarang, temukan jalan menuju kafetaria.");
+            CompleteCurrentQuest();
         }
     }
 
-    public void CollectBamboo()
+    public void OpenDoor()
     {
-        bambooCollected = true;
-        if (hasInteractedWithGuard)
+        isDoorOpen = true; 
+        Debug.Log("Pintu telah dibuka!");
+        
+       
+        if (_currentQuest == 1)
         {
-            ShowHint("Bambu siap diberikan kepada penjaga pintu.");
-        }
-        else
-        {
-            ShowHint("Kembali dan berinteraksilah dengan penjaga pintu.");
+            ShowHint("Sekarang, temukan jalan menuju kafetaria.");
         }
     }
 }

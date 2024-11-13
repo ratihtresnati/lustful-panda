@@ -19,7 +19,7 @@ public class TriggerDoor : MonoBehaviour
         if (other.CompareTag(_tag))
         {
             rigidbody.isKinematic = false;
-            QuestManager.instance._questIsComplete = true;
+            QuestManager.instance.CompleteCurrentQuest();
 
             if(outline != null)
             {
