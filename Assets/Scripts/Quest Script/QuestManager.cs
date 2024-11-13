@@ -1,109 +1,128 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class QuestManager : MonoBehaviour
 {
-    public static QuestManager instance;
     private int _currentQuest;
-
-    [SerializeField] private List<Quest> activeQuests = new List<Quest>(); 
-    public bool _questIsComplete = false;
-    private bool bambooCollected = false;
-    private bool hasInteractedWithGuard = false;
-    public UnityEvent unityEvent;
-
-    void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    private void Start()
-    {
-        StartQuest();
-    }
-
+    private int _currentQuestIndex;
+    private bool _questStart = false;
+    // private bool _lastQuest;
+    [SerializeField] private List<QuestScriptable> activeQuests = new List<QuestScriptable>();
     private void Update()
     {
-        if (_questIsComplete == true)
-        {
-            CompleteCurrentQuest(); 
-        }
-    }
+        // Quest();
+        Debug.Log(_currentQuestIndex + "" +activeQuests[_currentQuest].descriptionQuest.Count);
 
-    private void StartQuest()
+
+        if(_questStart == false)
+        {
+            Quest();
+        }
+
+        // activeQuests[_currentQuest].isComplete = false;
+        activeQuests[_currentQuest].nextHint = false;
+    }
+    
+    private void Quest()
     {
-        if (_currentQuest < activeQuests.Count)
-        {
-            ShowHint(activeQuests[_currentQuest].questDescription);
-            Debug.Log("Memulai quest: " + activeQuests[_currentQuest].questName);
-        }
+        //memanggil startquest dari quest dari sini sekalian melakukan start quest
+        QuestUI.instance.StartQuest(this);
     }
 
-    public void CompleteCurrentQuest()
+    public void StartQuest()
     {
-        
-        if (_currentQuest < activeQuests.Count)
+        ShowCurrentDescription();
+    }
+
+    public void ShowCurrentDescription()
+    {
+        if(_currentQuestIndex < activeQuests[_currentQuest].descriptionQuest.Count)
         {
-            activeQuests[_currentQuest].CompleteQuest();
-            activeQuests[_currentQuest].EndQuest();
-            _questIsComplete = false;
-            // NextQuest(); 
+            QuestUI.instance.ShowHint(activeQuests[_currentQuest].descriptionQuest[_currentQuestIndex]);
         }
     }
 
-    public void NextQuest()
+    public void NextDescription()
+    {
+        _currentQuestIndex++;
+
+        if(_currentQuestIndex < activeQuests[_currentQuest].descriptionQuest.Count)
+        {
+            ShowCurrentDescription();
+        }
+        else
+        {
+            activeQuests[_currentQuest].isComplete = true;
+            if (activeQuests[_currentQuest].isComplete)
+            {
+                _currentQuestIndex = 0;
+                NextQuest(out bool lastQuest);
+            }
+        }
+    }
+
+    public void NextQuest(out bool lastQuest)
     {
         _currentQuest++;
-        if (_currentQuest < activeQuests.Count)
+
+        if (_currentQuest > activeQuests.Count - 1)
         {
-            Debug.Log("Melanjutkan ke quest: " + activeQuests[_currentQuest].questName);
-            ShowHint(activeQuests[_currentQuest].questDescription);
+            lastQuest = true;
+            return;
         }
+
+        lastQuest = false;
+
+        ShowCurrentDescription();
     }
 
-    public void ShowHint(string hint)
+    public bool HintComplete()
     {
-        HintManager.instance.ShowHint(hint);
-        Debug.Log("Hint ditampilkan: " + hint);
+        return activeQuests[_currentQuest].nextHint;
     }
 
-    public void InteractWithDoorGuard()
+    public int IdQuest()
     {
-        if (!hasInteractedWithGuard)
-        {
-            ShowHint("Cari bambu untuk diberikan kepada penjaga pintu.");
-            hasInteractedWithGuard = true;
-        }
-        else if (bambooCollected)
-        {
-            ShowHint("Quest selesai! Anda telah memberikan bambu.");
-            _questIsComplete = true;
-            NextQuest();
-        }
-        else
-        {
-            ShowHint("Ambil bambu untuk diberikan.");
-        }
+        return activeQuests[_currentQuest].idQuest;
     }
 
-    public void CollectBamboo()
+    public int CurrentIndex()
     {
-        bambooCollected = true;
-        if (hasInteractedWithGuard)
-        {
-            ShowHint("Bambu siap diberikan kepada penjaga pintu.");
-        }
-        else
-        {
-            ShowHint("Kembali dan berinteraksilah dengan penjaga pintu.");
-        }
+        return _currentQuestIndex;
     }
+
+    // public void InteractWithDoorGuard()
+    // {
+    //     if (!hasInteractedWithGuard)
+    //     {
+    //         ShowHint("Cari bambu untuk diberikan kepada penjaga pintu.");
+    //         hasInteractedWithGuard = true;
+    //     }
+    //     else if (bambooCollected)
+    //     {
+    //         ShowHint("Quest selesai! Anda telah memberikan bambu.");
+    //         _questIsComplete = true;
+    //         NextQuest();
+    //     }
+    //     else
+    //     {
+    //         ShowHint("Ambil bambu untuk diberikan.");
+    //     }
+    // }
+
+    // public void CollectBamboo()
+    // {
+    //     bambooCollected = true;
+    //     if (hasInteractedWithGuard)
+    //     {
+    //         ShowHint("Bambu siap diberikan kepada penjaga pintu.");
+    //     }
+    //     else
+    //     {
+    //         ShowHint("Kembali dan berinteraksilah dengan penjaga pintu.");
+    //     }
+    // }
 }
+
+

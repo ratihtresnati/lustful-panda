@@ -20,6 +20,9 @@ public class conditionalObjectInteract : MonoBehaviour
     private PlayerHoldPosition playerHoldPosition;
     private ParentPosition _parentPosition;
 
+    public bool IsInteract { get; private set; }
+    public bool IsGiveItem { get; private set; }
+
 
     void Start()
     {
@@ -33,6 +36,9 @@ public class conditionalObjectInteract : MonoBehaviour
             dialogAsset.SetActive(false);
         }
         player = GameObject.Find("Panda Bayik");
+
+        IsInteract = false;
+        IsGiveItem = false;
     }
     void Update()
     {
@@ -49,11 +55,11 @@ public class conditionalObjectInteract : MonoBehaviour
         float distance = Vector3.Distance(player.transform.position, transform.position);
         if (distance <= interactionRadius && InputManager.instance.InteractInput)
         {
-            if (isCarryingTheItem)
+            if (isCarryingTheItem == true && IsInteract == true)
             {
                 Interact();
             }
-            else
+            else if (isCarryingTheItem == false)
             {
                 if(_itemOutline != null)
                 {
@@ -62,57 +68,28 @@ public class conditionalObjectInteract : MonoBehaviour
                 
                 dialogAsset.transform.SetParent(_parentPosition.PositionParent());
                 dialogAsset.SetActive(true);
-                QuestManager.instance.NextQuest();
+                IsInteract = true;
             }
         }
     }
-
-    /*private void InteractEvent(InputAction.CallbackContext context)
-    {
-        float distance = Vector3.Distance(player.transform.position, transform.position);
-        if (distance <= interactionRadius)
-        {
-            float distance = Vector3.Distance(player.transform.position, transform.position);
-            if (distance <= interactionRadius)
-            {
-                if (isCarryingTheItem)
-                {
-                    Interact();
-                }
-                else
-                {
-                    _itemOutline.ApplyOutline(true);
-                    dialogAsset.SetActive(true);
-                    QuestManager.instance.NextQuest();
-                }
-            }
-        }
-    }*/
 
     void Interact()
     {
-        switch (questNum) {
-        case 1: //npc panda
-            NPCPandaStateController npcPanda = GetComponent<NPCPandaStateController>();
-            if (npcPanda != null)
-            {
-                npcPanda._isComplete = true;
-                QuestManager.instance.NextQuest();
-                _outline.ApplyOutline(false);
-            }
-            else
-            {
-                Debug.LogWarning("NPCPandaStateController tidak ditemukan pada objek ini.");
-            }
-        break;
-        case 2: //final door
-            BoxCollider boxCollider = GetComponent<BoxCollider>();
-            if (boxCollider != null){
-                boxCollider.enabled = false;
-            }
-        break;
+        IsGiveItem = true;
+        NPCPandaStateController npcPanda = GetComponent<NPCPandaStateController>();
+        if (npcPanda != null)
+        {
+            npcPanda._isComplete = true;
+            _outline.ApplyOutline(false);
         }
+        else
+        {
+            Debug.LogWarning("NPCPandaStateController tidak ditemukan pada objek ini.");
+        }
+
         Destroy(taskItem);
         Destroy(dialogAsset);
     }
+    
+    
 }

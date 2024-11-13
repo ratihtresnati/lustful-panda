@@ -6,8 +6,6 @@ public class PauseManager : MonoBehaviour
 {
     public static PauseManager instance;
     public interactItem interactItems;
-    public PandaQuest pandaQuest;
-
     public bool IsPause { get; private set; }
 
     private void Awake()
@@ -16,7 +14,6 @@ public class PauseManager : MonoBehaviour
         {
             instance = this;
         }
-        pandaQuest = FindObjectOfType<PandaQuest>();
     }
 
     public void PauseGame()
@@ -25,11 +22,6 @@ public class PauseManager : MonoBehaviour
         Time.timeScale = 0f;
 
         InputManager.PlayerInput.SwitchCurrentActionMap("UI");
-
-        pandaQuest.enabled = false;
-
-        // InputManager.PlayerInputManager.Player.Disable();
-        // InputManager.PlayerInputManager.UI.Enable();
     }
 
     public void UnpauseGame()
@@ -38,7 +30,5 @@ public class PauseManager : MonoBehaviour
         Time.timeScale = 1f;
 
         InputManager.PlayerInput.SwitchCurrentActionMap("Player");
-        // InputManager.PlayerInputManager.Player.Enable();
-        // InputManager.PlayerInputManager.UI.Disable();
     }
 }

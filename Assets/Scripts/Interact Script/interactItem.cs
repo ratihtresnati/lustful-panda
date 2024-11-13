@@ -19,10 +19,14 @@ public class interactItem : MonoBehaviour
     public Outline outline;
     private PlayerHoldPosition _playerHoldPosition;
 
+    public bool IsTakeItems { get; private set; }
+
     void Start()
     {
         player = GameObject.Find("Panda Bayik");
         _playerHoldPosition = player.GetComponent<PlayerHoldPosition>();
+
+        IsTakeItems = false;
     }
 
     void Update()
@@ -33,9 +37,13 @@ public class interactItem : MonoBehaviour
         // ngecek jarak pemain di debug
         if (distance <= pickupRadius){
             if (obstacleObject != null)
-            {return;}
-            else{
-                canPickup = true;}
+            {
+                return;
+            }
+            else
+            {
+                canPickup = true;
+            }
         }
         else{
             canPickup = false;
@@ -59,6 +67,8 @@ public class interactItem : MonoBehaviour
         if (outline != null){
             outline.ApplyOutline(false);
         }
+        IsTakeItems = true;
+
 
         transform.parent = _playerHoldPosition.PositionParent();
         transform.localPosition = Vector3.zero;
@@ -72,6 +82,7 @@ public class interactItem : MonoBehaviour
         if (outline != null){
             outline.ApplyOutline(true);
         }
+        IsTakeItems = false;
 
         // Positioning item
         transform.position = player.transform.TransformPoint(dropOffsetPosPlayer);

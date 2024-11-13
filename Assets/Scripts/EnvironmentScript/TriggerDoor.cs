@@ -6,25 +6,19 @@ using System;
 public class TriggerDoor : MonoBehaviour
 {
     private Rigidbody rigidbody;
-    private Outline outline;
     [SerializeField] private String _tag;
+    public bool IsOpen { get; private set; }
 
     private void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
-        outline = gameObject.GetComponent<Outline>();
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(_tag))
         {
             rigidbody.isKinematic = false;
-            QuestManager.instance._questIsComplete = true;
-
-            if(outline != null)
-            {
-                outline.ApplyOutline(false);
-            }
+            IsOpen = true;
         }
     }
 }
