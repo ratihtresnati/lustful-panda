@@ -1,4 +1,4 @@
-    using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,6 +38,40 @@ public class ControlDisplay : MonoBehaviour
         Resolution resolution = resolutions[resulotionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
+//     void Start()
+// {
+//     resolutions = Screen.resolutions;
+
+//     resolutionDropdown.ClearOptions();
+
+//     List<string> options = new List<string>();
+//     HashSet<string> uniqueResolutions = new HashSet<string>();
+
+//     int currentResolutionIndex = 0;
+
+//     for (int i = 0; i < resolutions.Length; i++)
+//     {
+//         string option = resolutions[i].width + " x " + resolutions[i].height;
+
+//         // Tambahkan hanya jika resolusi unik
+//         if (!uniqueResolutions.Contains(option))
+//         {
+//             uniqueResolutions.Add(option);
+//             options.Add(option);
+
+//             // Deteksi resolusi saat ini
+//             if (resolutions[i].width == Screen.currentResolution.width &&
+//                 resolutions[i].height == Screen.currentResolution.height)
+//             {
+//                 currentResolutionIndex = options.Count - 1; // Update indeks sesuai dengan opsi yang dimasukkan
+//             }
+//         }
+//     }
+
+//     resolutionDropdown.AddOptions(options);
+//     resolutionDropdown.value = currentResolutionIndex;
+//     resolutionDropdown.RefreshShownValue();
+// }
 
     public static ControlDisplay instance;
     public GameObject[] Inputs;
@@ -66,7 +100,6 @@ public class ControlDisplay : MonoBehaviour
                     Dropdown DComponent = selectedButton.GetComponent<Dropdown>();
                     if (DComponent != null)
                     {
-                        // Open the dropdown (simulate a click)
                         DComponent.Show();
                     }
                 }

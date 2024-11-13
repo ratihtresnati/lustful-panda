@@ -11,13 +11,16 @@ public class SettingsManager : MonoBehaviour
     public GameObject[] Buttons;
     [SerializeField] private GameObject _controlMapBtn;
     [SerializeField] private GameObject _controlDisplayBtn;
+    [SerializeField] private GameObject _controlAudioBtn;
     [SerializeField] private GameObject _controlMapMenu;
     [SerializeField] private GameObject _controlDisplayMenu;
+    [SerializeField] public GameObject _controlAudioMenu;
     [SerializeField] private GameObject _firstButtonCM;
     [SerializeField] private GameObject _firstButtonCD;
 
     private bool _isControlMap = false;
     private bool _isControlDisplay = false;
+    public bool _isControlAudio = false;
     
     private void Awake()
     {
@@ -56,6 +59,10 @@ public class SettingsManager : MonoBehaviour
                 {
                     CloseControlDisplay();
                 }
+                if (selectedButton == _controlAudioBtn && InputManager.instance.ButtonClickInput && _isControlAudio == false )
+                {
+                    OpenControlAudio();
+                }
             }
     }
 
@@ -84,6 +91,10 @@ public class SettingsManager : MonoBehaviour
 
         EventSystem.current.SetSelectedGameObject(_firstButtonCD);
     }
+    private void OpenControlAudio(){
+        _controlAudioMenu.SetActive(true);
+        _isControlAudio = true;
+    }
     private void CloseControlMap(){
         _controlMapMenu.SetActive(false);
         _isControlMap = false;
@@ -91,5 +102,9 @@ public class SettingsManager : MonoBehaviour
     private void CloseControlDisplay(){
         _controlDisplayMenu.SetActive(false);
         _isControlDisplay = false;
+    }
+    public void CloseControlAudio(){
+        _controlAudioMenu.SetActive(false);
+        _isControlAudio = false;
     }
 }

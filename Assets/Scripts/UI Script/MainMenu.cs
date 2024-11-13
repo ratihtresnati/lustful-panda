@@ -24,6 +24,12 @@ public class MainMenu : MonoBehaviour
 
     // Daftar tombol dan scene yang akan dimuat
     public SceneButton[] sceneButtons;
+
+    AudioManager audioManager;
+
+    private void Awake() {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
     void Start()
     {
         // Menambahkan listener ke setiap tombol
