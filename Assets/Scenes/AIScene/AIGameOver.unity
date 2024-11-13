@@ -604,6 +604,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 846720710}
     - target: {fileID: 748401429654358634, guid: 153d18dd75e16374abcca3c2c9a306fb, type: 3}
+      propertyPath: GameOver
+      value: 
+      objectReference: {fileID: 927293153}
+    - target: {fileID: 748401429654358634, guid: 153d18dd75e16374abcca3c2c9a306fb, type: 3}
+      propertyPath: pandaRotSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 748401429654358634, guid: 153d18dd75e16374abcca3c2c9a306fb, type: 3}
       propertyPath: patrolPoint.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -611,6 +619,10 @@ PrefabInstance:
       propertyPath: patrolPoint.Array.data[0]
       value: 
       objectReference: {fileID: 1614629061}
+    - target: {fileID: 3509370447413529161, guid: 153d18dd75e16374abcca3c2c9a306fb, type: 3}
+      propertyPath: m_AutoBraking
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4441337211312655702, guid: 153d18dd75e16374abcca3c2c9a306fb, type: 3}
       propertyPath: targetMask.m_Bits
       value: 1280
@@ -659,9 +671,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6333285602929487565, guid: 153d18dd75e16374abcca3c2c9a306fb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -89.98021
+      objectReference: {fileID: 0}
+    - target: {fileID: 6789284445588187806, guid: 153d18dd75e16374abcca3c2c9a306fb, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7276022016859574408, guid: 153d18dd75e16374abcca3c2c9a306fb, type: 3}
       propertyPath: m_Name
       value: Zookeeper men
+      objectReference: {fileID: 0}
+    - target: {fileID: 8950626505620933929, guid: 153d18dd75e16374abcca3c2c9a306fb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 81.68037
+      objectReference: {fileID: 0}
+    - target: {fileID: 8950626505620933929, guid: 153d18dd75e16374abcca3c2c9a306fb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 8950626505620933929, guid: 153d18dd75e16374abcca3c2c9a306fb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 180
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -670,6 +702,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7276022016859574408, guid: 153d18dd75e16374abcca3c2c9a306fb, type: 3}
       insertIndex: 6
       addedObject: {fileID: 964967699}
+    - targetCorrespondingSourceObject: {fileID: 7276022016859574408, guid: 153d18dd75e16374abcca3c2c9a306fb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 964967716}
   m_SourcePrefab: {fileID: 100100000, guid: 153d18dd75e16374abcca3c2c9a306fb, type: 3}
 --- !u!224 &869875800 stripped
 RectTransform:
@@ -730,6 +765,27 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5005046747529710416, guid: 153d18dd75e16374abcca3c2c9a306fb, type: 3}
   m_PrefabInstance: {fileID: 848965580}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &964967716
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 964967690}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 1.0300835}
+  m_Center: {x: 0, y: 0, z: 0.015041769}
 --- !u!1 &1017832660
 GameObject:
   m_ObjectHideFlags: 0
@@ -1099,6 +1155,30 @@ PrefabInstance:
       propertyPath: panda
       value: 
       objectReference: {fileID: 693306202}
+    - target: {fileID: 364960569451175078, guid: de990c201f6f90346a5ca6a54691e221, type: 3}
+      propertyPath: RunCost
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 364960569451175078, guid: de990c201f6f90346a5ca6a54691e221, type: 3}
+      propertyPath: Stamina
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 364960569451175078, guid: de990c201f6f90346a5ca6a54691e221, type: 3}
+      propertyPath: GameOver
+      value: 
+      objectReference: {fileID: 927293153}
+    - target: {fileID: 364960569451175078, guid: de990c201f6f90346a5ca6a54691e221, type: 3}
+      propertyPath: ChargeRate
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 364960569451175078, guid: de990c201f6f90346a5ca6a54691e221, type: 3}
+      propertyPath: MaxStamina
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 364960569451175078, guid: de990c201f6f90346a5ca6a54691e221, type: 3}
+      propertyPath: StaminaBar
+      value: 
+      objectReference: {fileID: 196585877}
     - target: {fileID: 394461383272751020, guid: de990c201f6f90346a5ca6a54691e221, type: 3}
       propertyPath: m_Layer
       value: 0

@@ -12,6 +12,9 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Game Obejact")]
+    public GameOver GameOver;
+
     [Header("Movement")]
     [SerializeField] private float _jumpSpeed = 3f;
     [SerializeField] private float _walkSpeed = 3f;
@@ -28,6 +31,7 @@ public class PlayerController : MonoBehaviour
     public GameObject box;
 
     public bool InBox;
+    public bool IsCatch = false;
     
     [SerializeField]
     private Vector2 _inputVector;
@@ -42,6 +46,7 @@ public class PlayerController : MonoBehaviour
     public float Stamina, MaxStamina;
     public float RunCost;
     public float ChargeRate;
+    public float magnitude;
 
     private Coroutine recharge;
 
@@ -63,43 +68,67 @@ public class PlayerController : MonoBehaviour
    
     void Update()
     {
-        HanddleMovements();
+        HanddleGameOver();
 
-        TransformBox();
+        if (!IsCatch)
+        {
 
+            HanddleMovements();
 
-        //moveset
-        if(InputManager.instance.JumpInput){
-            if (!IsRooling){
-                if (_characterController.isGrounded && !IsJump){
-                    StartCoroutine(Jumping());
-                }
-            }
-        }
+            TransformBox();
 
-        if(InputManager.instance.RollInput){
-            if (!IsRooling){ 
-                if (!IsJump){
-                    if (_velocity.magnitude != 0) StartCoroutine(Rolling());
-                }
-            }
-        }
-
-        if(InputManager.instance.RunPressed){
-            IsRun = true;
-            if (recharge != null)
+            if (!InBox)
             {
-                StopCoroutine(recharge);
+
+                //moveset
+                if (InputManager.instance.JumpInput)
+                {
+                    if (!IsRooling)
+                    {
+                        if (_characterController.isGrounded && !IsJump)
+                        {
+                            StartCoroutine(Jumping());
+                        }
+                    }
+                }
+
+                if (InputManager.instance.RollInput)
+                {
+                    if (!IsRooling)
+                    {
+                        if (!IsJump)
+                        {
+                            if (_velocity.magnitude != 0) StartCoroutine(Rolling());
+                        }
+                    }
+                }
+
+                if (InputManager.instance.RunPressed)
+                {
+                    IsRun = true;
+                    if (recharge != null)
+                    {
+                        StopCoroutine(recharge);
+                    }
+                }
+
+                if (InputManager.instance.RunReleased)
+                {
+                    IsRun = false;
+                    recharge = StartCoroutine(RechargeStamina());
+                }
             }
         }
-
-        if(InputManager.instance.RunReleased){
-            IsRun = false;
-            recharge = StartCoroutine(RechargeStamina());
-        }
-
         //Debug.Log(ySpeed);
         // Debug.Log(_IsJump);
+    }
+
+    private void HanddleGameOver()
+    {
+        if (GameOver.GameEndT)
+        {
+            IsCatch = true;
+        }
     }
 
     private void TransformBox()
@@ -107,20 +136,43 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.F))
         {
             InBox = true;
-            panda.SetActive(false);
-            box.SetActive(true);
-            transform.gameObject.layer = 0;
-
         }
-        
+
         if (Input.GetKey(KeyCode.J))
         {
             InBox = false;
+        }
+
+        // Player ketahuan ketika terlihat Zoo Keeper
+        if (GameOver.PlayerSee)
+        {
+            InBox = false;
+        }
+
+        // Ketika sedang dalam kondisi menjadi box
+        if (InBox)
+        {
+            panda.SetActive(false); // objexk panda hilang
+            box.SetActive(true); // diganti object kardus
+            transform.gameObject.layer = 0;
+
+            if (magnitude > 0)
+            {
+                transform.gameObject.layer = 10; // layer mask berubah menjadi terget
+            }
+            else
+            {
+                transform.gameObject.layer = 0; // layer mask berubah menjadi default
+            }
+
+        }
+        else
+        {
             panda.SetActive(true);
             box.SetActive(false);
             transform.gameObject.layer = 10;
-
         }
+        
     }
 
     private void HanddleMovements()
@@ -153,7 +205,7 @@ public class PlayerController : MonoBehaviour
             _speed = _walkSpeed;
         }
 
-        float magnitude = Mathf.Clamp01(Move.magnitude) * _speed;
+        magnitude = Mathf.Clamp01(Move.magnitude) * _speed;
         Move.Normalize();
 
         _ySpeed += Physics.gravity.y * Time.deltaTime;
