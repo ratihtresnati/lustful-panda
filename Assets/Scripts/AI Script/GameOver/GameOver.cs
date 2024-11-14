@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class GameOver : MonoBehaviour
 {
+    public PlayerController PlayerControl;
 
     public CatchSensor catchSensor;
     public bool GameEnd = false;
@@ -17,10 +18,27 @@ public class GameOver : MonoBehaviour
 
     private void Update()
     {
+
         if (catchSensor.catchPlayer)
         {
-            GameEnd = false;
-            GameEndT = true;
+            StartCoroutine(GameOverMoment());
+            
         }
+    }
+
+    IEnumerator GameOverMoment()
+    {
+        if (PlayerControl.IsJump)
+        {
+            GameEnd = false;
+            //GameEndT = true;
+        }
+        else
+        {
+            yield return new WaitForSeconds(0.5f);
+            GameEnd = true;
+            //GameEndT = true;
+        }
+
     }
 }

@@ -108,7 +108,7 @@ public class AIPatrolling : MonoBehaviour
         GetComponent<NavMeshAgent>().speed = RunSpeed;
         agent.SetDestination(player.position);
 
-        if (GameOver.GameEndT)
+        if (GameOver.GameEnd)
         {
             GetComponent<NavMeshAgent>().speed = 0;
             currentState = ZooKeeperState.Catch;

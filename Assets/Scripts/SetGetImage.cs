@@ -36,7 +36,7 @@ public class SetGetImage : MonoBehaviour
         RenderCamera.SetActive(true);
         yield return new WaitForSeconds(0.01f);
         GetImage();
-        yield return new WaitForSeconds(0.01f);
+        yield return new WaitForSeconds(3f);
         Time.timeScale = 0;
         RI.SetActive(true);
         /*

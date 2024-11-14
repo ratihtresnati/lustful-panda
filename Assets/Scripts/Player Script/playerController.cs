@@ -125,8 +125,9 @@ public class PlayerController : MonoBehaviour
 
     private void HanddleGameOver()
     {
-        if (GameOver.GameEndT)
+        if (GameOver.GameEnd)
         {
+            _velocity.y = 0;
             IsCatch = true;
         }
     }
