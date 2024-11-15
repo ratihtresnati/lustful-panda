@@ -4,17 +4,11 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class MainMenu : MonoBehaviour
 {
-    // Array untuk menyimpan tombol dan indeks scene atau flag apakah tombol berfungsi sebagai tombol keluar
-    [System.Serializable]
-    public class SceneButton
-    {
-        public Button button;        // Tombol UI
-        public int sceneIndex = -1;  // Indeks scene tujuan di Build Settings (-1 jika tombol ini adalah tombol keluar)
-        public bool isExitButton;    // True jika tombol ini adalah tombol keluar
-    }
+     public static MainMenu Instance;
     
     public GameObject menuGameObject;
     private bool exit = false;
@@ -22,8 +16,25 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private float _resetDelay = 0.5f;
     
 
+    public float scaleMultiplier = 1.1f;
+    public float animationDuration = 0.2f;
+    private GameObject selectedButton;
+    private GameObject _lastSelectedButton;
+    public bool IsMouse { get; set; }
     // Daftar tombol dan scene yang akan dimuat
     public SceneButton[] sceneButtons;
+
+     private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     void Start()
     {
         // Menambahkan listener ke setiap tombol
@@ -43,53 +54,80 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    private void Update()
+private void Update()
+{
+    if (Loading.instance.IsLoading == true) 
     {
-        if (Loading.instance.IsLoading == true) 
+        _resetTimer += Time.deltaTime; 
+        if (_resetTimer < _resetDelay) return;
+
+        Loading.instance.IsLoading = false;
+    }
+
+        foreach (SceneButton sceneButton in sceneButtons)
         {
-            _resetTimer += Time.deltaTime; 
-            if (_resetTimer < _resetDelay) return;
+            int index = sceneButton.sceneIndex; // Simpan indeks lokal untuk digunakan dalam lambda
 
-            Loading.instance.IsLoading = false;
-        }
-
-            foreach (SceneButton sceneButton in sceneButtons)
+            if (IsMouse == true) 
             {
-                int index = sceneButton.sceneIndex; // Simpan indeks lokal untuk digunakan dalam lambda
+                EventSystem.current.SetSelectedGameObject(null);
+                return;
+            }
+            else
+            {
+                selectedButton = EventSystem.current.currentSelectedGameObject;
+            }
+
+            if (selectedButton == sceneButton.button.gameObject)
+            {
+                OnPointerEnter(sceneButton);
                 if (InputManager.instance.ButtonClickInput )//&& InputManager.instance._interact == true)
-                {
-                    GameObject selectedButton = EventSystem.current.currentSelectedGameObject;
-                    if (selectedButton == sceneButton.button.gameObject)
+                {   
+                    if (sceneButton.isExitButton == true )
                     {
-                        if (sceneButton.isExitButton == true )
-                        {
-                            ExitApplication();
-                            Debug.Log("exit");
-                            exit = true;
-                        }
-                        else
-                        {
-                            LoadScene(index);
-                            Debug.Log("load");
-                        }
+                        ExitApplication();
+                        Debug.Log("exit");
+                        exit = true;
+                    }
+                    else
+                    {
+                        LoadScene(index);
+                        Debug.Log("load");
                     }
                 }
             }
+            else
+            {
+                OnPointerExit(sceneButton);
+            }
+        }
     }
+
+    public void OnPointerEnter(SceneButton sceneButton)
+    {
+        sceneButton.button.gameObject.transform.DOScale(new Vector3(scaleMultiplier, scaleMultiplier, scaleMultiplier), animationDuration);
+    }
+
+    public void OnPointerExit(SceneButton sceneButton)
+    {
+        sceneButton.button.gameObject.transform.DOScale(Vector3.one, animationDuration);
+    }
+
 
     // Fungsi untuk memuat scene berdasarkan indeks
     public void LoadScene(int sceneIndex)
     {
-        // InputManager.PlayerInput.enabled = false; 
-        // isLoading = true;
-        menuGameObject.SetActive(false);
+        foreach (SceneButton sceneButton in sceneButtons)
+        {
+            DOTween.Kill(sceneButton.button.gameObject.transform);
+        }
 
-        // SceneManager.LoadScene(sceneIndex);
+        menuGameObject.SetActive(false);   
         Loading.instance.LoadScene(sceneIndex);
     }
 
     // Fungsi untuk keluar dari aplikasi
-    private void ExitApplication()
+    public void ExitApplication()
     {
         // InputManager.PlayerInput.enabled = false; 
         Application.Quit();
