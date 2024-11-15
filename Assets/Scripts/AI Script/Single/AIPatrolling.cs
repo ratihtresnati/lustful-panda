@@ -8,11 +8,15 @@ public class AIPatrolling : MonoBehaviour
 {
     public AISensor Sensor;
 
+    public GameOver GameOver;
+
     public AIAnimatorController AIAnimatorController;
 
     [SerializeField] private Transform player;
     [SerializeField] private float walkSpeed = 3f;
-    [SerializeField] private float runSpeed = 4f;
+    [SerializeField] private float pandaRotSpeed = 5f;
+    
+    public float RunSpeed = 4f;
 
     NavMeshAgent agent;
     public Transform[] patrolPoint;
@@ -38,7 +42,6 @@ public class AIPatrolling : MonoBehaviour
     
     void Update()
     {
-       
 
         switch (currentState)
         {
@@ -48,7 +51,7 @@ public class AIPatrolling : MonoBehaviour
                 break;
             case ZooKeeperState.Search:
                 Search();
-                AIAnimatorController.Idle();
+                AIAnimatorController.Search();
                 break;
             case ZooKeeperState.Patrol:
                 Patrol();
@@ -61,8 +64,27 @@ public class AIPatrolling : MonoBehaviour
                 Chase();
                 AIAnimatorController.Run();
                 break;
+            case ZooKeeperState.Catch:
+                Catch();
+                AIAnimatorController.Catch();
+                break;
         }
 
+    }
+
+    private void Catch()
+    {
+        GetComponent<NavMeshAgent>().speed = 0;
+
+        Vector3 targetDir = transform.position - player.position;
+
+        float singleStep = pandaRotSpeed * Time.deltaTime;
+
+        Vector3 newDir = Vector3.RotateTowards(player.forward, -targetDir, singleStep, 0);
+
+        newDir.y = 0;
+
+        player.rotation = Quaternion.LookRotation(newDir);
     }
 
     private void AfterChase()
@@ -72,7 +94,7 @@ public class AIPatrolling : MonoBehaviour
         if (GetComponent<NavMeshAgent>().speed <= 0)
         {
             idleTimer = idleTimeAfterLosePlayer;
-            currentState = ZooKeeperState.Idle;
+            currentState = ZooKeeperState.Search;
         }
         if (Sensor.canSeePlayer)
         {
@@ -83,8 +105,15 @@ public class AIPatrolling : MonoBehaviour
 
     void Chase()
     {
-        GetComponent<NavMeshAgent>().speed = runSpeed;
+        GetComponent<NavMeshAgent>().speed = RunSpeed;
         agent.SetDestination(player.position);
+
+        if (GameOver.GameEnd)
+        {
+            GetComponent<NavMeshAgent>().speed = 0;
+            currentState = ZooKeeperState.Catch;
+        }
+
         if (!Sensor.canSeePlayer)
         {
             //idleTimer = 2f;
@@ -118,7 +147,6 @@ public class AIPatrolling : MonoBehaviour
     private void Search()
     {
 
-        GetComponent<NavMeshAgent>().speed = walkSpeed;
         idleTimer -= Time.deltaTime;
 
         if (idleTimer <= 0f)
@@ -163,7 +191,8 @@ public class AIPatrolling : MonoBehaviour
         Patrol,
         Chase,
         Search,
-        AfterChase
+        AfterChase,
+        Catch
     }
 
 }

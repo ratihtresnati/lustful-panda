@@ -22,6 +22,12 @@ public class CharacterAnimatorController : MonoBehaviour
 
     private void Update()
     {
+
+        if (_playerController.IsCatch)
+        {
+            StartCoroutine(Catching());
+        }
+
         var state = GetState();
 
         if(state == _currentState) return;
@@ -70,4 +76,11 @@ public class CharacterAnimatorController : MonoBehaviour
     private static readonly int Run = Animator.StringToHash("Run");
     private static readonly int Walk = Animator.StringToHash("Walking");
     private static readonly int WalkSlow = Animator.StringToHash("WalkSlow");
+
+    IEnumerator Catching()
+    {
+        yield return new WaitForSeconds(0.8f);
+
+        _animator.SetBool("isCatch", true);
+    }
 }

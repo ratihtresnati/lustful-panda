@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
+
 public class PlayerInteract : MonoBehaviour
 {    
     public float interactDistance = 5f; // Jarak di mana panda bisa berinteraksi dengan objek
     public Transform panda; // Referensi ke posisi panda
     public float pushForce = 5f; // Kekuatan dorongan pada objek
-
 
     public Animator _animator;
     public Rig boxAnim;
@@ -16,7 +16,6 @@ public class PlayerInteract : MonoBehaviour
     private GameObject currentObject;
     public bool _findInteractable = false;
     [SerializeField] private float duration = 0.3f;
-
 
     private void Start()
     {
