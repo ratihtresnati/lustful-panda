@@ -71,7 +71,7 @@ public class QuestManager : MonoBehaviour
 
     public void ShowHint(string hint)
     {
-        HintManager.instance.ShowHint(hint);
+        // HintManager.instance.ShowHint(hint);
     }
 
     public void InteractWithDoorGuard()
