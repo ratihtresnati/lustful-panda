@@ -1,36 +1,42 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class conditionalObjectInteract : MonoBehaviour
 {
-    public float interactionRadius; // Radius interaksi
+    private PlayerInputManager playarInputManager;
+
+    public float interactionRadius;
     public GameObject player;
-    public GameObject taskItem; // Referensi ke item quest
+    public GameObject taskItem;
     public GameObject dialogAsset;
     private bool isCarryingTheItem = false;
     [SerializeField] private Outline _outline;
-
-    [SerializeField] private Outline itemOutline;
+    [SerializeField] private Outline _itemOutline;
     public int questNum;
     
     private PlayerHoldPosition playerHoldPosition;
+    private ParentPosition _parentPosition;
+
 
     void Start()
     {
         playerHoldPosition = FindObjectOfType<PlayerHoldPosition>();
-        _outline = GetComponent<Outline>();
-         if (dialogAsset != null)
+        _outline = gameObject.GetComponent<Outline>();
+        _itemOutline = taskItem.GetComponent<Outline>();
+        _parentPosition = gameObject.GetComponent<ParentPosition>();
+
+        if (dialogAsset != null)
         {
             dialogAsset.SetActive(false);
         }
-
+        player = GameObject.Find("Panda Bayik");
     }
-
     void Update()
     {
         // Check bawaan item
-
         if (taskItem != null && taskItem.transform.parent == playerHoldPosition.PositionParent())
         {
             isCarryingTheItem = true;
@@ -41,7 +47,7 @@ public class conditionalObjectInteract : MonoBehaviour
         }
         // Menghitung jarak pemain n objek
         float distance = Vector3.Distance(player.transform.position, transform.position);
-        if (distance <= interactionRadius && Input.GetKeyDown(KeyCode.F))
+        if (distance <= interactionRadius && InputManager.instance.InteractInput)
         {
             if (isCarryingTheItem)
             {
@@ -49,11 +55,39 @@ public class conditionalObjectInteract : MonoBehaviour
             }
             else
             {
-                itemOutline.ApplyOutline(true);
+                if(_itemOutline != null)
+                {
+                    _itemOutline.ApplyOutline(true);
+                }   
+                
+                dialogAsset.transform.SetParent(_parentPosition.PositionParent());
                 dialogAsset.SetActive(true);
+                QuestManager.instance.NextQuest();
             }
         }
     }
+
+    /*private void InteractEvent(InputAction.CallbackContext context)
+    {
+        float distance = Vector3.Distance(player.transform.position, transform.position);
+        if (distance <= interactionRadius)
+        {
+            float distance = Vector3.Distance(player.transform.position, transform.position);
+            if (distance <= interactionRadius)
+            {
+                if (isCarryingTheItem)
+                {
+                    Interact();
+                }
+                else
+                {
+                    _itemOutline.ApplyOutline(true);
+                    dialogAsset.SetActive(true);
+                    QuestManager.instance.NextQuest();
+                }
+            }
+        }
+    }*/
 
     void Interact()
     {
@@ -63,10 +97,8 @@ public class conditionalObjectInteract : MonoBehaviour
             if (npcPanda != null)
             {
                 npcPanda._isComplete = true;
-                QuestManager.instance._questIsComplete = true;
-                if (_outline != null){
-                    _outline.ApplyOutline(false);
-                    }
+                QuestManager.instance.NextQuest();
+                _outline.ApplyOutline(false);
             }
             else
             {

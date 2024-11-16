@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,102 +6,76 @@ using UnityEngine.Events;
 
 public class interactItem : MonoBehaviour
 {
+    [SerializeField] private GameInput gameInput;
     public float pickupRadius;
     private bool canPickup = false;
     bool isCarryingItem = false;
     public GameObject player;
+    public GameObject destinedObject;
     public GameObject obstacleObject; 
     public Vector3 grabOffsetPlayer; // jarak objek setelah diambil karakter
-    public Vector3 dropOffsetPlayer; // jarak objek setelah ditaro karakter
+    public Vector3 dropOffsetPosPlayer; // jarak objek setelah ditaro karakter
+    public Vector3 dropOffsetRotPlayer; // rotasi objek setelah ditaro karakter
     public Outline outline;
-    private PlayerHoldPosition playerHoldPosition;
-
-    [SerializeField] private UnityEvent _nextObject;
-
-    [SerializeField] private GameObject _itemsPosition;
+    private PlayerHoldPosition _playerHoldPosition;
 
     void Start()
     {
-        playerHoldPosition = FindObjectOfType<PlayerHoldPosition>();
+        player = GameObject.Find("Panda Bayik");
+        _playerHoldPosition = player.GetComponent<PlayerHoldPosition>();
     }
 
     void Update()
     {
-        // Menghitung jarak antara pemain dan objek
         float distance = Vector3.Distance(player.transform.position, transform.position);
+        float distance2 = Vector3.Distance(player.transform.position, destinedObject.transform.position);
 
         // ngecek jarak pemain di debug
-        if (distance <= pickupRadius)
-        {
+        if (distance <= pickupRadius){
             if (obstacleObject != null)
-            {
-                Debug.Log("belum bisa interact");
-                return;
-            }
-            else
-            {
-                canPickup = true;
-                Debug.Log("ambil barang = E");
-            }
+            {return;}
+            else{
+                canPickup = true;}
         }
-        else
-        {
+        else{
             canPickup = false;
         }
 
-        // Ambil item
-        if (canPickup && Input.GetKeyDown(KeyCode.E))
-        {
-            if (!isCarryingItem)
-            {
+        // interact item
+        if(InputManager.instance.InteractInput){
+            if (canPickup && !isCarryingItem){
                 Pickup();
             }
-        }
-
-        // Drop item
-        if (isCarryingItem && Input.GetKeyDown(KeyCode.R))
-        {
-            Drop();
+            else if (isCarryingItem && distance2 <= pickupRadius){
+                
+            }
+            else if (isCarryingItem){
+                Drop();
+            }
         }
     }
-
     void Pickup()
     {
-        _nextObject.Invoke();
-        Debug.Log("membawa barang");
-
-        // Matiin outline
         if (outline != null){
             outline.ApplyOutline(false);
         }
 
-        transform.parent = playerHoldPosition.PositionParent();
+        transform.parent = _playerHoldPosition.PositionParent();
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.Euler(0, 90, 0);
-
-        // Positioning item
-        // transform.position = player.transform.TransformPoint(grabOffsetPlayer);
-        // float yPlayer = player.transform.eulerAngles.y;
-        // transform.rotation = Quaternion.Euler(0, yPlayer, 0);
-
-        // Menjadikan pemain parent, biar nempel
-        // transform.SetParent(player.transform);
 
         isCarryingItem = true;
         canPickup = false;
     }
-
     void Drop()
     {
-        Debug.Log("barang dilepas");
-
         if (outline != null){
             outline.ApplyOutline(true);
         }
 
         // Positioning item
-        transform.position = player.transform.TransformPoint(dropOffsetPlayer);
-        transform.localRotation = Quaternion.Euler(0, 0, 0);
+        transform.position = player.transform.TransformPoint(dropOffsetPosPlayer);
+        transform.localRotation = Quaternion.Euler(dropOffsetRotPlayer);
 
         // Lepas parent
         transform.SetParent(null);
