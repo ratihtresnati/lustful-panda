@@ -16,6 +16,8 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject _backButton;
     [SerializeField] private GameObject _controlMap;
     GameObject _selectedButton;
+    [SerializeField] private GameObject _controlDisplay;
+    [SerializeField] private GameObject _controlAudio;
     
     private GameObject[] pauseButtons;
     
@@ -27,6 +29,8 @@ public class MenuManager : MonoBehaviour
     public float scaleMultiplier = 1.1f;
     public float animationDuration = 0.2f;
 
+    AudioManager audioManager;
+
     private void Awake()
     {
         _mainMenu = GameObject.Find("PauseMenu");
@@ -35,8 +39,10 @@ public class MenuManager : MonoBehaviour
         _settingButton = GameObject.Find("Settings");
         _backButton = GameObject.Find("Back");
         _controlMap = GameObject.Find("ControlMap UI");
-        
-        _mouse = FindObjectOfType<Mouse>();
+        _controlDisplay = GameObject.Find("ControlDisplay UI");
+        _controlAudio = GameObject.Find("ControlAudio UI");
+
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
     }
 
     private void Start()
@@ -44,8 +50,8 @@ public class MenuManager : MonoBehaviour
         _mainMenu.SetActive(false);
         _settingMenu.SetActive(false);
         _controlMap.SetActive(false);
-
-        pauseButtons = new GameObject[] { _resumeButton, _settingButton, _backButton };
+        _controlDisplay.SetActive(false);
+        _controlAudio.SetActive(false);
     }
 
     private void Update()
@@ -55,6 +61,7 @@ public class MenuManager : MonoBehaviour
             if(!PauseManager.instance.IsPause)
             {
                 Pause();
+                audioManager.PlaySFX(audioManager.SFXButtonClick);
             }
         }
 
@@ -66,10 +73,13 @@ public class MenuManager : MonoBehaviour
                 {
                     OpenMainMenu();
                     _isPaused = false;
+                    SettingsManager.instance._isControlAudio = false;
+                    audioManager.PlaySFX(audioManager.SFXButtonClick);
                 }
                 else
                 {
                     Unpause();
+                    audioManager.PlaySFX(audioManager.SFXButtonClick);
                 }
             }
         }
@@ -84,6 +94,7 @@ public class MenuManager : MonoBehaviour
                     if(InputManager.instance.ButtonClickInput)
                     {
                         OnSettingPress();
+                        audioManager.PlaySFX(audioManager.SFXButtonClick);
                     }
                 }
                 else
@@ -97,6 +108,7 @@ public class MenuManager : MonoBehaviour
                     if(InputManager.instance.ButtonClickInput)
                     {
                         OnResumePress();
+                        audioManager.PlaySFX(audioManager.SFXButtonClick);
                     }
                 }
                 else
@@ -110,6 +122,7 @@ public class MenuManager : MonoBehaviour
                     if(InputManager.instance.ButtonClickInput)
                     {
                         OnBackPress();
+                        audioManager.PlaySFX(audioManager.SFXButtonClick);
                     }
                 }
                 else
@@ -139,6 +152,8 @@ public class MenuManager : MonoBehaviour
         _mainMenu.SetActive(true);
         _settingMenu.SetActive(false);
         _controlMap.SetActive(false);
+        _controlDisplay.SetActive(false);
+        _controlAudio.SetActive(false);
 
         EventSystem.current.SetSelectedGameObject(_resumeButton);
     }
@@ -158,6 +173,8 @@ public class MenuManager : MonoBehaviour
         _mainMenu.SetActive(false);
         _settingMenu.SetActive(false);
         _controlMap.SetActive(false);
+        _controlDisplay.SetActive(false);
+        _controlAudio.SetActive(false);
 
         EventSystem.current.SetSelectedGameObject(null);
     }
@@ -175,7 +192,6 @@ public class MenuManager : MonoBehaviour
     public void OnBackPress()
     { 
         PauseManager.instance.UnpauseGame();
-
         Loading.instance.LoadScene(0);
     }
 
