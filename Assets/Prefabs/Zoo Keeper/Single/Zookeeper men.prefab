@@ -14,8 +14,10 @@ GameObject:
   - component: {fileID: 6789284445588187806}
   - component: {fileID: 3509370447413529161}
   - component: {fileID: 748401429654358634}
+  - component: {fileID: 5492963913605323851}
   - component: {fileID: 4441337211312655702}
   - component: {fileID: 334584410330302043}
+  - component: {fileID: 362587987260573747}
   - component: {fileID: 1095837170777590032}
   m_Layer: 0
   m_Name: Zookeeper men
@@ -107,7 +109,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Height: 2
@@ -152,11 +154,34 @@ MonoBehaviour:
   AIAnimatorController: {fileID: 334584410330302043}
   player: {fileID: 0}
   walkSpeed: 3
-  pandaRotSpeed: 5
+  pandaRotSpeed: 10
   RunSpeed: 4
-  patrolPoint: []
+  patrolPoint:
+  - {fileID: 0}
   idleTime: 2
   idleTimeAfterLosePlayer: 5
+--- !u!114 &5492963913605323851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7276022016859574408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d879e7366db342844bcff0a391517f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radiusCatch: 1
+  angleCatch: 100
+  playerSouldCatch: {fileID: 0}
+  targetMaskCatah:
+    serializedVersion: 2
+    m_Bits: 1280
+  obstructionMaskCatch:
+    serializedVersion: 2
+    m_Bits: 512
+  catchPlayer: 0
 --- !u!114 &4441337211312655702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,10 +200,10 @@ MonoBehaviour:
   playerRef: {fileID: 0}
   targetMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 1280
   obstructionMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 512
   canSeePlayer: 0
 --- !u!114 &334584410330302043
 MonoBehaviour:
@@ -192,7 +217,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fae6c40d7afcfd949b0645189922daec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
+  animator: {fileID: 6747298098734983619}
+--- !u!114 &362587987260573747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7276022016859574408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00d99bdc8c03a404c847bc23f578a66e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _positionParent: {fileID: 0}
 --- !u!65 &1095837170777590032
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -262,6 +300,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -1081249749698373253, guid: f5dd45e0f7dbcdd4284e95cf7677d71c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 81.68037
+      objectReference: {fileID: 0}
+    - target: {fileID: -1081249749698373253, guid: f5dd45e0f7dbcdd4284e95cf7677d71c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: -1081249749698373253, guid: f5dd45e0f7dbcdd4284e95cf7677d71c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 180
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: f5dd45e0f7dbcdd4284e95cf7677d71c, type: 3}
       propertyPath: m_Name
       value: Zookeeper1_ANM
@@ -270,6 +320,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 540ecd94e02f2b349a8e77671e534177, type: 2}
+    - target: {fileID: 6570184258767420063, guid: f5dd45e0f7dbcdd4284e95cf7677d71c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -89.98021
+      objectReference: {fileID: 0}
     - target: {fileID: 8244472121894002071, guid: f5dd45e0f7dbcdd4284e95cf7677d71c, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -282,5 +336,10 @@ PrefabInstance:
 --- !u!4 &811522095232693177 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f5dd45e0f7dbcdd4284e95cf7677d71c, type: 3}
+  m_PrefabInstance: {fileID: 921446229601473618}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &6747298098734983619 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: f5dd45e0f7dbcdd4284e95cf7677d71c, type: 3}
   m_PrefabInstance: {fileID: 921446229601473618}
   m_PrefabAsset: {fileID: 0}

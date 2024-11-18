@@ -18,6 +18,7 @@ public class GameOver : MonoBehaviour
 
     private void Update()
     {
+        PlayerControl = FindObjectOfType<PlayerController>();
 
         if (catchSensor.catchPlayer)
         {

@@ -13,6 +13,7 @@ public class AIPatrolling : MonoBehaviour
     public AIAnimatorController AIAnimatorController;
 
     [SerializeField] private Transform player;
+    private GameObject _playerPanda;
     [SerializeField] private float walkSpeed = 3f;
     [SerializeField] private float pandaRotSpeed = 5f;
     
@@ -31,6 +32,9 @@ public class AIPatrolling : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _playerPanda = GameObject.Find("Panda Bayik");
+        player = _playerPanda.transform;
+        GameOver = FindObjectOfType<GameOver>();
         AIAnimatorController = GetComponent<AIAnimatorController>();
         agent = GetComponent<NavMeshAgent>();
         Sensor = GetComponent<AISensor>();
@@ -42,7 +46,6 @@ public class AIPatrolling : MonoBehaviour
     
     void Update()
     {
-
         switch (currentState)
         {
             case ZooKeeperState.Idle:
@@ -130,11 +133,14 @@ public class AIPatrolling : MonoBehaviour
 
         if (idleTimer <= 0f)
         {
-            target = patrolPoint[patrolPointIndex].position;
-            agent.SetDestination(target);
+            if (patrolPoint != null && patrolPoint.Length > 0)
+            {
+                target = patrolPoint[patrolPointIndex].position;
+                agent.SetDestination(target);
 
-            GetComponent<NavMeshAgent>().speed = walkSpeed;
-            currentState = ZooKeeperState.Patrol;
+                GetComponent<NavMeshAgent>().speed = walkSpeed;
+                currentState = ZooKeeperState.Patrol;
+            }
         }
 
         if (Sensor.canSeePlayer)
@@ -176,7 +182,6 @@ public class AIPatrolling : MonoBehaviour
                 currentState = ZooKeeperState.Idle;
             }
                 currentState = ZooKeeperState.Idle;
-
 
         }
             if (Sensor.canSeePlayer)

@@ -22,6 +22,7 @@ public class AISensor : MonoBehaviour
     void Start()
     {
         playerRef = GameObject.FindGameObjectWithTag("PandaMC");
+        GameOver = FindObjectOfType<GameOver>();
         StartCoroutine(FOVRoutine());
     }
 

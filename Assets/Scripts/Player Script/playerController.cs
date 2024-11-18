@@ -53,17 +53,11 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _characterController = GetComponent<CharacterController>();
-
+        GameOver = FindObjectOfType<GameOver>();
+        panda = GameObject.Find("Panda");
 
         Keyframe roll_lastFrame = _rollCurve[_rollCurve.length - 1];
         _rollTimer = roll_lastFrame.time;
-
-        
-
-        // gameInput.OnRunningEvent += OnRunEvent;
-        // gameInput.OutRunningEvent += OutRunEvent;
-        // gameInput.OnJumpingEvent += OnJumpEvent;
-        // gameInput.OnRollingEvent += OnRollEvent;
     }
    
     void Update()

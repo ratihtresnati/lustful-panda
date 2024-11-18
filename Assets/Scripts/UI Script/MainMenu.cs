@@ -8,80 +8,41 @@ using DG.Tweening;
 
 public class MainMenu : MonoBehaviour
 {
-     public static MainMenu Instance;
-    
     public GameObject menuGameObject;
     private bool exit = false;
     private float _resetTimer = 0f;
-    [SerializeField] private float _resetDelay = 0.5f;
+    private float _resetDelay = 0.5f;
     
-
+    [Header("Animation UI")]
     public float scaleMultiplier = 1.1f;
     public float animationDuration = 0.2f;
-    private GameObject selectedButton;
-    private GameObject _lastSelectedButton;
-    public bool IsMouse { get; set; }
+    
     // Daftar tombol dan scene yang akan dimuat
     public SceneButton[] sceneButtons;
+    private GameObject _selectedButton;
+    private Mouse _mouse;
+    public bool IsMouse { get; set; }
 
-     private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
     void Start()
     {
-        // Menambahkan listener ke setiap tombol
-        foreach (SceneButton sceneButton in sceneButtons)
-        {
-            int index = sceneButton.sceneIndex; // Simpan indeks lokal untuk digunakan dalam lambda
-            if (sceneButton.isExitButton)
-            {
-                sceneButton.button.onClick.AddListener(ExitApplication);
-            }
-            else
-            {
-                // Jika bukan tombol keluar, tambahkan listener untuk memuat scene
-                // int index = sceneButton.sceneIndex; // Simpan indeks lokal untuk digunakan dalam lambda
-                sceneButton.button.onClick.AddListener(() => LoadScene(index));
-            }
-        }
+        InitializeButtonSelect();
+        _mouse = FindObjectOfType<Mouse>();
     }
 
-private void Update()
-{
-    if (Loading.instance.IsLoading == true) 
+    private void Update()
     {
-        _resetTimer += Time.deltaTime; 
-        if (_resetTimer < _resetDelay) return;
-
-        Loading.instance.IsLoading = false;
-    }
+        LoadingDelay();
 
         foreach (SceneButton sceneButton in sceneButtons)
         {
             int index = sceneButton.sceneIndex; // Simpan indeks lokal untuk digunakan dalam lambda
 
-            if (IsMouse == true) 
-            {
-                EventSystem.current.SetSelectedGameObject(null);
-                return;
-            }
-            else
-            {
-                selectedButton = EventSystem.current.currentSelectedGameObject;
-            }
+            UpdateButtonSelected(sceneButton);
 
-            if (selectedButton == sceneButton.button.gameObject)
+            if (_selectedButton == sceneButton.button.gameObject)
             {
                 OnPointerEnter(sceneButton);
-                if (InputManager.instance.ButtonClickInput )//&& InputManager.instance._interact == true)
+                if (InputManager.instance.ButtonClickInput )
                 {   
                     if (sceneButton.isExitButton == true )
                     {
@@ -103,6 +64,40 @@ private void Update()
         }
     }
 
+    private void InitializeButtonSelect()
+    {
+        if (_selectedButton == null && sceneButtons.Length > 0)
+        {
+            _selectedButton = sceneButtons[0].button.gameObject;
+            EventSystem.current.SetSelectedGameObject(_selectedButton);
+        }
+    }
+
+    private void UpdateButtonSelected(SceneButton sceneButton)
+    {
+        if (IsMouse == true) 
+        {
+            _selectedButton = _mouse.LastHoveredButton();
+            EventSystem.current.SetSelectedGameObject(_mouse.LastHoveredButton());
+        }
+        else
+        {
+            _selectedButton = EventSystem.current.currentSelectedGameObject;
+        }
+    }
+
+    private void LoadingDelay()
+    {
+        //harus pake ini, karna kalo engga dia bakalan auto klik button padahal dia masih loading  
+        if (Loading.instance.IsLoading == true) 
+        {
+            _resetTimer += Time.deltaTime; 
+            if (_resetTimer < _resetDelay) return;
+
+            Loading.instance.IsLoading = false;
+        }
+    }
+
     public void OnPointerEnter(SceneButton sceneButton)
     {
         sceneButton.button.gameObject.transform.DOScale(new Vector3(scaleMultiplier, scaleMultiplier, scaleMultiplier), animationDuration);
@@ -112,7 +107,6 @@ private void Update()
     {
         sceneButton.button.gameObject.transform.DOScale(Vector3.one, animationDuration);
     }
-
 
     // Fungsi untuk memuat scene berdasarkan indeks
     public void LoadScene(int sceneIndex)
@@ -129,7 +123,6 @@ private void Update()
     // Fungsi untuk keluar dari aplikasi
     public void ExitApplication()
     {
-        // InputManager.PlayerInput.enabled = false; 
         Application.Quit();
         Debug.Log("Application has been exited."); // Hanya berfungsi di editor atau build yang didukung
     }
