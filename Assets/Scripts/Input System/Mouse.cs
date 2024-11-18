@@ -7,10 +7,12 @@ public class Mouse : MonoBehaviour
 {
     private GameObject _lastButton;
     private MainMenu _mainMenu;
-
+    private MenuManager _menuManager;
+    [SerializeField] private bool _pauseMenu;
     private void Start()
     {
         _mainMenu = FindObjectOfType<MainMenu>();
+        _menuManager = FindObjectOfType<MenuManager>();
     }
 
     private void Update()
@@ -23,15 +25,46 @@ public class Mouse : MonoBehaviour
 
         foreach (RaycastResult result in results)
         {
-            SceneButton sceneButton = FindSceneButton(result.gameObject);
-            if (sceneButton != null)
+            if(_pauseMenu == true)
             {
-                HandleSceneButtonHover(sceneButton);
-                isHoveringButton = true;
+                GameObject[] pauseButtons = _menuManager.ButtonPauseMenu();
+                foreach (GameObject button in pauseButtons)
+                {
+                    if (result.gameObject == button)
+                    {
+                        HandleButtonHover(button);
+                        isHoveringButton = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                SceneButton sceneButton = FindSceneButton(result.gameObject);
+
+                Debug.Log(result.gameObject);
+                if (sceneButton != null)
+                {
+                    HandleSceneButtonHover(sceneButton);
+                    isHoveringButton = true;
+                }
             }
         }
 
-        _mainMenu.IsMouse = isHoveringButton;
+        if (_mainMenu != null)
+        {
+            _mainMenu.IsMouse = isHoveringButton;
+        }
+
+        if (_menuManager != null)
+        {
+            _menuManager.IsMouse = isHoveringButton;
+        }
+    }
+
+    private void HandleButtonHover(GameObject button)
+    {
+        _lastButton = button; 
     }
 
     private void HandleSceneButtonHover(SceneButton sceneButton)

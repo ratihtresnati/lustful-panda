@@ -27,9 +27,6 @@ public class PauseManager : MonoBehaviour
         InputManager.PlayerInput.SwitchCurrentActionMap("UI");
 
         pandaQuest.enabled = false;
-
-        // InputManager.PlayerInputManager.Player.Disable();
-        // InputManager.PlayerInputManager.UI.Enable();
     }
 
     public void UnpauseGame()
@@ -38,7 +35,5 @@ public class PauseManager : MonoBehaviour
         Time.timeScale = 1f;
 
         InputManager.PlayerInput.SwitchCurrentActionMap("Player");
-        // InputManager.PlayerInputManager.Player.Enable();
-        // InputManager.PlayerInputManager.UI.Disable();
     }
 }

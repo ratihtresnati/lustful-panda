@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class MenuManager : MonoBehaviour
 {
@@ -14,8 +15,17 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject _settingButton;
     [SerializeField] private GameObject _backButton;
     [SerializeField] private GameObject _controlMap;
+    GameObject _selectedButton;
     
-    private bool _isPaused;
+    private GameObject[] pauseButtons;
+    
+    [SerializeField] private bool _isPaused;
+    public bool IsMouse { get; set; }
+    private Mouse _mouse;
+
+    [Header("Animation UI")]
+    public float scaleMultiplier = 1.1f;
+    public float animationDuration = 0.2f;
 
     private void Awake()
     {
@@ -25,6 +35,8 @@ public class MenuManager : MonoBehaviour
         _settingButton = GameObject.Find("Settings");
         _backButton = GameObject.Find("Back");
         _controlMap = GameObject.Find("ControlMap UI");
+        
+        _mouse = FindObjectOfType<Mouse>();
     }
 
     private void Start()
@@ -32,6 +44,8 @@ public class MenuManager : MonoBehaviour
         _mainMenu.SetActive(false);
         _settingMenu.SetActive(false);
         _controlMap.SetActive(false);
+
+        pauseButtons = new GameObject[] { _resumeButton, _settingButton, _backButton };
     }
 
     private void Update()
@@ -59,27 +73,53 @@ public class MenuManager : MonoBehaviour
                 }
             }
         }
+        
+        _selectedButton = EventSystem.current.currentSelectedGameObject;
 
-        if (InputManager.instance.ButtonClickInput)
-        {
-            GameObject selectedButton = EventSystem.current.currentSelectedGameObject;
-
-            if (selectedButton != null)
+            if (_selectedButton != null)
             {
-                if (selectedButton == _settingButton)
-                {
-                    OnSettingPress();
+                if (_selectedButton == _settingButton)
+                {     
+                    OnPointerEnter(_settingButton);
+                    if(InputManager.instance.ButtonClickInput)
+                    {
+                        OnSettingPress();
+                    }
                 }
-                else if (selectedButton == _resumeButton)
+                else
                 {
-                    OnResumePress();
+                    OnPointerExit(_settingButton);
                 }
-                else if (selectedButton == _backButton)
+                
+                if (_selectedButton == _resumeButton)
                 {
-                    OnBackPress();
+                    OnPointerEnter(_resumeButton);
+                    if(InputManager.instance.ButtonClickInput)
+                    {
+                        OnResumePress();
+                    }
+                }
+                else
+                {
+                    OnPointerExit(_resumeButton);
+                }
+                
+                if (_selectedButton == _backButton)
+                {
+                    OnPointerEnter(_backButton);
+                    if(InputManager.instance.ButtonClickInput)
+                    {
+                        OnBackPress();
+                    }
+                }
+                else
+                {
+                    OnPointerExit(_backButton);
                 }
             }
-        }
+
+            MouseHover(_selectedButton);
+        Debug.Log(IsMouse);
     }
 
     public void Pause()
@@ -111,7 +151,6 @@ public class MenuManager : MonoBehaviour
         SettingsManager.instance.FirstSelected();
         
         _isPaused = true;
-        // EventSystem.current.SetSelectedGameObject(_settingMenuFirst);
     }
 
     private void CloseMainMenu()
@@ -136,8 +175,38 @@ public class MenuManager : MonoBehaviour
     public void OnBackPress()
     { 
         PauseManager.instance.UnpauseGame();
-        // InputManager.PlayerInput.enabled = false;
 
         Loading.instance.LoadScene(0);
+    }
+
+    public void OnPointerEnter(GameObject gameObject)
+    {
+        if (gameObject == null) return;
+        gameObject.transform.DOKill(); 
+        gameObject.transform.DOScale(new Vector3(scaleMultiplier, scaleMultiplier, scaleMultiplier), animationDuration).SetUpdate(true);
+    }
+
+    public void OnPointerExit(GameObject gameObject)
+    { 
+        gameObject.transform.DOKill(); 
+        gameObject.transform.DOScale(Vector3.one, animationDuration).SetUpdate(true);
+    }
+
+    public GameObject[] ButtonPauseMenu()
+    {
+        return pauseButtons;
+    }
+
+    private void MouseHover(GameObject gameObject)
+    {
+        if (IsMouse == true) 
+        {
+            gameObject = _mouse.LastHoveredButton();
+            EventSystem.current.SetSelectedGameObject(_mouse.LastHoveredButton());
+        }
+        else
+        {
+            gameObject = EventSystem.current.currentSelectedGameObject;
+        }
     }
 }

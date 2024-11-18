@@ -42,7 +42,7 @@ public class MainMenu : MonoBehaviour
             if (_selectedButton == sceneButton.button.gameObject)
             {
                 OnPointerEnter(sceneButton);
-                if (InputManager.instance.ButtonClickInput )
+                if (InputManager.instance.ButtonClickInput)
                 {   
                     if (sceneButton.isExitButton == true )
                     {
@@ -100,11 +100,13 @@ public class MainMenu : MonoBehaviour
 
     public void OnPointerEnter(SceneButton sceneButton)
     {
+        sceneButton.button.gameObject.transform.DOKill(); 
         sceneButton.button.gameObject.transform.DOScale(new Vector3(scaleMultiplier, scaleMultiplier, scaleMultiplier), animationDuration);
     }
 
     public void OnPointerExit(SceneButton sceneButton)
     {
+        sceneButton.button.gameObject.transform.DOKill(); 
         sceneButton.button.gameObject.transform.DOScale(Vector3.one, animationDuration);
     }
 
