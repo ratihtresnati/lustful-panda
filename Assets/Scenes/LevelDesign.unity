@@ -2283,11 +2283,11 @@ MonoBehaviour:
   m_MinValue: 0.0001
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.305
+  m_Value: 0.312
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1939018208}
         m_TargetAssemblyTypeName: VolumeSettings, Assembly-CSharp
         m_MethodName: SetMusicVolume
         m_Mode: 1
@@ -11681,11 +11681,11 @@ MonoBehaviour:
   m_MinValue: 0.0001
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.0001
+  m_Value: 0.505
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1939018208}
         m_TargetAssemblyTypeName: VolumeSettings, Assembly-CSharp
         m_MethodName: SetSFXVolume
         m_Mode: 1
@@ -17104,6 +17104,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1432086776771904845, guid: 2cbacdbe8d56c34458b8118bc54d6d68, type: 3}
   m_PrefabInstance: {fileID: 7174717575764652023}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1939018208 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5705067585860339361, guid: 2cbacdbe8d56c34458b8118bc54d6d68, type: 3}
+  m_PrefabInstance: {fileID: 7174717575764652023}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af6dfc4e455c7074a9324aff1330ecef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1941548328
 GameObject:
   m_ObjectHideFlags: 0
@@ -17896,7 +17907,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2030390102}
-  - component: {fileID: 2030390103}
   m_Layer: 0
   m_Name: ControlAudio UI
   m_TagString: Untagged
@@ -17922,21 +17932,6 @@ Transform:
   - {fileID: 1706098262}
   m_Father: {fileID: 798580272}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2030390103
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2030390101}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af6dfc4e455c7074a9324aff1330ecef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioMixer: {fileID: 24100000, guid: f2624c4ad9262c541887ae9f2df991c0, type: 2}
-  musicSlider: {fileID: 241930065}
-  sfxSlider: {fileID: 1260761641}
 --- !u!1001 &2038127602
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19661,6 +19656,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5705067585860339361, guid: 2cbacdbe8d56c34458b8118bc54d6d68, type: 3}
+      propertyPath: sfxSlider
+      value: 
+      objectReference: {fileID: 1260761641}
+    - target: {fileID: 5705067585860339361, guid: 2cbacdbe8d56c34458b8118bc54d6d68, type: 3}
+      propertyPath: musicSlider
+      value: 
+      objectReference: {fileID: 241930065}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
