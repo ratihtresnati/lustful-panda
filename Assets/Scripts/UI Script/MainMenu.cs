@@ -23,6 +23,12 @@ public class MainMenu : MonoBehaviour
     private Mouse _mouse;
     public bool IsMouse { get; set; }
 
+
+    AudioManager audioManager;
+
+    private void Awake() {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
     void Start()
     {
         InitializeButtonSelect();

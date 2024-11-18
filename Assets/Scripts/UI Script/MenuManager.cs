@@ -14,8 +14,12 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject _settingButton;
     [SerializeField] private GameObject _backButton;
     [SerializeField] private GameObject _controlMap;
+    [SerializeField] private GameObject _controlDisplay;
+    [SerializeField] private GameObject _controlAudio;
     
     private bool _isPaused;
+
+    AudioManager audioManager;
 
     private void Awake()
     {
@@ -25,6 +29,10 @@ public class MenuManager : MonoBehaviour
         _settingButton = GameObject.Find("Settings");
         _backButton = GameObject.Find("Back");
         _controlMap = GameObject.Find("ControlMap UI");
+        _controlDisplay = GameObject.Find("ControlDisplay UI");
+        _controlAudio = GameObject.Find("ControlAudio UI");
+
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
     }
 
     private void Start()
@@ -32,6 +40,8 @@ public class MenuManager : MonoBehaviour
         _mainMenu.SetActive(false);
         _settingMenu.SetActive(false);
         _controlMap.SetActive(false);
+        _controlDisplay.SetActive(false);
+        _controlAudio.SetActive(false);
     }
 
     private void Update()
@@ -41,6 +51,7 @@ public class MenuManager : MonoBehaviour
             if(!PauseManager.instance.IsPause)
             {
                 Pause();
+                audioManager.PlaySFX(audioManager.SFXButtonClick);
             }
         }
 
@@ -52,10 +63,13 @@ public class MenuManager : MonoBehaviour
                 {
                     OpenMainMenu();
                     _isPaused = false;
+                    SettingsManager.instance._isControlAudio = false;
+                    audioManager.PlaySFX(audioManager.SFXButtonClick);
                 }
                 else
                 {
                     Unpause();
+                    audioManager.PlaySFX(audioManager.SFXButtonClick);
                 }
             }
         }
@@ -69,14 +83,17 @@ public class MenuManager : MonoBehaviour
                 if (selectedButton == _settingButton)
                 {
                     OnSettingPress();
+                    audioManager.PlaySFX(audioManager.SFXButtonClick);
                 }
                 else if (selectedButton == _resumeButton)
                 {
                     OnResumePress();
+                    audioManager.PlaySFX(audioManager.SFXButtonClick);
                 }
                 else if (selectedButton == _backButton)
                 {
                     OnBackPress();
+                    audioManager.PlaySFX(audioManager.SFXButtonClick);
                 }
             }
         }
@@ -99,6 +116,8 @@ public class MenuManager : MonoBehaviour
         _mainMenu.SetActive(true);
         _settingMenu.SetActive(false);
         _controlMap.SetActive(false);
+        _controlDisplay.SetActive(false);
+        _controlAudio.SetActive(false);
 
         EventSystem.current.SetSelectedGameObject(_resumeButton);
     }
@@ -119,6 +138,8 @@ public class MenuManager : MonoBehaviour
         _mainMenu.SetActive(false);
         _settingMenu.SetActive(false);
         _controlMap.SetActive(false);
+        _controlDisplay.SetActive(false);
+        _controlAudio.SetActive(false);
 
         EventSystem.current.SetSelectedGameObject(null);
     }
@@ -137,7 +158,6 @@ public class MenuManager : MonoBehaviour
     { 
         PauseManager.instance.UnpauseGame();
         // InputManager.PlayerInput.enabled = false;
-
         Loading.instance.LoadScene(0);
     }
 }
