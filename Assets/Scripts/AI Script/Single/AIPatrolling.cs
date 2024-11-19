@@ -8,7 +8,7 @@ public class AIPatrolling : MonoBehaviour
 {
     public AISensor Sensor;
 
-    public GameOver GameOver;
+    [SerializeField] private PlayerController PlayerController;
 
     public AIAnimatorController AIAnimatorController;
 
@@ -34,7 +34,7 @@ public class AIPatrolling : MonoBehaviour
     {
         _playerPanda = GameObject.Find("Panda Bayik");
         player = _playerPanda.transform;
-        GameOver = FindObjectOfType<GameOver>();
+        //GameOver = FindObjectOfType<GameOver>();
         AIAnimatorController = GetComponent<AIAnimatorController>();
         agent = GetComponent<NavMeshAgent>();
         Sensor = GetComponent<AISensor>();
@@ -111,7 +111,7 @@ public class AIPatrolling : MonoBehaviour
         GetComponent<NavMeshAgent>().speed = RunSpeed;
         agent.SetDestination(player.position);
 
-        if (GameOver.GameEnd)
+        if (PlayerController.GameOver)
         {
             GetComponent<NavMeshAgent>().speed = 0;
             currentState = ZooKeeperState.Catch;

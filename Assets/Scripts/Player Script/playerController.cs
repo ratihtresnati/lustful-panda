@@ -12,8 +12,7 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("Game Obejact")]
-    public GameOver GameOver;
+
 
     [Header("Movement")]
     [SerializeField] private float _jumpSpeed = 3f;
@@ -31,6 +30,8 @@ public class PlayerController : MonoBehaviour
     public GameObject box;
 
     public bool InBox;
+    public bool GameOver = false;
+    public bool PlayerSee = false;
     public bool IsCatch = false;
     
     [SerializeField]
@@ -119,7 +120,7 @@ public class PlayerController : MonoBehaviour
 
     private void HanddleGameOver()
     {
-        if (GameOver.GameEnd)
+        if (GameOver)
         {
             _velocity.y = 0;
             IsCatch = true;
@@ -128,18 +129,9 @@ public class PlayerController : MonoBehaviour
 
     private void TransformBox()
     {
-        if (Input.GetKey(KeyCode.F))
-        {
-            InBox = true;
-        }
-
-        if (Input.GetKey(KeyCode.J))
-        {
-            InBox = false;
-        }
 
         // Player ketahuan ketika terlihat Zoo Keeper
-        if (GameOver.PlayerSee)
+        if (PlayerSee)
         {
             InBox = false;
         }

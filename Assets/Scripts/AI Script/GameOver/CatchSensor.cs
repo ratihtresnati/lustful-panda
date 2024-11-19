@@ -9,13 +9,15 @@ public class CatchSensor : MonoBehaviour
     [Range(0, 360)]
     public float angleCatch;
 
-    public GameObject playerSouldCatch;
 
+    public GameObject playerSouldCatch;
+    public bool catchPlayer;
+
+    [SerializeField] private PlayerController PlayerController;
 
     public LayerMask targetMaskCatah;
     public LayerMask obstructionMaskCatch;
 
-    public bool catchPlayer;
 
 
     void Start()
@@ -49,13 +51,16 @@ public class CatchSensor : MonoBehaviour
                 float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMaskCatch))
+                {
                     catchPlayer = true;
+                    PlayerController.GameOver = true;
+                }
                 else
-                    catchPlayer = false;
+                    PlayerController.GameOver = false;
             }
 
         }
         else
-            catchPlayer = false;
+            PlayerController.GameOver = false;
     }
 }
