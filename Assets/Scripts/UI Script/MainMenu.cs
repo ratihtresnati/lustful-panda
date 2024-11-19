@@ -23,7 +23,6 @@ public class MainMenu : MonoBehaviour
     private Mouse _mouse;
     public bool IsMouse { get; set; }
 
-
     AudioManager audioManager;
 
     private void Awake() {
@@ -37,7 +36,14 @@ public class MainMenu : MonoBehaviour
 
     private void Update()
     {
-        LoadingDelay();
+        //LoadingDelay();
+        if (Loading.instance.IsLoading == true) 
+        {
+            _resetTimer += Time.deltaTime; 
+            if (_resetTimer < _resetDelay) return;
+
+            Loading.instance.IsLoading = false;
+        }
 
         foreach (SceneButton sceneButton in sceneButtons)
         {

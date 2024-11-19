@@ -3,78 +3,77 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class ControlDisplay : MonoBehaviour
 {
-    public void SetFullScreen (bool isFullscreen){
+    public void SetFullScreen(bool isFullscreen)
+    {
         Screen.fullScreen = isFullscreen;
     }
 
-    public Dropdown resolutionDropdown;
-    Resolution[] resolutions;
+    [SerializeField] private TMP_Dropdown resolutionDropdown;
 
-    void Start(){
+    private Resolution[] resolutions;
+    private List<Resolution> filteredResolutions;
+
+    private float currentRefreshRate;
+    private int currentResolutionIndex = 0;
+
+    void Start()
+    {
         resolutions = Screen.resolutions;
+        filteredResolutions = new List<Resolution>();
 
         resolutionDropdown.ClearOptions();
+        currentRefreshRate = (float)Screen.currentResolution.refreshRateRatio.value;
+
+        for (int i = 0; i < resolutions.Length; i++)
+        {
+            if ((float)resolutions[i].refreshRateRatio.value == currentRefreshRate)
+            {
+                filteredResolutions.Add(resolutions[i]);
+            }
+        }
+
+        filteredResolutions.Sort((a, b) =>
+        {
+            if (a.width != b.width)
+                return b.width.CompareTo(a.width);
+            else
+                return b.height.CompareTo(a.height);
+        });
 
         List<string> options = new List<string>();
+        for (int i = 0; i < filteredResolutions.Count; i++)
+        {
+            // Hanya menampilkan resolusi dalam format "Width x Height"
+            string resolutionOption = filteredResolutions[i].width + "x" + filteredResolutions[i].height;
+            options.Add(resolutionOption);
 
-        int currentResulotionIndex = 0;
-        for (int i = 0; i < resolutions.Length; i++){
-            string option = resolutions[i].width + " x " + resolutions[i].height;
-            options.Add(option);
-
-            if (resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height){
-                currentResulotionIndex = i;
+            if (filteredResolutions[i].width == Screen.width &&
+                filteredResolutions[i].height == Screen.height &&
+                (float)filteredResolutions[i].refreshRateRatio.value == currentRefreshRate)
+            {
+                currentResolutionIndex = i;
             }
         }
 
         resolutionDropdown.AddOptions(options);
-        resolutionDropdown.value = currentResulotionIndex;
+        resolutionDropdown.value = currentResolutionIndex = 0;
         resolutionDropdown.RefreshShownValue();
+        SetResolution(currentResolutionIndex);
     }
-    public void SetResulotion (int resulotionIndex){
-        Resolution resolution = resolutions[resulotionIndex];
-        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+
+    public void SetResolution(int resolutionIndex)
+    {
+        Resolution resolution = filteredResolutions[resolutionIndex];
+        Screen.SetResolution(resolution.width, resolution.height, true);
     }
-//     void Start()
-// {
-//     resolutions = Screen.resolutions;
-
-//     resolutionDropdown.ClearOptions();
-
-//     List<string> options = new List<string>();
-//     HashSet<string> uniqueResolutions = new HashSet<string>();
-
-//     int currentResolutionIndex = 0;
-
-//     for (int i = 0; i < resolutions.Length; i++)
-//     {
-//         string option = resolutions[i].width + " x " + resolutions[i].height;
-
-//         // Tambahkan hanya jika resolusi unik
-//         if (!uniqueResolutions.Contains(option))
-//         {
-//             uniqueResolutions.Add(option);
-//             options.Add(option);
-
-//             // Deteksi resolusi saat ini
-//             if (resolutions[i].width == Screen.currentResolution.width &&
-//                 resolutions[i].height == Screen.currentResolution.height)
-//             {
-//                 currentResolutionIndex = options.Count - 1; // Update indeks sesuai dengan opsi yang dimasukkan
-//             }
-//         }
-//     }
-
-//     resolutionDropdown.AddOptions(options);
-//     resolutionDropdown.value = currentResolutionIndex;
-//     resolutionDropdown.RefreshShownValue();
-// }
 
     public static ControlDisplay instance;
     public GameObject[] Inputs;
+
     private void Update()
     {
         if (InputManager.instance.ButtonClickInput)
@@ -97,7 +96,7 @@ public class ControlDisplay : MonoBehaviour
                         TComponent.isOn = !TComponent.isOn;
                     }
 
-                    Dropdown DComponent = selectedButton.GetComponent<Dropdown>();
+                    TMP_Dropdown DComponent = selectedButton.GetComponent<TMP_Dropdown>();
                     if (DComponent != null)
                     {
                         DComponent.Show();
