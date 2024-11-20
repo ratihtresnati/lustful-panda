@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 843330801157203325}
   - component: {fileID: 8236604764320249678}
   m_Layer: 0
-  m_Name: Chef
+  m_Name: ZooKeeper Prototypr
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -92,7 +92,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1532302487600179898}
   - {fileID: 1073478602400596542}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 232.319, z: 0}
@@ -204,7 +203,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Sensor: {fileID: 2871412607723872286}
-  PlayerController: {fileID: 0}
+  GameOver: {fileID: 0}
   AIAnimatorController: {fileID: 4053813351026669080}
   player: {fileID: 0}
   walkSpeed: 3
@@ -227,9 +226,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radiusCatch: 1
   angleCatch: 100
+  GameOver: {fileID: 0}
   playerSouldCatch: {fileID: 0}
-  catchPlayer: 0
-  PlayerController: {fileID: 0}
   targetMaskCatah:
     serializedVersion: 2
     m_Bits: 1280
@@ -250,9 +248,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius: 8.6
   angle: 189
-  PlayerController: {fileID: 0}
+  GameOver: {fileID: 0}
   playerRef: {fileID: 0}
-  CatchSensor: {fileID: 0}
   targetMask:
     serializedVersion: 2
     m_Bits: 1280
@@ -307,77 +304,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 2, z: 1.0300835}
   m_Center: {x: 0, y: 0, z: 0.015041769}
---- !u!1001 &1353733572600941905
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 6116762334514320563}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 255e7166e05a7ef47a7f2e7a1fe30129, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 255e7166e05a7ef47a7f2e7a1fe30129, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 255e7166e05a7ef47a7f2e7a1fe30129, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 255e7166e05a7ef47a7f2e7a1fe30129, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 255e7166e05a7ef47a7f2e7a1fe30129, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 255e7166e05a7ef47a7f2e7a1fe30129, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 255e7166e05a7ef47a7f2e7a1fe30129, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 255e7166e05a7ef47a7f2e7a1fe30129, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 255e7166e05a7ef47a7f2e7a1fe30129, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 255e7166e05a7ef47a7f2e7a1fe30129, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -668024357936998749, guid: 255e7166e05a7ef47a7f2e7a1fe30129, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 76353b18dd18ca34e9e2b0bfdfc5b6dd, type: 2}
-    - target: {fileID: 919132149155446097, guid: 255e7166e05a7ef47a7f2e7a1fe30129, type: 3}
-      propertyPath: m_Name
-      value: Chef_ANM
-      objectReference: {fileID: 0}
-    - target: {fileID: 5866666021909216657, guid: 255e7166e05a7ef47a7f2e7a1fe30129, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: a19edd7e3daa5564c925d1958c9515c0, type: 2}
-    - target: {fileID: 8244472121894002071, guid: 255e7166e05a7ef47a7f2e7a1fe30129, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 76353b18dd18ca34e9e2b0bfdfc5b6dd, type: 2}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 255e7166e05a7ef47a7f2e7a1fe30129, type: 3}
---- !u!4 &1532302487600179898 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 255e7166e05a7ef47a7f2e7a1fe30129, type: 3}
-  m_PrefabInstance: {fileID: 1353733572600941905}
-  m_PrefabAsset: {fileID: 0}
