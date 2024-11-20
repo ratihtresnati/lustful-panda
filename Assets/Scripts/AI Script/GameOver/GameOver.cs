@@ -17,7 +17,7 @@ public class GameOver : MonoBehaviour
 
     private void Update()
     {
-        //PlayerControl = FindObjectOfType<PlayerController>();
+        //layerControl = FindObjectOfType<PlayerController>();
 
         Debug.Log(PlayerCatch);
 

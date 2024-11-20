@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class AIPatrolling : MonoBehaviour
 {
-    public AISensor Sensor;
+    [SerializeField] private AISensor Sensor;
 
     [SerializeField] private PlayerController PlayerController;
 
