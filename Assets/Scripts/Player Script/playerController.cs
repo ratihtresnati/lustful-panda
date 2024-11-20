@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using UnityEditor.ShaderGraph.Drawing;
+//using UnityEditor.ShaderGraph.Drawing;
 
 // using System.Xml.Serialization;
 // using UnityEditor.Experimental.GraphView;
@@ -12,8 +12,7 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("Game Obejact")]
-    public GameOver GameOver;
+
 
     [Header("Movement")]
     [SerializeField] private float _jumpSpeed = 3f;
@@ -31,6 +30,8 @@ public class PlayerController : MonoBehaviour
     public GameObject box;
 
     public bool InBox;
+    public bool GameOver;
+    public bool PlayerSee = false;
     public bool IsCatch = false;
     
     [SerializeField]
@@ -53,7 +54,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _characterController = GetComponent<CharacterController>();
-        GameOver = FindObjectOfType<GameOver>();
+       // GameOver = FindObjectOfType<GameOver>();
         panda = GameObject.Find("Panda");
 
         Keyframe roll_lastFrame = _rollCurve[_rollCurve.length - 1];
@@ -119,7 +120,7 @@ public class PlayerController : MonoBehaviour
 
     private void HanddleGameOver()
     {
-        if (GameOver.GameEnd)
+        if (GameOver)
         {
             _velocity.y = 0;
             IsCatch = true;
@@ -128,18 +129,9 @@ public class PlayerController : MonoBehaviour
 
     private void TransformBox()
     {
-        if (Input.GetKey(KeyCode.F))
-        {
-            InBox = true;
-        }
-
-        if (Input.GetKey(KeyCode.J))
-        {
-            InBox = false;
-        }
 
         // Player ketahuan ketika terlihat Zoo Keeper
-        if (GameOver.PlayerSee)
+        if (PlayerSee)
         {
             InBox = false;
         }
@@ -147,7 +139,7 @@ public class PlayerController : MonoBehaviour
         // Ketika sedang dalam kondisi menjadi box
         if (InBox)
         {
-            panda.SetActive(false); // objexk panda hilang
+            panda.SetActive(false); // objek panda hilang
             box.SetActive(true); // diganti object kardus
             transform.gameObject.layer = 0;
 
