@@ -111,6 +111,8 @@ public class AIPatrolling : MonoBehaviour
         GetComponent<NavMeshAgent>().speed = RunSpeed;
         agent.SetDestination(player.position);
 
+        Debug.Log(PlayerController.GameOver);
+
         if (PlayerController.GameOver)
         {
             GetComponent<NavMeshAgent>().speed = 0;

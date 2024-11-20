@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     public GameObject box;
 
     public bool InBox;
-    public bool GameOver = false;
+    public bool GameOver;
     public bool PlayerSee = false;
     public bool IsCatch = false;
     
@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _characterController = GetComponent<CharacterController>();
-        GameOver = FindObjectOfType<GameOver>();
+       // GameOver = FindObjectOfType<GameOver>();
         panda = GameObject.Find("Panda");
 
         Keyframe roll_lastFrame = _rollCurve[_rollCurve.length - 1];
@@ -139,7 +139,7 @@ public class PlayerController : MonoBehaviour
         // Ketika sedang dalam kondisi menjadi box
         if (InBox)
         {
-            panda.SetActive(false); // objexk panda hilang
+            panda.SetActive(false); // objek panda hilang
             box.SetActive(true); // diganti object kardus
             transform.gameObject.layer = 0;
 
