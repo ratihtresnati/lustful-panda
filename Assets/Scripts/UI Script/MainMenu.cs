@@ -11,7 +11,7 @@ public class MainMenu : MonoBehaviour
     public GameObject menuGameObject;
     private bool exit = false;
     private float _resetTimer = 0f;
-    private float _resetDelay = 0.5f;
+    private float _resetDelay = 1f;
     
     [Header("Animation UI")]
     public float scaleMultiplier = 1.1f;
@@ -26,8 +26,9 @@ public class MainMenu : MonoBehaviour
 
     AudioManager audioManager;
 
-    private void Awake() {
-        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    private void Awake() 
+    {
+        audioManager = GameObject.FindObjectOfType<AudioManager>();
     }
     void Start()
     {
@@ -37,7 +38,14 @@ public class MainMenu : MonoBehaviour
 
     private void Update()
     {
-        LoadingDelay();
+        //harus pake ini, karna kalo engga dia bakalan auto klik button padahal dia masih loading  
+        if (Loading.instance.IsLoading == true) 
+        {
+            _resetTimer += Time.deltaTime; 
+            if (_resetTimer < _resetDelay) return;
+
+            Loading.instance.IsLoading = false;
+        }
 
         foreach (SceneButton sceneButton in sceneButtons)
         {
@@ -50,6 +58,7 @@ public class MainMenu : MonoBehaviour
                 OnPointerEnter(sceneButton);
                 if (InputManager.instance.ButtonClickInput)
                 {   
+                    audioManager.Play("ButtonClick");
                     if (sceneButton.isExitButton == true )
                     {
                         ExitApplication();
@@ -89,18 +98,6 @@ public class MainMenu : MonoBehaviour
         else
         {
             _selectedButton = EventSystem.current.currentSelectedGameObject;
-        }
-    }
-
-    private void LoadingDelay()
-    {
-        //harus pake ini, karna kalo engga dia bakalan auto klik button padahal dia masih loading  
-        if (Loading.instance.IsLoading == true) 
-        {
-            _resetTimer += Time.deltaTime; 
-            if (_resetTimer < _resetDelay) return;
-
-            Loading.instance.IsLoading = false;
         }
     }
 

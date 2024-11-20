@@ -14,6 +14,7 @@ public class PlayerInteract : MonoBehaviour
     private Transform _panda; // Referensi ke posisi panda
     private GameObject _currentObject;
     private bool _findInteractable = false;
+    private bool _isPlayed = false;
 
     private void Start()
     {
@@ -25,9 +26,15 @@ public class PlayerInteract : MonoBehaviour
         if (PushBox == false)
         {
             boxAnim.weight -= Time.deltaTime * _duration;
+            _isPlayed = false;
         }else
         {
             boxAnim.weight += Time.deltaTime * _duration;
+            if (_isPlayed == false)
+            {
+                AudioManager.Instance.Play("DorongBox");
+                _isPlayed = true;
+            }
         }
 
         // Mendeteksi jika ada beberapa box di sekitar _panda
@@ -56,6 +63,8 @@ public class PlayerInteract : MonoBehaviour
                 }
             } 
         }
+
+        Debug.Log(_isPlayed);
 
         if (_findInteractable == false) 
         {

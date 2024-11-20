@@ -761,7 +761,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 364960569451175078, guid: de990c201f6f90346a5ca6a54691e221, type: 3}
   m_PrefabInstance: {fileID: 1847757165}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1025256486}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a569c98d0ac35c4f982e099600e1c9d, type: 3}
@@ -1016,7 +1016,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1017832660}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1017832663
 Camera:
   m_ObjectHideFlags: 0
@@ -1068,6 +1068,27 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!1 &1025256486 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8469045644921714720, guid: de990c201f6f90346a5ca6a54691e221, type: 3}
+  m_PrefabInstance: {fileID: 1847757165}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1025256499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025256486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cc7bfc14f54a6f44860104de72245a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  footstepsSound: []
+  endJumpSound: {fileID: 0}
+  rollingSound: {fileID: 0}
+  characterAudio: {fileID: 0}
 --- !u!1 &1290206693
 GameObject:
   m_ObjectHideFlags: 0
@@ -2195,13 +2216,17 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3643716964921723460, guid: de990c201f6f90346a5ca6a54691e221, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7873852868415615771, guid: de990c201f6f90346a5ca6a54691e221, type: 3}
       insertIndex: 0
       addedObject: {fileID: 1017832661}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8469045644921714720, guid: de990c201f6f90346a5ca6a54691e221, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1025256499}
   m_SourcePrefab: {fileID: 100100000, guid: de990c201f6f90346a5ca6a54691e221, type: 3}
 --- !u!1001 &1910482714
 PrefabInstance:
@@ -2256,7 +2281,8 @@ PrefabInstance:
       value: Manager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2864620414261831714, guid: 41423ae7ce303b14db4451f9aa1ee42b, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 41423ae7ce303b14db4451f9aa1ee42b, type: 3}

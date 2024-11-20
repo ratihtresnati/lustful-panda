@@ -41,8 +41,6 @@ public class MenuManager : MonoBehaviour
         _controlMap = GameObject.Find("ControlMap UI");
         _controlDisplay = GameObject.Find("ControlDisplay UI");
         _controlAudio = GameObject.Find("ControlAudio UI");
-
-        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
     }
 
     private void Start()
@@ -52,6 +50,8 @@ public class MenuManager : MonoBehaviour
         _controlMap.SetActive(false);
         _controlDisplay.SetActive(false);
         _controlAudio.SetActive(false);
+
+        pauseButtons = new GameObject[] { _resumeButton, _settingButton, _backButton };
     }
 
     private void Update()
@@ -61,7 +61,7 @@ public class MenuManager : MonoBehaviour
             if(!PauseManager.instance.IsPause)
             {
                 Pause();
-                audioManager.PlaySFX(audioManager.SFXButtonClick);
+                AudioManager.Instance.Play("OpenMenu");
             }
         }
 
@@ -74,12 +74,12 @@ public class MenuManager : MonoBehaviour
                     OpenMainMenu();
                     _isPaused = false;
                     SettingsManager.instance._isControlAudio = false;
-                    audioManager.PlaySFX(audioManager.SFXButtonClick);
+                    AudioManager.Instance.Play("OpenMenu");
                 }
                 else
                 {
                     Unpause();
-                    audioManager.PlaySFX(audioManager.SFXButtonClick);
+                    AudioManager.Instance.Play("OpenMenu");
                 }
             }
         }
@@ -94,7 +94,7 @@ public class MenuManager : MonoBehaviour
                     if(InputManager.instance.ButtonClickInput)
                     {
                         OnSettingPress();
-                        audioManager.PlaySFX(audioManager.SFXButtonClick);
+                        AudioManager.Instance.Play("ButtonClick");
                     }
                 }
                 else
@@ -108,7 +108,7 @@ public class MenuManager : MonoBehaviour
                     if(InputManager.instance.ButtonClickInput)
                     {
                         OnResumePress();
-                        audioManager.PlaySFX(audioManager.SFXButtonClick);
+                        AudioManager.Instance.Play("ButtonClick");
                     }
                 }
                 else
@@ -122,7 +122,7 @@ public class MenuManager : MonoBehaviour
                     if(InputManager.instance.ButtonClickInput)
                     {
                         OnBackPress();
-                        audioManager.PlaySFX(audioManager.SFXButtonClick);
+                        AudioManager.Instance.Play("ButtonClick");
                     }
                 }
                 else

@@ -65,6 +65,16 @@ public class conditionalObjectInteract : MonoBehaviour
                 _dialogAsset.transform.position = _parentPosition.PositionParent().position + _dialogPosition;
                 _dialogAsset.SetActive(true);
                 QuestManager.instance.NextQuest();
+
+                if(_questDoor == true)
+                {
+                    AudioManager.Instance.Play("BukaKunci");
+                }
+                else
+                {
+                    AudioManager.Instance.Play("NPCPanda");
+                }
+
             }
         }
     }
@@ -88,6 +98,7 @@ public class conditionalObjectInteract : MonoBehaviour
             if(_questDoor == true)
             {
                 _rigidbody.isKinematic = false;
+                AudioManager.Instance.Play("BukaPintu");
             }
         break;
         case 2: //final door

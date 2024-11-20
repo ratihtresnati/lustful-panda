@@ -65,6 +65,7 @@ public class interactItem : MonoBehaviour
 
         isCarryingItem = true;
         canPickup = false;
+        AudioManager.Instance.Play("CollectItem");
     }
     void Drop()
     {
@@ -81,5 +82,6 @@ public class interactItem : MonoBehaviour
 
         isCarryingItem = false;
         canPickup = true;
+        AudioManager.Instance.Play("DropItem");
     }
 }
