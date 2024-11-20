@@ -17,6 +17,7 @@ public class SettingsManager : MonoBehaviour
     [SerializeField] public GameObject _controlAudioMenu;
     [SerializeField] private GameObject _firstButtonCM;
     [SerializeField] private GameObject _firstButtonCD;
+    [SerializeField] private GameObject _firstButtonCA;
 
     private bool _isControlMap = false;
     private bool _isControlDisplay = false;
@@ -63,6 +64,10 @@ public class SettingsManager : MonoBehaviour
                 {
                     OpenControlAudio();
                 }
+                else if (selectedButton == _controlAudioBtn && _isControlAudio == true)
+                {
+                    CloseControlAudio();
+                }
             }
     }
 
@@ -94,6 +99,8 @@ public class SettingsManager : MonoBehaviour
     private void OpenControlAudio(){
         _controlAudioMenu.SetActive(true);
         _isControlAudio = true;
+
+        EventSystem.current.SetSelectedGameObject(_firstButtonCA);
     }
     private void CloseControlMap(){
         _controlMapMenu.SetActive(false);
