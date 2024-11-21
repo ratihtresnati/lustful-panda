@@ -84,7 +84,7 @@ public class MenuManager : MonoBehaviour
             }
         }
         
-        _selectedButton = EventSystem.current.currentSelectedGameObject;
+        // MouseHover(_selectedButton);
 
             if (_selectedButton != null)
             {
@@ -129,9 +129,8 @@ public class MenuManager : MonoBehaviour
                 {
                     OnPointerExit(_backButton);
                 }
-            }
-
-            MouseHover(_selectedButton);
+            }            
+            Debug.Log(_selectedButton);
         Debug.Log(IsMouse);
     }
 

@@ -34,7 +34,6 @@ public class Mouse : MonoBehaviour
                     {
                         HandleButtonHover(button);
                         isHoveringButton = true;
-                        break;
                     }
                 }
             }
@@ -64,7 +63,10 @@ public class Mouse : MonoBehaviour
 
     private void HandleButtonHover(GameObject button)
     {
+        _menuManager.OnPointerEnter(button);
         _lastButton = button; 
+
+        Debug.Log(_lastButton);
     }
 
     private void HandleSceneButtonHover(SceneButton sceneButton)

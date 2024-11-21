@@ -49,6 +49,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSource: {fileID: 3935682103681527428}
   SFXSource: {fileID: 7462725804887545498}
+  soundClips:
+  - name: PintuKandang
+    clip: {fileID: 8300000, guid: 752cb28f3fb5e5c4c89444f8c23f8233, type: 3}
+    source: {fileID: 0}
+  - name: BukaKunci
+    clip: {fileID: 8300000, guid: 06753dae2ed08f243906ed7e7a2a33ef, type: 3}
+    source: {fileID: 0}
+  - name: BukaPintu
+    clip: {fileID: 8300000, guid: ab32bb9484804894090b3c924f536b9d, type: 3}
+    source: {fileID: 0}
+  - name: DropItem
+    clip: {fileID: 8300000, guid: d78637953eeb3d84a930179661035df2, type: 3}
+    source: {fileID: 0}
+  - name: CollectItem
+    clip: {fileID: 8300000, guid: f67514d1a873b2746ae18d7b8d1f6ba0, type: 3}
+    source: {fileID: 0}
+  - name: GameOver
+    clip: {fileID: 8300000, guid: fc6dce8aea51bb74fa3f531c44547a5d, type: 3}
+    source: {fileID: 0}
+  - name: OpenMenu
+    clip: {fileID: 8300000, guid: 0695a7bbbdcba7943b49f191001abc2c, type: 3}
+    source: {fileID: 0}
+  - name: ButtonClick
+    clip: {fileID: 8300000, guid: e7a1e63ec468cdb43a503864dfd36a41, type: 3}
+    source: {fileID: 0}
+  - name: NPCPanda
+    clip: {fileID: 8300000, guid: c99e24dbce976c247a7b0a76afefab0a, type: 3}
+    source: {fileID: 0}
+  - name: DorongBox
+    clip: {fileID: 8300000, guid: 2fb2ba6f0e026074fa6d482225c99ec3, type: 3}
+    source: {fileID: 0}
   BGM: {fileID: 8300000, guid: a41fca23cf52fc14a862a1515dc40ba6, type: 3}
   SFXButtonClick: {fileID: 8300000, guid: c39fc36733478904792c770793fb044c, type: 3}
 --- !u!114 &5705067585860339361
@@ -240,7 +271,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
