@@ -9,14 +9,28 @@ public class ControlMapping : MonoBehaviour
 {
     public static ControlMapping instance;
     public GameObject[] Buttons;
+    private GameObject previousSelectedButton;
     private void Update()
     {
-        if (InputManager.instance.ButtonClickInput)
-        {
-            GameObject selectedButton = EventSystem.current.currentSelectedGameObject;
+        GameObject selectedButton = EventSystem.current.currentSelectedGameObject;
 
-            if (selectedButton != null)
+        if (selectedButton != previousSelectedButton)
+        {
+            if (previousSelectedButton != null)
             {
+                FindObjectOfType<MenuManager>().OnPointerExit(previousSelectedButton);
+            }
+
+            FindObjectOfType<MenuManager>().OnPointerEnter(selectedButton);
+            previousSelectedButton = selectedButton;
+        }
+
+        if (selectedButton != null)
+        {
+            if (InputManager.instance.ButtonClickInput && SettingsManager.instance.IsSetting == true)
+            {
+                EventSystem.current.SetSelectedGameObject(SettingsManager.instance._firstButtonCM);
+                
                 int index = System.Array.IndexOf(Buttons, selectedButton);
                 if (index >= 0 && index < Buttons.Length)
                 {
