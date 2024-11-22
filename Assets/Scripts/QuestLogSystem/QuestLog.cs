@@ -31,15 +31,14 @@ public static class QuestLog
     public static void CompleteQuest(QuestSystem quest) {
         questList.Remove(quest);
         completedQuest.Add(quest);
-        // Inventory.giveGold(quest.goldReward);
-        // Character.giveExp(quest.expReward);
+        
         onQuestChange.Invoke(questList, completedQuest);
     }
 
     private static void HandleOwnedItems(QuestSystem quest) {
         if (quest.objective.type != QuestSystem.Objective.Type.collect)
             return;
-        int amount = 0; // Inventory.GetCountOfIndex(quest.objective.objectiveId); 
+        int amount = 0; 
         if (quest.objective.ForceAddObjective(amount))
             CompleteQuest(quest);
     }

@@ -4,29 +4,50 @@ using UnityEngine;
 
 public class DebugQuestLog : MonoBehaviour
 {
-    // Start is called before the first frame update
+    
+    private string[] questDescriptions = new string[]
+    {
+        "keluar dari kandang.",
+        "ambil bambu.",
+        "menuju cafetaria.",
+        "lanjutkan quest berikutnya.",
+        // "Selamatkan hewan peliharaan yang terjebak di dalam gua.",
+        // "Hancurkan pasukan musuh yang menyerang desa.",
+        // "Cari bunga ajaib di puncak bukit tertinggi.",
+        // "Lindungi kereta barang dari serangan bandit.",
+        // "Temukan dan kalahkan bos tersembunyi di hutan gelap.",
+        // "Kumpulkan ramuan untuk membuat elixir penyembuhan."
+    };
+
     void Start()
     {
-        StartCoroutine(AddQuest(5));
+        AddQuests(5); 
     }
 
-    private QuestSystem getNext(int i) {
+    private QuestSystem getNext(int i)
+    {
         QuestSystem q = new QuestSystem();
-        q.questName = "Quest test " + i;
-        q.questDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-        q.expReward = Random.Range(100,1000);
-        q.goldReward = Random.Range(5,20);
+        q.questName = "Stage " + i;
+
+        
+        q.questDescription = questDescriptions[i % questDescriptions.Length];
+
+        q.expReward = Random.Range(100, 1000);
+        q.goldReward = Random.Range(5, 20);
         q.questCategory = 0;
+
         q.objective = new QuestSystem.Objective();
-        q.objective.type = (QuestSystem.Objective.Type)Random.Range(0, 3);  // Menyesuaikan untuk mengakomodasi tiga jenis (kill, talk, collect)
-        q.objective.amount = Random.Range(2,10);
+        q.objective.type = (QuestSystem.Objective.Type)Random.Range(0, 3); 
+        q.objective.amount = Random.Range(2, 10);
+
         return q;
     }
 
-    private IEnumerator AddQuest(int iter) {
-        for (int i = 0; i < iter; i++) {
-            QuestLog.AddQuest(getNext(i));  // Memanggil QuestLog dengan QuestSystem
-            yield return new WaitForSeconds(3f);
+    private void AddQuests(int iter)
+    {
+        for (int i = 0; i < iter; i++)
+        {
+            QuestLog.AddQuest(getNext(i));
         }
     }
 }
