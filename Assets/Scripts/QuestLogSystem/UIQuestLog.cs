@@ -48,7 +48,7 @@ public class UIQuestLog : MonoBehaviour
 
     private void HandleSizeChange(int newCount) {
     // Ubah ukuran listTransform sesuai dengan jumlah quest
-        listTransform.sizeDelta = new Vector2(0, newCount * 80);
+        // listTransform.sizeDelta = new Vector2(0, newCount * 80);
         
         // Periksa apakah jumlah tombol perlu diperbarui
         int oldCount = questButtons.Length;
@@ -103,11 +103,7 @@ public class UIQuestLog : MonoBehaviour
 
         questNameText.text = quest.questName;
         questDescriptionText.text = quest.questDescription;
-        questGoldRewardText.text = quest.goldReward + "gp";
-        questExpRewardText.text = quest.expReward + "Exp";
-        questObjectiveText.text = quest.objective.ToString();
         questDescriptionText.rectTransform.sizeDelta = new Vector2(0, questDescriptionText.preferredHeight);
-        rewardsContent.anchoredPosition = new Vector2(0, -50 - questDescriptionText.rectTransform.sizeDelta.y);
         questDescription.sizeDelta = new Vector2(0, questDescriptionText.rectTransform.sizeDelta.y + 300);
     }
 
