@@ -56,6 +56,8 @@ public class MenuManager : MonoBehaviour
 
     private void Update()
     {
+        if(FindObjectOfType<MainMenu>()) return;
+        
         if(InputManager.instance.PauseInput)
         {
             if(!PauseManager.instance.IsPause)

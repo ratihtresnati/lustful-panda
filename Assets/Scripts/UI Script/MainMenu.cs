@@ -9,6 +9,7 @@ using DG.Tweening;
 public class MainMenu : MonoBehaviour
 {
     public GameObject menuGameObject;
+    public GameObject settingGameObject;
     private bool exit = false;
     private float _resetTimer = 0f;
     private float _resetDelay = 1f;
@@ -20,6 +21,8 @@ public class MainMenu : MonoBehaviour
     // Daftar tombol dan scene yang akan dimuat
     public SceneButton[] sceneButtons;
     private GameObject _selectedButton;
+    private bool _isSetting;
+
     private Mouse _mouse;
     public bool IsMouse { get; set; }
 
@@ -33,6 +36,7 @@ public class MainMenu : MonoBehaviour
     {
         InitializeButtonSelect();
         _mouse = FindObjectOfType<Mouse>();
+        settingGameObject.SetActive(false);
     }
 
     private void Update()
@@ -64,6 +68,12 @@ public class MainMenu : MonoBehaviour
                         Debug.Log("exit");
                         exit = true;
                     }
+                    else if (sceneButton.isSettingButton == true)
+                    {
+                        _isSetting = true;
+                        settingGameObject.SetActive(true);
+                        SettingsManager.instance.FirstSelected();
+                    }
                     else
                     {
                         LoadScene(index);
@@ -75,6 +85,12 @@ public class MainMenu : MonoBehaviour
             {
                 OnPointerExit(sceneButton);
             }
+        }
+
+        if(InputManager.instance.PauseInput && _isSetting == true)
+        {
+            settingGameObject.SetActive(false);
+            _selectedButton = sceneButtons[0].button.gameObject;
         }
     }
 
