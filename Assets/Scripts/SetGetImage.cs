@@ -8,7 +8,9 @@ using Unity.VisualScripting;
 
 public class SetGetImage : MonoBehaviour
 {
-    public GameOver GameOver;
+    public PlayerController PlayerController;
+
+    public GameObject GameOver;
 
     public string Filename;
     
@@ -37,19 +39,22 @@ public class SetGetImage : MonoBehaviour
         yield return new WaitForSeconds(0.01f);
         GetImage();
         yield return new WaitForSeconds(3f);
-        Time.timeScale = 0;
         RI.SetActive(true);
         /*
         yield return new WaitForSeconds(0.01f);
         SetImage();
         */
-        yield return new WaitForSeconds(0.01f);
-        RenderCamera.SetActive(false);
-    }
 
+        yield return new WaitForSeconds(0.01f);
+        GameOver.SetActive(true);
+        Time.timeScale = 0;
+        RenderCamera.SetActive(false);
+
+    }
+    
     private void Update()
     {
-        if (GameOver.GameEnd)
+        if (PlayerController.GameOver)
         {
             StartCoroutine(RenderProcess());
         }
