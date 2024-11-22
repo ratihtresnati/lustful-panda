@@ -21,7 +21,7 @@ public class TriggerDoor : MonoBehaviour
         {
             _isOpened = true;
             rigidbody.isKinematic = false;
-            QuestManager.instance._questIsComplete = true;
+            // QuestManager.instance._questIsComplete = true;
 
             AudioManager.Instance.Play("PintuKandang");
 

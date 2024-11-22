@@ -35,9 +35,9 @@ public class MenuManager : MonoBehaviour
     {
         _mainMenu = GameObject.Find("PauseMenu");
         _settingMenu = GameObject.Find("Settings Menu");
-        _resumeButton = GameObject.Find("Resume");
-        _settingButton = GameObject.Find("Settings");
-        _backButton = GameObject.Find("Back");
+        _resumeButton = GameObject.Find("Resume Button");
+        _settingButton = GameObject.Find("Settings Button");
+        _backButton = GameObject.Find("Back Button");
         _controlMap = GameObject.Find("ControlMap UI");
         _controlDisplay = GameObject.Find("ControlDisplay UI");
         _controlAudio = GameObject.Find("ControlAudio UI");
@@ -84,54 +84,60 @@ public class MenuManager : MonoBehaviour
             }
         }
         
-        // MouseHover(_selectedButton);
+        if (IsMouse == true) 
+        {
+            _selectedButton = Mouse.Instance.LastHoveredButton();
+            EventSystem.current.SetSelectedGameObject(_selectedButton);
+        }
+        else
+        {
+            _selectedButton = EventSystem.current.currentSelectedGameObject;
+        }
 
-            if (_selectedButton != null)
+        if (_selectedButton != null)
+        {
+            if (_selectedButton == _settingButton)
+            {     
+                OnPointerEnter(_settingButton);
+                if(InputManager.instance.ButtonClickInput)
+                {
+                    OnSettingPress();
+                    AudioManager.Instance.Play("ButtonClick");
+                }
+            }
+            else
             {
-                if (_selectedButton == _settingButton)
-                {     
-                    OnPointerEnter(_settingButton);
-                    if(InputManager.instance.ButtonClickInput)
-                    {
-                        OnSettingPress();
-                        AudioManager.Instance.Play("ButtonClick");
-                    }
-                }
-                else
+                OnPointerExit(_settingButton);
+            }
+            
+            if (_selectedButton == _resumeButton)
+            {
+                OnPointerEnter(_resumeButton);
+                if(InputManager.instance.ButtonClickInput)
                 {
-                    OnPointerExit(_settingButton);
+                    OnResumePress();
+                    AudioManager.Instance.Play("ButtonClick");
                 }
+            }
+            else
+            {
+                OnPointerExit(_resumeButton);
+            }
                 
-                if (_selectedButton == _resumeButton)
+            if (_selectedButton == _backButton)
+            {
+                OnPointerEnter(_backButton);
+                if(InputManager.instance.ButtonClickInput)
                 {
-                    OnPointerEnter(_resumeButton);
-                    if(InputManager.instance.ButtonClickInput)
-                    {
-                        OnResumePress();
-                        AudioManager.Instance.Play("ButtonClick");
-                    }
+                    OnBackPress();
+                    AudioManager.Instance.Play("ButtonClick");
                 }
-                else
-                {
-                    OnPointerExit(_resumeButton);
-                }
-                
-                if (_selectedButton == _backButton)
-                {
-                    OnPointerEnter(_backButton);
-                    if(InputManager.instance.ButtonClickInput)
-                    {
-                        OnBackPress();
-                        AudioManager.Instance.Play("ButtonClick");
-                    }
-                }
-                else
-                {
-                    OnPointerExit(_backButton);
-                }
-            }            
-            Debug.Log(_selectedButton);
-        Debug.Log(IsMouse);
+            }
+            else
+            {
+                OnPointerExit(_backButton);
+            }
+        }            
     }
 
     public void Pause()
@@ -154,7 +160,7 @@ public class MenuManager : MonoBehaviour
         _controlDisplay.SetActive(false);
         _controlAudio.SetActive(false);
 
-        EventSystem.current.SetSelectedGameObject(_resumeButton);
+        FirstButton();
     }
 
     private void OpenSettingMenu()
@@ -212,16 +218,9 @@ public class MenuManager : MonoBehaviour
         return pauseButtons;
     }
 
-    private void MouseHover(GameObject gameObject)
+    private void FirstButton()
     {
-        if (IsMouse == true) 
-        {
-            gameObject = _mouse.LastHoveredButton();
-            EventSystem.current.SetSelectedGameObject(_mouse.LastHoveredButton());
-        }
-        else
-        {
-            gameObject = EventSystem.current.currentSelectedGameObject;
-        }
+        _selectedButton = _resumeButton;
+        EventSystem.current.SetSelectedGameObject(_selectedButton);
     }
 }

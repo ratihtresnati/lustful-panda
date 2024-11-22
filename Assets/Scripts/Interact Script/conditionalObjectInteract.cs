@@ -64,7 +64,7 @@ public class conditionalObjectInteract : MonoBehaviour
                 
                 _dialogAsset.transform.position = _parentPosition.PositionParent().position + _dialogPosition;
                 _dialogAsset.SetActive(true);
-                QuestManager.instance.NextQuest();
+                // QuestManager.instance.NextQuest();
 
                 if(_questDoor == true)
                 {
@@ -87,7 +87,7 @@ public class conditionalObjectInteract : MonoBehaviour
             if (npcPanda != null)
             {
                 npcPanda._isComplete = true;
-                QuestManager.instance.NextQuest();
+                // QuestManager.instance.NextQuest();
                 _outlineGameObject.ApplyOutline(false);
             }
             else
