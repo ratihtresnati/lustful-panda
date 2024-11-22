@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class DestroyItems : MonoBehaviour
 {
     private Rigidbody _rigidbody;
@@ -44,4 +43,12 @@ public class DestroyItems : MonoBehaviour
             Destroy();
         }
     }
+
+    // private void Block()
+    // {
+    //     navMeshModifier.overrideArea = true;
+    //     navMeshModifier.area = 1;
+
+    //     NavMeshSurface nav
+    // }
 }
