@@ -6,8 +6,8 @@ using TMPro;
 public class HintManager : MonoBehaviour
 {
     public static HintManager instance;
-    public TMP_Text hintText; 
-    public float hintDisplayTime = 5.0f;  
+    public TMP_Text hintText;
+    public float hintDisplayTime = 5.0f;
 
     void Awake()
     {
@@ -21,14 +21,12 @@ public class HintManager : MonoBehaviour
         }
     }
 
-   
     public void ShowHint(string hint)
     {
-        hintText.text = hint;
+        hintText.text = hint;   
         // StartCoroutine(HideHintAfterDelay());
     }
 
-    
     private IEnumerator HideHintAfterDelay()
     {
         yield return new WaitForSeconds(hintDisplayTime);
