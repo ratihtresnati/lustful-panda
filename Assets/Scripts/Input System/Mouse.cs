@@ -5,10 +5,25 @@ using UnityEngine.InputSystem;
 
 public class Mouse : MonoBehaviour
 {
+    public static Mouse Instance { get; private set; }
     private GameObject _lastButton;
     private MainMenu _mainMenu;
     private MenuManager _menuManager;
     [SerializeField] private bool _pauseMenu;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     private void Start()
     {
         _mainMenu = FindObjectOfType<MainMenu>();

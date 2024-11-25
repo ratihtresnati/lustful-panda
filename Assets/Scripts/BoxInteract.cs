@@ -6,7 +6,7 @@ public class BoxInteract : MonoBehaviour
 {
     public PlayerController PlayerController;
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (Input.GetKey(KeyCode.E))
         {

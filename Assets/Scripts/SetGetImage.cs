@@ -56,6 +56,7 @@ public class SetGetImage : MonoBehaviour
     {
         if (PlayerController.GameOver)
         {
+            InputManager.PlayerInput.enabled = false;
             StartCoroutine(RenderProcess());
         }
     }

@@ -76,10 +76,12 @@ public class ControlDisplay : MonoBehaviour
 
     private void Update()
     {
-        if (InputManager.instance.ButtonClickInput)
+        if (InputManager.instance.ButtonClickInput && SettingsManager.instance.IsSetting == true)
         {
+            EventSystem.current.SetSelectedGameObject(SettingsManager.instance._firstButtonCD);
+            
             GameObject selectedButton = EventSystem.current.currentSelectedGameObject;
-
+            
             if (selectedButton != null)
             {
                 int index = System.Array.IndexOf(Inputs, selectedButton);

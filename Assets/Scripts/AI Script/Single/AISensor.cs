@@ -55,13 +55,13 @@ public class AISensor : MonoBehaviour
 
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
                 {
-                    PlayerController.PlayerSee = true;
+                    //PlayerController.PlayerSee = true;
                     canSeePlayer = true;
                     CatchSensor.enabled = true;
                 }
                 else
                 {
-                    PlayerController.PlayerSee = false;
+                    //PlayerController.PlayerSee = false;
                     canSeePlayer = false;
                     CatchSensor.enabled = false;
 
@@ -71,7 +71,7 @@ public class AISensor : MonoBehaviour
         }
         else
         {
-            PlayerController.PlayerSee = false;
+            //PlayerController.PlayerSee = false;
             canSeePlayer = false;
             CatchSensor.enabled = false;
         }
