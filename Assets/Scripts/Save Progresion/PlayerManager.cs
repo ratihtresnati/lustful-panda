@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public int currentQuestID;  
-    public bool hintDisplayed;  
+    public int currentQuestID;      
+    public int currentStage = 1;    
+    public bool hintDisplayed;      
 
     private void Start()
     {
-        LoadPlayerData();
+        LoadPlayerData(); 
     }
 
+    
     public void OnStageChange()
     {
         SavePlayerData();
@@ -21,29 +23,46 @@ public class PlayerManager : MonoBehaviour
     {
         PlayerData data = new PlayerData
         {
-            playerPosition = transform.position,
-            currentQuestID = currentQuestID,
-            hintDisplayed = hintDisplayed
+            playerPosition = transform.position, 
+            currentQuestID = currentQuestID,     
+            currentStage = currentStage,         
+            hintDisplayed = hintDisplayed        
         };
-        SaveSystem.SavePlayerData(data);
+        SaveSystem.SavePlayerData(data);         
     }
 
     private void LoadPlayerData()
     {
-        PlayerData data = SaveSystem.LoadPlayerData();
+        PlayerData data = SaveSystem.LoadPlayerData(); 
         if (data != null)
         {
-            transform.position = data.playerPosition;
-            currentQuestID = data.currentQuestID;
-            hintDisplayed = data.hintDisplayed;
+            transform.position = data.playerPosition; 
+            currentQuestID = data.currentQuestID;     
+            currentStage = data.currentStage;         
+            hintDisplayed = data.hintDisplayed;       
+        }
+        else
+        {
+            Debug.Log("Memulai game baru...");
         }
     }
 
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("StageExit"))
         {
-            OnStageChange();
+            Debug.Log("Stage " + currentStage + " selesai.");
+            currentStage++;       
+            OnStageChange();      
         }
+    }
+
+    
+    public void AdvanceToNextQuest()
+    {
+        currentQuestID++;         
+        SavePlayerData();         
+        Debug.Log("Quest " + currentQuestID + " diselesaikan.");
     }
 }

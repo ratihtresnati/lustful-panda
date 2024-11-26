@@ -7,24 +7,26 @@ public static class SaveSystem
 {
     private static string savePath => Application.persistentDataPath + "/playerData.json";
 
+   
     public static void SavePlayerData(PlayerData data)
     {
-        string json = JsonUtility.ToJson(data);
-        File.WriteAllText(savePath, json);
-        Debug.Log(savePath);
+        string json = JsonUtility.ToJson(data, true); 
+        File.WriteAllText(savePath, json);           
+        Debug.Log("Data saved to: " + savePath);
     }
 
+    
     public static PlayerData LoadPlayerData()
     {
         if (File.Exists(savePath))
         {
-            string json = File.ReadAllText(savePath);
-            return JsonUtility.FromJson<PlayerData>(json);
+            string json = File.ReadAllText(savePath);        
+            return JsonUtility.FromJson<PlayerData>(json);   
         }
         else
         {
             Debug.LogWarning("Save file tidak ditemukan.");
-            return null;
+            return null; 
         }
     }
 }
