@@ -31,7 +31,7 @@ public class PlayerManager : MonoBehaviour
         SaveSystem.SavePlayerData(data);         
     }
 
-    private void LoadPlayerData()
+    public void LoadPlayerData()
     {
         PlayerData data = SaveSystem.LoadPlayerData(); 
         if (data != null)
