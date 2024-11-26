@@ -31,6 +31,7 @@ public class AIPatrolling : MonoBehaviour
     [SerializeField] private float idleTimeAfterLosePlayer = 3f;
     float idleTimer = 0f;
 
+    [SerializeField] private Vector3 pl;
 
     // Start is called before the first frame update
     void Start()
@@ -81,7 +82,7 @@ public class AIPatrolling : MonoBehaviour
 
     private void Catch()
     {
-
+        player.position = transform.TransformPoint(pl);
         GetComponent<NavMeshAgent>().speed = 0;
 
         Vector3 targetDir = transform.position - player.position;

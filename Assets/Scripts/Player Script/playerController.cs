@@ -129,7 +129,7 @@ public class PlayerController : MonoBehaviour
         if (GameOver)
         {
             transform.gameObject.layer = 9;
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.2f);
             rb.isKinematic = true;
             _velocity.y = 0;
             IsCatch = true;
