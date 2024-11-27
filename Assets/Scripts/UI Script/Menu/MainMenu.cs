@@ -12,16 +12,12 @@ public class MainMenu : MonoBehaviour
     private ButtonSelected buttonSelected;
     public GameObject settingGameObject;
     private bool exit = false;
-    private float _resetTimer = 0f;
-    private float _resetDelay = 1f;
 
     
     // Daftar tombol dan scene yang akan dimuat
     public SceneButton[] sceneButtons;
     private GameObject _selectedButton;
     private bool _isSetting;
-
-    private Mouse _mouse;
     public bool IsMouse { get; set; }
 
     AudioManager audioManager;
@@ -34,22 +30,12 @@ public class MainMenu : MonoBehaviour
     }
     void Start()
     {
-        _mouse = FindObjectOfType<Mouse>();
         settingGameObject.SetActive(false);
         selectButtonHandler.FirstButton(buttonSelected);
     }
 
     private void Update()
     {
-        //harus pake ini, karna kalo engga dia bakalan auto klik button padahal dia masih loading  
-        if (Loading.instance.IsLoading == true) 
-        {
-            _resetTimer += Time.deltaTime; 
-            if (_resetTimer < _resetDelay) return;
-
-            Loading.instance.IsLoading = false;
-        }
-
         selectButtonHandler.SelectButton();
 
         if(selectButtonHandler.SelectedButton != null)
