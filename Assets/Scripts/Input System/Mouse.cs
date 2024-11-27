@@ -5,74 +5,98 @@ using UnityEngine.InputSystem;
 
 public class Mouse : MonoBehaviour
 {
-    public static Mouse Instance;
-    public Camera cam;
-    public Vector2 mousePos;
-    private SceneButton lastHoveredButton;
+    public static Mouse Instance { get; private set; }
+    private GameObject _lastButton;
+    private MainMenu _mainMenu;
+    private MenuManager _menuManager;
+    [SerializeField] private bool _pauseMenu;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {
-        cam = Camera.main;
-        Instance = this;
+        _mainMenu = FindObjectOfType<MainMenu>();
+        _menuManager = FindObjectOfType<MenuManager>();
     }
 
     private void Update()
     {
-        HandleMouseInput();
-    }
-
-    private void HandleMouseInput()
-    {
-        InputManager.PlayerInputManager.UI.Point.performed += OnMousePos;
-
         PointerEventData pointerData = new PointerEventData(EventSystem.current) { position = Input.mousePosition };
         List<RaycastResult> results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(pointerData, results);
 
+        bool isHoveringButton = false;
+
         foreach (RaycastResult result in results)
         {
-            SceneButton sceneButton = FindSceneButton(result.gameObject);
-            if (sceneButton != null)
+            if(_pauseMenu == true)
             {
-                HandleSceneButtonHover(sceneButton);
-                return;
+                GameObject[] pauseButtons = _menuManager.ButtonPauseMenu();
+                foreach (GameObject button in pauseButtons)
+                {
+                    if (result.gameObject == button)
+                    {
+                        HandleButtonHover(button);
+                        isHoveringButton = true;
+                    }
+                }
             }
+            else
+            {
+                SceneButton sceneButton = FindSceneButton(result.gameObject);
+
+                Debug.Log(result.gameObject);
+                if (sceneButton != null)
+                {
+                    HandleSceneButtonHover(sceneButton);
+                    isHoveringButton = true;
+                }
+            }
+        }
+
+        if (_mainMenu != null)
+        {
+            _mainMenu.IsMouse = isHoveringButton;
+        }
+
+        if (_menuManager != null)
+        {
+            _menuManager.IsMouse = isHoveringButton;
         }
     }
 
-    private SceneButton FindSceneButton(GameObject gameObject)
+    private void HandleButtonHover(GameObject button)
     {
-        return System.Array.Find(MainMenu.Instance.sceneButtons, sb => sb.button.gameObject == gameObject);
+        _menuManager.OnPointerEnter(button);
+        _lastButton = button; 
+
+        Debug.Log(_lastButton);
     }
 
     private void HandleSceneButtonHover(SceneButton sceneButton)
     {
-        MainMenu.Instance.OnPointerEnter(sceneButton);
-        if (EventSystem.current.currentSelectedGameObject == sceneButton.button.gameObject)
-        {
-            MainMenu.Instance.IsMouse = true;
-            lastHoveredButton = sceneButton;
-            if (InputManager.instance.ButtonClickInput)
-            {
-                if (sceneButton.isExitButton)
-                {
-                    MainMenu.Instance.ExitApplication();
-                }
-                else
-                {
-                    MainMenu.Instance.LoadScene(sceneButton.sceneIndex);
-                }
-            }
-        }
-        else
-        {
-            MainMenu.Instance.IsMouse = false;
-            lastHoveredButton = null;
-        }
+        _mainMenu.OnPointerEnter(sceneButton);
+        _lastButton = sceneButton.button.gameObject; 
     }
 
-    private void OnMousePos(InputAction.CallbackContext context)
+    private SceneButton FindSceneButton(GameObject gameObject)
     {
-        mousePos = cam.ScreenToWorldPoint(context.ReadValue<Vector2>());
+        return System.Array.Find(_mainMenu.sceneButtons, sb => sb.button.gameObject == gameObject);
+    }
+
+    public GameObject LastHoveredButton()
+    {
+        return _lastButton;
     }
 }

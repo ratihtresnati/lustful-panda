@@ -5,15 +5,14 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class interactItem : MonoBehaviour
-{
-    [SerializeField] private GameInput gameInput;
+{    
     public float pickupRadius;
     private bool canPickup = false;
     bool isCarryingItem = false;
     public GameObject player;
     public GameObject destinedObject;
     public GameObject obstacleObject; 
-    public Vector3 grabOffsetPlayer; // jarak objek setelah diambil karakter
+    // public Vector3 grabOffsetPlayer; // jarak objek setelah diambil karakter
     public Vector3 dropOffsetPosPlayer; // jarak objek setelah ditaro karakter
     public Vector3 dropOffsetRotPlayer; // rotasi objek setelah ditaro karakter
     public Outline outline;
@@ -66,6 +65,7 @@ public class interactItem : MonoBehaviour
 
         isCarryingItem = true;
         canPickup = false;
+        AudioManager.Instance.Play("CollectItem");
     }
     void Drop()
     {
@@ -82,5 +82,6 @@ public class interactItem : MonoBehaviour
 
         isCarryingItem = false;
         canPickup = true;
+        AudioManager.Instance.Play("DropItem");
     }
 }

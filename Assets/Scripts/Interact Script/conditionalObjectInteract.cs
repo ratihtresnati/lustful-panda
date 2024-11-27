@@ -6,103 +6,99 @@ using UnityEngine.InputSystem;
 
 public class conditionalObjectInteract : MonoBehaviour
 {
-    private PlayerInputManager playarInputManager;
-
-    public float interactionRadius;
-    public GameObject player;
-    public GameObject taskItem;
-    public GameObject dialogAsset;
-    private bool isCarryingTheItem = false;
-    [SerializeField] private Outline _outline;
-    [SerializeField] private Outline _itemOutline;
-    public int questNum;
-    
-    private PlayerHoldPosition playerHoldPosition;
+    [SerializeField] private int _questNum = 1;
+    [SerializeField] private float _interactionRadius = 3f;
+    [SerializeField] private GameObject _taskItem;
+    [SerializeField] private GameObject _dialogAsset;
+    [SerializeField] Vector3 _dialogPosition = new Vector3(0.5f, 2.0f, 0f);
+    private GameObject _player;
+    private bool _isCarryingTheItem = false;
+    private Outline _outlineGameObject;
+    private Outline _itemRequireOutline;
+    private PlayerHoldPosition _playerHoldPosition;
     private ParentPosition _parentPosition;
+    [SerializeField] private bool _questDoor = false;
+    private Rigidbody _rigidbody;
 
 
     void Start()
     {
-        playerHoldPosition = FindObjectOfType<PlayerHoldPosition>();
-        _outline = gameObject.GetComponent<Outline>();
-        _itemOutline = taskItem.GetComponent<Outline>();
+        _playerHoldPosition = FindObjectOfType<PlayerHoldPosition>();
+        _outlineGameObject = gameObject.GetComponent<Outline>();
+        _itemRequireOutline = _taskItem.GetComponent<Outline>();
         _parentPosition = gameObject.GetComponent<ParentPosition>();
+        _rigidbody = GetComponent<Rigidbody>();
 
-        if (dialogAsset != null)
+        if (_dialogAsset != null)
         {
-            dialogAsset.SetActive(false);
+            _dialogAsset.SetActive(false);
         }
-        player = GameObject.Find("Panda Bayik");
+
+        _player = GameObject.Find("Panda Bayik");
     }
     void Update()
     {
         // Check bawaan item
-        if (taskItem != null && taskItem.transform.parent == playerHoldPosition.PositionParent())
+        if (_taskItem != null && _taskItem.transform.parent == _playerHoldPosition.PositionParent())
         {
-            isCarryingTheItem = true;
+            _isCarryingTheItem = true;
         }
         else
         {
-            isCarryingTheItem = false;
+            _isCarryingTheItem = false;
         }
         // Menghitung jarak pemain n objek
-        float distance = Vector3.Distance(player.transform.position, transform.position);
-        if (distance <= interactionRadius && InputManager.instance.InteractInput)
+        float distance = Vector3.Distance(_player.transform.position, transform.position);
+        if (distance <= _interactionRadius && InputManager.instance.InteractInput)
         {
-            if (isCarryingTheItem)
+            if (_isCarryingTheItem)
             {
                 Interact();
             }
             else
             {
-                if(_itemOutline != null)
+                if(_itemRequireOutline != null)
                 {
-                    _itemOutline.ApplyOutline(true);
+                    _itemRequireOutline.ApplyOutline(true);
                 }   
                 
-                dialogAsset.transform.SetParent(_parentPosition.PositionParent());
-                dialogAsset.SetActive(true);
-                QuestManager.instance.NextQuest();
+                _dialogAsset.transform.position = _parentPosition.PositionParent().position + _dialogPosition;
+                _dialogAsset.SetActive(true);
+                // QuestManager.instance.NextQuest();
+
+                if(_questDoor == true)
+                {
+                    AudioManager.Instance.Play("BukaKunci");
+                }
+                else
+                {
+                    AudioManager.Instance.Play("NPCPanda");
+                }
+
             }
         }
     }
 
-    /*private void InteractEvent(InputAction.CallbackContext context)
-    {
-        float distance = Vector3.Distance(player.transform.position, transform.position);
-        if (distance <= interactionRadius)
-        {
-            float distance = Vector3.Distance(player.transform.position, transform.position);
-            if (distance <= interactionRadius)
-            {
-                if (isCarryingTheItem)
-                {
-                    Interact();
-                }
-                else
-                {
-                    _itemOutline.ApplyOutline(true);
-                    dialogAsset.SetActive(true);
-                    QuestManager.instance.NextQuest();
-                }
-            }
-        }
-    }*/
-
     void Interact()
     {
-        switch (questNum) {
+        switch (_questNum) {
         case 1: //npc panda
             NPCPandaStateController npcPanda = GetComponent<NPCPandaStateController>();
             if (npcPanda != null)
             {
                 npcPanda._isComplete = true;
-                QuestManager.instance.NextQuest();
-                _outline.ApplyOutline(false);
+                // QuestManager.instance.NextQuest();
+                _outlineGameObject.ApplyOutline(false);
             }
             else
             {
                 Debug.LogWarning("NPCPandaStateController tidak ditemukan pada objek ini.");
+            }
+
+            if(_questDoor == true)
+            {
+                _rigidbody.isKinematic = false;
+                AudioManager.Instance.Play("BukaPintu");
             }
         break;
         case 2: //final door
@@ -112,7 +108,7 @@ public class conditionalObjectInteract : MonoBehaviour
             }
         break;
         }
-        Destroy(taskItem);
-        Destroy(dialogAsset);
+        Destroy(_taskItem);
+        Destroy(_dialogAsset);
     }
 }

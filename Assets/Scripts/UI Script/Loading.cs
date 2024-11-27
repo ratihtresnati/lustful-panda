@@ -44,6 +44,7 @@ public class Loading : MonoBehaviour
             yield return null;
         }
         
+        IsLoading = false;
         LoadingScreen.SetActive(false);
     }
 }

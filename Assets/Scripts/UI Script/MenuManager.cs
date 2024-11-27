@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class MenuManager : MonoBehaviour
 {
@@ -14,17 +15,32 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject _settingButton;
     [SerializeField] private GameObject _backButton;
     [SerializeField] private GameObject _controlMap;
+    GameObject _selectedButton;
+    [SerializeField] private GameObject _controlDisplay;
+    [SerializeField] private GameObject _controlAudio;
     
-    private bool _isPaused;
+    private GameObject[] pauseButtons;
+    
+    [SerializeField] private bool _isPaused;
+    public bool IsMouse { get; set; }
+    private Mouse _mouse;
+
+    [Header("Animation UI")]
+    public float scaleMultiplier = 1.1f;
+    public float animationDuration = 0.2f;
+
+    AudioManager audioManager;
 
     private void Awake()
     {
         _mainMenu = GameObject.Find("PauseMenu");
         _settingMenu = GameObject.Find("Settings Menu");
-        _resumeButton = GameObject.Find("Resume");
-        _settingButton = GameObject.Find("Settings");
-        _backButton = GameObject.Find("Back");
+        _resumeButton = GameObject.Find("Resume Button");
+        _settingButton = GameObject.Find("Settings Button");
+        _backButton = GameObject.Find("Back Button");
         _controlMap = GameObject.Find("ControlMap UI");
+        _controlDisplay = GameObject.Find("ControlDisplay UI");
+        _controlAudio = GameObject.Find("ControlAudio UI");
     }
 
     private void Start()
@@ -32,15 +48,22 @@ public class MenuManager : MonoBehaviour
         _mainMenu.SetActive(false);
         _settingMenu.SetActive(false);
         _controlMap.SetActive(false);
+        _controlDisplay.SetActive(false);
+        _controlAudio.SetActive(false);
+
+        pauseButtons = new GameObject[] { _resumeButton, _settingButton, _backButton };
     }
 
     private void Update()
     {
+        if(FindObjectOfType<MainMenu>()) return;
+        
         if(InputManager.instance.PauseInput)
         {
             if(!PauseManager.instance.IsPause)
             {
                 Pause();
+                AudioManager.Instance.Play("OpenMenu");
             }
         }
 
@@ -52,34 +75,71 @@ public class MenuManager : MonoBehaviour
                 {
                     OpenMainMenu();
                     _isPaused = false;
+                    SettingsManager.instance._isControlAudio = false;
+                    AudioManager.Instance.Play("OpenMenu");
                 }
                 else
                 {
                     Unpause();
+                    AudioManager.Instance.Play("OpenMenu");
                 }
             }
         }
-
-        if (InputManager.instance.ButtonClickInput)
+        
+        if (IsMouse == true) 
         {
-            GameObject selectedButton = EventSystem.current.currentSelectedGameObject;
+            _selectedButton = Mouse.Instance.LastHoveredButton();
+            EventSystem.current.SetSelectedGameObject(_selectedButton);
+        }
+        else
+        {
+            _selectedButton = EventSystem.current.currentSelectedGameObject;
+        }
 
-            if (selectedButton != null)
-            {
-                if (selectedButton == _settingButton)
+        if (_selectedButton != null)
+        {
+            if (_selectedButton == _settingButton)
+            {     
+                OnPointerEnter(_settingButton);
+                if(InputManager.instance.ButtonClickInput)
                 {
                     OnSettingPress();
-                }
-                else if (selectedButton == _resumeButton)
-                {
-                    OnResumePress();
-                }
-                else if (selectedButton == _backButton)
-                {
-                    OnBackPress();
+                    AudioManager.Instance.Play("ButtonClick");
                 }
             }
-        }
+            else
+            {
+                OnPointerExit(_settingButton);
+            }
+            
+            if (_selectedButton == _resumeButton)
+            {
+                OnPointerEnter(_resumeButton);
+                if(InputManager.instance.ButtonClickInput)
+                {
+                    OnResumePress();
+                    AudioManager.Instance.Play("ButtonClick");
+                }
+            }
+            else
+            {
+                OnPointerExit(_resumeButton);
+            }
+                
+            if (_selectedButton == _backButton)
+            {
+                OnPointerEnter(_backButton);
+                if(InputManager.instance.ButtonClickInput)
+                {
+                    OnBackPress();
+                    AudioManager.Instance.Play("ButtonClick");
+                }
+            }
+            else
+            {
+                OnPointerExit(_backButton);
+            }
+        }            
     }
 
     public void Pause()
@@ -99,8 +159,10 @@ public class MenuManager : MonoBehaviour
         _mainMenu.SetActive(true);
         _settingMenu.SetActive(false);
         _controlMap.SetActive(false);
+        _controlDisplay.SetActive(false);
+        _controlAudio.SetActive(false);
 
-        EventSystem.current.SetSelectedGameObject(_resumeButton);
+        FirstButton();
     }
 
     private void OpenSettingMenu()
@@ -111,7 +173,6 @@ public class MenuManager : MonoBehaviour
         SettingsManager.instance.FirstSelected();
         
         _isPaused = true;
-        // EventSystem.current.SetSelectedGameObject(_settingMenuFirst);
     }
 
     private void CloseMainMenu()
@@ -119,6 +180,8 @@ public class MenuManager : MonoBehaviour
         _mainMenu.SetActive(false);
         _settingMenu.SetActive(false);
         _controlMap.SetActive(false);
+        _controlDisplay.SetActive(false);
+        _controlAudio.SetActive(false);
 
         EventSystem.current.SetSelectedGameObject(null);
     }
@@ -136,8 +199,30 @@ public class MenuManager : MonoBehaviour
     public void OnBackPress()
     { 
         PauseManager.instance.UnpauseGame();
-        // InputManager.PlayerInput.enabled = false;
-
         Loading.instance.LoadScene(0);
+    }
+
+    public void OnPointerEnter(GameObject gameObject)
+    {
+        if (gameObject == null) return;
+        gameObject.transform.DOKill(); 
+        gameObject.transform.DOScale(new Vector3(scaleMultiplier, scaleMultiplier, scaleMultiplier), animationDuration).SetUpdate(true);
+    }
+
+    public void OnPointerExit(GameObject gameObject)
+    { 
+        gameObject.transform.DOKill(); 
+        gameObject.transform.DOScale(Vector3.one, animationDuration).SetUpdate(true);
+    }
+
+    public GameObject[] ButtonPauseMenu()
+    {
+        return pauseButtons;
+    }
+
+    private void FirstButton()
+    {
+        _selectedButton = _resumeButton;
+        EventSystem.current.SetSelectedGameObject(_selectedButton);
     }
 }

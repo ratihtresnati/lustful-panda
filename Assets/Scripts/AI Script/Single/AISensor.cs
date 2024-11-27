@@ -8,9 +8,11 @@ public class AISensor : MonoBehaviour
     public float radius;
     [Range(0, 360)]
     public float angle;
-    
+
+    [SerializeField] private PlayerController PlayerController;
 
     public GameObject playerRef;
+    public CatchSensor CatchSensor;
 
     public LayerMask targetMask;
     public LayerMask obstructionMask;
@@ -21,6 +23,7 @@ public class AISensor : MonoBehaviour
     void Start()
     {
         playerRef = GameObject.FindGameObjectWithTag("PandaMC");
+        //GameOver = FindObjectOfType<GameOver>();
         StartCoroutine(FOVRoutine());
     }
 
@@ -51,14 +54,27 @@ public class AISensor : MonoBehaviour
                 float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
+                {
+                    //PlayerController.PlayerSee = true;
                     canSeePlayer = true;
+                    CatchSensor.enabled = true;
+                }
                 else
+                {
+                    //PlayerController.PlayerSee = false;
                     canSeePlayer = false;
+                    CatchSensor.enabled = false;
+
+                }
             }
             
         }
         else
+        {
+            //PlayerController.PlayerSee = false;
             canSeePlayer = false;
+            CatchSensor.enabled = false;
+        }
     }
     
     

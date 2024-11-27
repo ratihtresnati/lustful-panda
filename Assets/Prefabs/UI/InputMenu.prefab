@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3767044742680982783}
   - component: {fileID: 531200970632947826}
   - component: {fileID: 4384595382113574575}
+  - component: {fileID: 596275889291997532}
   m_Layer: 0
   m_Name: InputMenu
   m_TagString: Untagged
@@ -46,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: f482c79eb02cf1641b64b906646009f6, type: 3}
-  m_NotificationBehavior: 0
+  m_NotificationBehavior: 2
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -99,19 +100,7 @@ MonoBehaviour:
     m_ActionId: c5b526ba-d5bc-4f23-81eb-3feb99119baf
     m_ActionName: UI/Point[/Mouse/position]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
-        m_MethodName: OnExitPress
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 5fdb9c0d-00f7-4219-94fc-620cd595084f
     m_ActionName: UI/Click[/Mouse/leftButton,/Keyboard/e]
   - m_PersistentCalls:
@@ -138,9 +127,13 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 13519b34-134d-4cc3-b422-5943cdcdb426
     m_ActionName: UI/MenuClose[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d54d0bfb-4b25-4b93-b2ae-38e1a4e15a37
+    m_ActionName: UI/Pause[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: Keyboard
-  m_DefaultActionMap: Player
+  m_DefaultActionMap: UI
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &4384595382113574575
@@ -155,3 +148,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea7d512ad6c796442a866df838b58616, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _smoothInputSpeed: 0.04
+--- !u!114 &596275889291997532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8144661669031708666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cf3c38b7bc151b4495bd60a7cfdd986, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 0}
+  mousePos: {x: 0, y: 0}
+  lastHoveredButton: {fileID: 0}
