@@ -78,7 +78,7 @@ public class ControlDisplay : MonoBehaviour
     {
         if (InputManager.instance.ButtonClickInput && SettingsManager.instance.IsSetting == true)
         {
-            EventSystem.current.SetSelectedGameObject(SettingsManager.instance._firstButtonCD);
+            // EventSystem.current.SetSelectedGameObject(SettingsManager.instance._firstButtonCD);
             
             GameObject selectedButton = EventSystem.current.currentSelectedGameObject;
             
