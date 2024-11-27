@@ -11,7 +11,7 @@ public class BoxInteract : MonoBehaviour
         if (Input.GetKey(KeyCode.E))
         {
             PlayerController.InBox = true;
-            //Debug.Log("Getbox");
+            Debug.Log("Getbox");
         }
     }
 

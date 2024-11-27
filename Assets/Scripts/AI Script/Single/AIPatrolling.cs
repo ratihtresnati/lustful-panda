@@ -10,13 +10,15 @@ public class AIPatrolling : MonoBehaviour
 
     [SerializeField] private PlayerController PlayerController;
 
-    public AIAnimatorController AIAnimatorController;
+    private AIAnimatorController AIAnimatorController;
 
     [SerializeField] private Transform player;
     private GameObject _playerPanda;
     [SerializeField] private float walkSpeed = 3f;
     [SerializeField] private float pandaRotSpeed = 5f;
-    
+
+    private CatchSensor catchSensor;
+
     public float RunSpeed = 4f;
 
     NavMeshAgent agent;
@@ -29,16 +31,19 @@ public class AIPatrolling : MonoBehaviour
     [SerializeField] private float idleTimeAfterLosePlayer = 3f;
     float idleTimer = 0f;
 
+    [SerializeField] private Vector3 pl;
+
     // Start is called before the first frame update
     void Start()
     {
         _playerPanda = GameObject.Find("Panda Bayik");
-        player = _playerPanda.transform;
+        //player = _playerPanda.transform;
         //GameOver = FindObjectOfType<GameOver>();
         AIAnimatorController = GetComponent<AIAnimatorController>();
         agent = GetComponent<NavMeshAgent>();
         Sensor = GetComponent<AISensor>();
 
+        catchSensor = GetComponent<CatchSensor>();
         currentState = ZooKeeperState.Idle;
     }
 
@@ -77,6 +82,7 @@ public class AIPatrolling : MonoBehaviour
 
     private void Catch()
     {
+        player.position = transform.TransformPoint(pl);
         GetComponent<NavMeshAgent>().speed = 0;
 
         Vector3 targetDir = transform.position - player.position;
@@ -88,6 +94,7 @@ public class AIPatrolling : MonoBehaviour
         newDir.y = 0;
 
         player.rotation = Quaternion.LookRotation(newDir);
+        gameObject.transform.LookAt(new Vector3(player.position.x, transform.position.y, player.position.z));
     }
 
     private void AfterChase()
@@ -108,15 +115,23 @@ public class AIPatrolling : MonoBehaviour
 
     void Chase()
     {
+        PlayerController.InBox = false;
         GetComponent<NavMeshAgent>().speed = RunSpeed;
         agent.SetDestination(player.position);
 
-        Debug.Log(PlayerController.GameOver);
+        //Debug.Log(PlayerController.GameOver);
 
-        if (PlayerController.GameOver)
+        if (catchSensor.catchPlayer && !PlayerController.IsJump)
         {
             GetComponent<NavMeshAgent>().speed = 0;
+            PlayerController.GameOver = true;
             currentState = ZooKeeperState.Catch;
+        }
+
+        else if (PlayerController.GameOver) 
+        {
+            GetComponent<NavMeshAgent>().speed = 0;
+            currentState = ZooKeeperState.Idle;
         }
 
         if (!Sensor.canSeePlayer)
@@ -150,6 +165,7 @@ public class AIPatrolling : MonoBehaviour
             currentState = ZooKeeperState.Chase;
 
         }
+        
     }
 
     private void Search()
@@ -186,10 +202,10 @@ public class AIPatrolling : MonoBehaviour
                 currentState = ZooKeeperState.Idle;
 
         }
-            if (Sensor.canSeePlayer)
-            {
-                currentState = ZooKeeperState.Chase;
-            }
+        if (Sensor.canSeePlayer)
+        {
+            currentState = ZooKeeperState.Chase;
+        }
     }
 
     public enum ZooKeeperState

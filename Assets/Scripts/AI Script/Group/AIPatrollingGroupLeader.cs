@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AIPatrollingGroup : MonoBehaviour
+public class AIPatrollingGroupLeader : MonoBehaviour
 {
-    public GroupTrigger GroupTrigger;
+    [SerializeField] private GroupTrigger GroupTrigger;
 
     [SerializeField] private AISensor Sensor;
 
@@ -110,9 +110,9 @@ public class AIPatrollingGroup : MonoBehaviour
             idleTimer = idleTimeAfterLosePlayer;
             currentState = ZooKeeperState.Search;
         }
-        if (Sensor.canSeePlayer || GroupTrigger.GroupCanSee)
+        if (Sensor.canSeePlayer)
         {
-            //GroupTrigger.groupCanSee = true;
+            GroupTrigger.GroupCanSee = true;
             currentState = ZooKeeperState.Chase;
 
         }
@@ -143,6 +143,7 @@ public class AIPatrollingGroup : MonoBehaviour
         if (!Sensor.canSeePlayer)
         {
             //idleTimer = 2f;
+            GroupTrigger.GroupCanSee = false;
             currentState = ZooKeeperState.AfterChase;
 
         }
@@ -165,9 +166,9 @@ public class AIPatrollingGroup : MonoBehaviour
             }
         }
 
-        if (Sensor.canSeePlayer || GroupTrigger.GroupCanSee)
+        if (Sensor.canSeePlayer)
         {
-            //GroupTrigger.groupCanSee = true;
+            GroupTrigger.GroupCanSee = true;
             currentState = ZooKeeperState.Chase;
 
         }
@@ -187,9 +188,9 @@ public class AIPatrollingGroup : MonoBehaviour
             currentState = ZooKeeperState.Patrol;
         }
 
-        if (Sensor.canSeePlayer || GroupTrigger.GroupCanSee)
+        if (Sensor.canSeePlayer)
         {
-            //GroupTrigger.groupCanSee = true;
+            GroupTrigger.GroupCanSee = true;
             currentState = ZooKeeperState.Chase;
         }
     }
@@ -209,9 +210,9 @@ public class AIPatrollingGroup : MonoBehaviour
                 currentState = ZooKeeperState.Idle;
 
         }
-        if (Sensor.canSeePlayer || GroupTrigger.GroupCanSee)
+        if (Sensor.canSeePlayer)
         {
-            //GroupTrigger.groupCanSee = true;
+            GroupTrigger.GroupCanSee = true;
             currentState = ZooKeeperState.Chase;
         }
     }

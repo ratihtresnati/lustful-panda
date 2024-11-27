@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
 
     public bool InBox;
     public bool GameOver;
-    public bool PlayerSee = false;
+    public bool PlayerSee;
     public bool IsCatch = false;
     
     [SerializeField]
@@ -49,6 +49,8 @@ public class PlayerController : MonoBehaviour
     public float ChargeRate;
     public float magnitude;
 
+    Rigidbody rb;
+
     private Coroutine recharge;
 
     void Start()
@@ -57,13 +59,16 @@ public class PlayerController : MonoBehaviour
        // GameOver = FindObjectOfType<GameOver>();
         panda = GameObject.Find("Panda");
 
+        rb = GetComponent<Rigidbody>();
+
         Keyframe roll_lastFrame = _rollCurve[_rollCurve.length - 1];
         _rollTimer = roll_lastFrame.time;
     }
    
     void Update()
     {
-        HanddleGameOver();
+        StartCoroutine(HanddleGameOver());
+        //HanddleGameOver();
 
         if (!IsCatch)
         {
@@ -71,6 +76,17 @@ public class PlayerController : MonoBehaviour
             HanddleMovements();
 
             TransformBox();
+
+                if (InputManager.instance.RollInput)
+                {
+                    if (!IsRooling)
+                    {
+                        if (!IsJump)
+                        {
+                            if (_velocity.magnitude != 0) StartCoroutine(Rolling());
+                        }
+                    }
+                }
 
             if (!InBox)
             {
@@ -87,16 +103,6 @@ public class PlayerController : MonoBehaviour
                     }
                 }
 
-                if (InputManager.instance.RollInput)
-                {
-                    if (!IsRooling)
-                    {
-                        if (!IsJump)
-                        {
-                            if (_velocity.magnitude != 0) StartCoroutine(Rolling());
-                        }
-                    }
-                }
 
                 if (InputManager.instance.RunPressed)
                 {
@@ -118,20 +124,36 @@ public class PlayerController : MonoBehaviour
         // Debug.Log(_IsJump);
     }
 
-    private void HanddleGameOver()
+    IEnumerator HanddleGameOver()
     {
         if (GameOver)
         {
+            transform.gameObject.layer = 9;
+            yield return new WaitForSeconds(0.2f);
+            rb.isKinematic = true;
             _velocity.y = 0;
             IsCatch = true;
         }
     }
 
+    /*
+    private void HanddleGameOver()
+    {
+        if (GameOver)
+        {
+
+            rb.isKinematic = true;
+            _velocity.y = 0;
+            IsCatch = true;
+        }
+    }
+    */
+
     private void TransformBox()
     {
 
         // Player ketahuan ketika terlihat Zoo Keeper
-        if (PlayerSee)
+        if (PlayerSee || IsRooling)
         {
             InBox = false;
         }
