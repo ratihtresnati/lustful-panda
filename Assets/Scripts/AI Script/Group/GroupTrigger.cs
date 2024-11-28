@@ -4,5 +4,18 @@ using UnityEngine;
 
 public class GroupTrigger : MonoBehaviour
 {
-    public bool groupCanSee = false;
+    public AISensor LeaderSensor;
+    public bool GroupCanSee;
+
+    private void Update()
+    {
+        if ( LeaderSensor.canSeePlayer)
+        {
+            GroupCanSee = true;
+        }
+        else
+        {
+            GroupCanSee = false;
+        }
+    }
 }

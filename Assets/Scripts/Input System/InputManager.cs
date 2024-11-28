@@ -12,8 +12,7 @@ public class InputManager : MonoBehaviour
     public bool ResumeInput { get; private set; }
     public bool ButtonClickInput { get; private set; }
     public bool InteractClickInput { get; private set; }
-    public bool MainMenu { get; private set; }
-    public bool _interact { get; private set; }
+    public bool InteractInputDown { get; private set; }
     public Vector2 MoveInput { get; private set; }
     public bool RunPressed { get; private set; }
     public bool RunReleased { get; private set; }
@@ -56,20 +55,23 @@ public class InputManager : MonoBehaviour
         _runAction = PlayerInput.actions["Run"];
         _jumpAction = PlayerInput.actions["Jump"];
         _rollAction = PlayerInput.actions["Roll"];
-        _interactAction = PlayerInput.actions["Interact"];
         
     }
     private void UpdateInputs(){
         PauseInput = _pauseAction.WasPressedThisFrame();
         ResumeInput = _resumeAction.WasPressedThisFrame();
         ButtonClickInput = _selectAction.WasPressedThisFrame();
-        InteractClickInput = _interactAction.WasPressedThisFrame();
+
+        //interact
+        InteractClickInput = _interactAction.WasPressedThisFrame(); //untuk button click
+        InteractInputDown = _interactAction.IsPressed(); //untuk interact hold
+        InteractInput = _interactAction.WasPressedThisFrame(); //untuk interact pressed
+
         MoveInput = _moveAction.ReadValue<Vector2>();
         RunPressed = _runAction.WasPressedThisFrame();
         RunReleased = _runAction.WasReleasedThisFrame();
         JumpInput = _jumpAction.WasPressedThisFrame();
         RollInput = _rollAction.WasPressedThisFrame();
-        InteractInput = _interactAction.WasPressedThisFrame();
         PauseInput = _pauseAction.WasPressedThisFrame();
     }
 

@@ -174,7 +174,7 @@ public partial class @PlayerInputManager: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""e61f4983-2652-438b-8817-45749e233691"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -297,7 +297,7 @@ public partial class @PlayerInputManager: IInputActionCollection2, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""ScrollWheel"",

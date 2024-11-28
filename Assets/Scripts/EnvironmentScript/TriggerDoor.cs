@@ -8,6 +8,7 @@ public class TriggerDoor : MonoBehaviour
     private Rigidbody rigidbody;
     private Outline outline;
     [SerializeField] private String _tag;
+    private bool _isOpened;
 
     private void Start()
     {
@@ -16,10 +17,13 @@ public class TriggerDoor : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(_tag))
+        if (other.CompareTag(_tag) && _isOpened == false)
         {
+            _isOpened = true;
             rigidbody.isKinematic = false;
-            QuestManager.instance.CompleteCurrentQuest();
+            // QuestManager.instance._questIsComplete = true;
+
+            AudioManager.Instance.Play("PintuKandang");
 
             if(outline != null)
             {

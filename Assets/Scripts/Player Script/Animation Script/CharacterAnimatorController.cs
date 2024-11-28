@@ -7,6 +7,7 @@ public class CharacterAnimatorController : MonoBehaviour
 {
     private Animator _animator;
     [SerializeField] private PlayerController _playerController;
+    [SerializeField] private PlayerInteract _playerInteract;
     [SerializeField] private float _jumpAnimationDuration = 0.6f;
     [SerializeField] private float _rollAnimationDuration = 0.8f;
     private float _lockedTill;
@@ -15,12 +16,18 @@ public class CharacterAnimatorController : MonoBehaviour
     private void Awake()
     {
         _animator = GetComponent<Animator>();
-
+        _playerInteract = GetComponent<PlayerInteract>();
         _playerController = GetComponent<PlayerController>();
     }
 
     private void Update()
     {
+
+        if (_playerController.IsCatch)
+        {
+            StartCoroutine(Catching());
+        }
+
         var state = GetState();
 
         if(state == _currentState) return;
@@ -47,6 +54,7 @@ public class CharacterAnimatorController : MonoBehaviour
         {
             if (_playerController.IsRooling == true) return LockState(Roll, _rollAnimationDuration);
             if (_playerController.IsRun == true && _playerController.Move != Vector3.zero) return Run;
+            if (_playerInteract.PushBox == true) return WalkSlow;
 
             return _playerController.Move == Vector3.zero ? Idle : Walk;
         }
@@ -67,4 +75,12 @@ public class CharacterAnimatorController : MonoBehaviour
     private static readonly int Land = Animator.StringToHash("Land");
     private static readonly int Run = Animator.StringToHash("Run");
     private static readonly int Walk = Animator.StringToHash("Walking");
+    private static readonly int WalkSlow = Animator.StringToHash("WalkSlow");
+
+    IEnumerator Catching()
+    {
+        yield return new WaitForSeconds(0.8f);
+
+        _animator.SetBool("isCatch", true);
+    }
 }

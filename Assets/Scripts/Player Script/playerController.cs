@@ -2,13 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+//using UnityEditor.ShaderGraph.Drawing;
+
 // using System.Xml.Serialization;
 // using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+
+
     [Header("Movement")]
     [SerializeField] private float _jumpSpeed = 3f;
     [SerializeField] private float _walkSpeed = 3f;
@@ -20,6 +25,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _jumpDelayDuration = 0.2f;
     [SerializeField] AnimationCurve _rollCurve;
     private CharacterController _characterController;
+
+    public GameObject panda;
+    public GameObject box;
+
+    public bool InBox;
+    public bool GameOver;
+    public bool PlayerSee;
+    public bool IsCatch = false;
     
     [SerializeField]
     private Vector2 _inputVector;
@@ -30,50 +43,148 @@ public class PlayerController : MonoBehaviour
     public bool IsRooling { get; private set; }
     public bool isGrounded { get; private set; }
 
+    public Image StaminaBar;
+    public float Stamina, MaxStamina;
+    public float RunCost;
+    public float ChargeRate;
+    public float magnitude;
+
+    Rigidbody rb;
+
+    private Coroutine recharge;
+
     void Start()
     {
         _characterController = GetComponent<CharacterController>();
+       // GameOver = FindObjectOfType<GameOver>();
+        panda = GameObject.Find("Panda");
+
+        rb = GetComponent<Rigidbody>();
 
         Keyframe roll_lastFrame = _rollCurve[_rollCurve.length - 1];
         _rollTimer = roll_lastFrame.time;
-
-        // gameInput.OnRunningEvent += OnRunEvent;
-        // gameInput.OutRunningEvent += OutRunEvent;
-        // gameInput.OnJumpingEvent += OnJumpEvent;
-        // gameInput.OnRollingEvent += OnRollEvent;
     }
    
     void Update()
     {
-        HanddleMovements();
+        StartCoroutine(HanddleGameOver());
+        //HanddleGameOver();
 
-        //moveset
-        if(InputManager.instance.JumpInput){
-            if (!IsRooling){
-                if (_characterController.isGrounded && !IsJump){
-                    StartCoroutine(Jumping());
+        if (!IsCatch)
+        {
+
+            HanddleMovements();
+
+            TransformBox();
+
+                if (InputManager.instance.RollInput)
+                {
+                    if (!IsRooling)
+                    {
+                        if (!IsJump)
+                        {
+                            if (_velocity.magnitude != 0) StartCoroutine(Rolling());
+                        }
+                    }
+                }
+
+            if (!InBox)
+            {
+
+                //moveset
+                if (InputManager.instance.JumpInput)
+                {
+                    if (!IsRooling)
+                    {
+                        if (_characterController.isGrounded && !IsJump)
+                        {
+                            StartCoroutine(Jumping());
+                        }
+                    }
+                }
+
+
+                if (InputManager.instance.RunPressed)
+                {
+                    IsRun = true;
+                    if (recharge != null)
+                    {
+                        StopCoroutine(recharge);
+                    }
+                }
+
+                if (InputManager.instance.RunReleased)
+                {
+                    IsRun = false;
+                    recharge = StartCoroutine(RechargeStamina());
                 }
             }
         }
-        if(InputManager.instance.RollInput){
-            if (!IsRooling){ 
-                if (!IsJump){
-                    if (_velocity.magnitude != 0) StartCoroutine(Rolling());
-                }
-            }
-        }
-        if(InputManager.instance.RunPressed){
-            IsRun = true;
-        }
-        if(InputManager.instance.RunReleased){
-            IsRun = false;
-        }
-
         //Debug.Log(ySpeed);
         // Debug.Log(_IsJump);
     }
 
-      private void HanddleMovements()
+    IEnumerator HanddleGameOver()
+    {
+        if (GameOver)
+        {
+            transform.gameObject.layer = 9;
+            yield return new WaitForSeconds(0.2f);
+            rb.isKinematic = true;
+            _velocity.y = 0;
+            IsCatch = true;
+        }
+    }
+
+    /*
+    private void HanddleGameOver()
+    {
+        if (GameOver)
+        {
+
+            rb.isKinematic = true;
+            _velocity.y = 0;
+            IsCatch = true;
+        }
+    }
+    */
+
+    private void TransformBox()
+    {
+
+        // Player ketahuan ketika terlihat Zoo Keeper
+        if (PlayerSee || IsRooling)
+        {
+            InBox = false;
+        }
+
+        // Ketika sedang dalam kondisi menjadi box
+        if (InBox)
+        {
+            panda.SetActive(false); // objek panda hilang
+            box.SetActive(true); // diganti object kardus
+            transform.gameObject.layer = 0;
+
+            if (magnitude > 0)
+            {
+                transform.gameObject.layer = 10; // layer mask berubah menjadi terget
+            }
+            else
+            {
+                transform.gameObject.layer = 0; // layer mask berubah menjadi default
+            }
+
+        }
+        else
+        {
+            panda.SetActive(true);
+            box.SetActive(false);
+            transform.gameObject.layer = 10;
+        }
+        
+    }
+
+    private void HanddleMovements()
     {
         if (!IsRooling)
         {
@@ -84,17 +195,26 @@ public class PlayerController : MonoBehaviour
 
         Move = new Vector3(_inputVector.x, 0, _inputVector.y);
 
-        if (IsRun)
+        if (IsRun && Stamina > 0)
         {
             _speed = _runSpeed;
-        }
+                Stamina -= RunCost * Time.deltaTime;
+                if (Stamina < 0)
+                {
+                    Stamina = 0;
+                }
+                else
+                {
+                    StaminaBar.fillAmount = Stamina / MaxStamina;
+                }
+            }
         else
         {
             IsRun = false;
             _speed = _walkSpeed;
         }
 
-        float magnitude = Mathf.Clamp01(Move.magnitude) * _speed;
+        magnitude = Mathf.Clamp01(Move.magnitude) * _speed;
         Move.Normalize();
 
         _ySpeed += Physics.gravity.y * Time.deltaTime;
@@ -120,6 +240,26 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    private IEnumerator RechargeStamina()
+    {
+        yield return new WaitForSeconds(1f);
+
+        while (Stamina < MaxStamina)
+        {
+            Stamina += ChargeRate * Time.deltaTime;
+            if (Stamina > MaxStamina)
+            {
+                Stamina = MaxStamina;
+            }
+            else
+            {
+                StaminaBar.fillAmount = Stamina / MaxStamina;
+            }
+            yield return new WaitForSeconds(.1f);
+        }
+    }
+
 
     IEnumerator Rolling()
     {
