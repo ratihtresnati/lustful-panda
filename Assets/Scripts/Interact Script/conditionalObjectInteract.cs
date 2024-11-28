@@ -77,7 +77,7 @@ public class conditionalObjectInteract : MonoBehaviour
             {
                 Interact();
             }
-            else if (isCarryingTheItem == false)
+            else if (_isCarryingTheItem == false)
             {
                 ShowDialogAfterInteract();
             }
