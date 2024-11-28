@@ -8,7 +8,7 @@ public class BoxInteract : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (Input.GetKey(KeyCode.E))
+        if (InputManager.instance.ButtonClickInput)
         {
             PlayerController.InBox = true;
             //Debug.Log("Getbox");
