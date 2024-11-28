@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AIPatrollingGroupLeader : MonoBehaviour
+public class AIPatrollingStay : MonoBehaviour
 {
-    [SerializeField] private GroupTrigger GroupTrigger;
-
     [SerializeField] private AISensor Sensor;
 
     [SerializeField] private PlayerController PlayerController;
@@ -45,6 +43,7 @@ public class AIPatrollingGroupLeader : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         Sensor = GetComponent<AISensor>();
 
+        target = patrolPoint[patrolPointIndex].position;
         catchSensor = GetComponent<CatchSensor>();
         currentState = ZooKeeperState.Idle;
     }
@@ -85,8 +84,6 @@ public class AIPatrollingGroupLeader : MonoBehaviour
     private void Catch()
     {
         player.position = transform.TransformPoint(pl);
-
-
         GetComponent<NavMeshAgent>().speed = 0;
 
         Vector3 targetDir = transform.position - player.position;
@@ -112,7 +109,6 @@ public class AIPatrollingGroupLeader : MonoBehaviour
         }
         if (Sensor.canSeePlayer)
         {
-            GroupTrigger.GroupCanSee = true;
             currentState = ZooKeeperState.Chase;
 
         }
@@ -128,7 +124,6 @@ public class AIPatrollingGroupLeader : MonoBehaviour
 
         if (catchSensor.catchPlayer && !PlayerController.IsJump)
         {
-
             GetComponent<NavMeshAgent>().speed = 0;
             PlayerController.GameOver = true;
             currentState = ZooKeeperState.Catch;
@@ -143,7 +138,7 @@ public class AIPatrollingGroupLeader : MonoBehaviour
         if (!Sensor.canSeePlayer)
         {
             //idleTimer = 2f;
-            GroupTrigger.GroupCanSee = false;
+
             currentState = ZooKeeperState.AfterChase;
 
         }
@@ -156,19 +151,16 @@ public class AIPatrollingGroupLeader : MonoBehaviour
 
         if (idleTimer <= 0f)
         {
-            if (patrolPoint != null && patrolPoint.Length > 0)
-            {
-                target = patrolPoint[patrolPointIndex].position;
+           
                 agent.SetDestination(target);
 
                 GetComponent<NavMeshAgent>().speed = walkSpeed;
-                currentState = ZooKeeperState.Patrol;
-            }
+                //currentState = ZooKeeperState.Patrol;
+            
         }
 
         if (Sensor.canSeePlayer)
         {
-            GroupTrigger.GroupCanSee = true;
             currentState = ZooKeeperState.Chase;
 
         }
@@ -182,7 +174,6 @@ public class AIPatrollingGroupLeader : MonoBehaviour
 
         if (idleTimer <= 0f)
         {
-            patrolPointIndex = 0;
             target = patrolPoint[patrolPointIndex].position;
             agent.SetDestination(target);
 
@@ -191,7 +182,6 @@ public class AIPatrollingGroupLeader : MonoBehaviour
 
         if (Sensor.canSeePlayer)
         {
-            GroupTrigger.GroupCanSee = true;
             currentState = ZooKeeperState.Chase;
         }
     }
@@ -200,20 +190,10 @@ public class AIPatrollingGroupLeader : MonoBehaviour
         GetComponent<NavMeshAgent>().speed = walkSpeed;
         if (agent.remainingDistance <= 0.5f)
         {
-            patrolPointIndex++;
-            idleTimer = idleTime;
-            
-            if (patrolPointIndex == patrolPoint.Length)
-            {
-                patrolPointIndex = 0;
-                currentState = ZooKeeperState.Idle;
-            }
-                currentState = ZooKeeperState.Idle;
-
+            currentState = ZooKeeperState.Idle;
         }
         if (Sensor.canSeePlayer)
         {
-            GroupTrigger.GroupCanSee = true;
             currentState = ZooKeeperState.Chase;
         }
     }

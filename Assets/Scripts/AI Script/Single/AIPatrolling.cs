@@ -175,6 +175,7 @@ public class AIPatrolling : MonoBehaviour
 
         if (idleTimer <= 0f)
         {
+            patrolPointIndex = 0;
             target = patrolPoint[patrolPointIndex].position;
             agent.SetDestination(target);
 
