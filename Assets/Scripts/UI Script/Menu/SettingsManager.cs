@@ -52,7 +52,7 @@ public class SettingsManager : MonoBehaviour
 
     private void Update()
     {
-        if(InputManager.instance.ResumeInput)
+        if(InputManager.instance.ResumeInput && IsSetting == false)
         {
             PauseManager.instance.CloseSettingMenu();
         }
@@ -95,6 +95,33 @@ public class SettingsManager : MonoBehaviour
                 }
             } 
         }
+        
+        if(_isControlAudio == true && IsSetting == true)
+        {
+            if(InputManager.instance.ResumeInput)
+            {
+                CloseControlAudio();
+            }                
+        }
+
+        if(_isControlDisplay == true && IsSetting == true)
+        {
+            if(InputManager.instance.ResumeInput)
+            {
+                CloseControlDisplay();
+            }                
+        }
+
+        if(_isControlMap == true && IsSetting == true)
+        {
+            if(InputManager.instance.ResumeInput)
+            {
+                CloseControlMap();
+            }                
+        }
+
+        // if(_controlMapButton.Buttons)
+
 
             // if (selectedButton != null)
             // {
@@ -149,14 +176,21 @@ public class SettingsManager : MonoBehaviour
     }
 
     private void OpenControlMap(){
-        _controlMapMenu.SetActive(true);
+        // _controlMapMenu.SetActive(true);
         _isControlMap = true;
         IsSetting = true;
+
+        selectedButton = TabManager.instance.selectButtonHandler.buttonSelected.buttonPage[0];
+        EventSystem.current.SetSelectedGameObject(selectedButton);
     }
 
     private void OpenControlDisplay(){
         // _controlDisplayMenu.SetActive(true);
         _isControlDisplay = true;
+        IsSetting = true;
+
+        selectedButton = TabManager.instance.selectButtonHandler.buttonSelected.buttonPage[0];
+        EventSystem.current.SetSelectedGameObject(selectedButton);
 
         // EventSystem.current.SetSelectedGameObject(_firstButtonCD);
     }
@@ -164,19 +198,29 @@ public class SettingsManager : MonoBehaviour
         // _controlAudioMenu.SetActive(true);
         _isControlAudio = true;
 
+        IsSetting = true;
+        
+        selectedButton = TabManager.instance.selectButtonHandler.buttonSelected.buttonPage[0];
+        EventSystem.current.SetSelectedGameObject(selectedButton);
         // EventSystem.current.SetSelectedGameObject(_firstButtonCA);
     }
     private void CloseControlMap(){
         // _controlMapMenu.SetActive(false);
+        IsSetting = false;
         _isControlMap = false;
         Debug.Log("hai");
+        SelectButton(2);
     }
     private void CloseControlDisplay(){
         // _controlDisplayMenu.SetActive(false);
         _isControlDisplay = false;
+        IsSetting = false;
+        SelectButton(1);
     }
     public void CloseControlAudio(){
         // _controlAudioMenu.SetActive(false);
+        IsSetting = false;
         _isControlAudio = false;
+        SelectButton(0);
     }
 }

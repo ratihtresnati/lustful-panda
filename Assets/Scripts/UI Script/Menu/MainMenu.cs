@@ -72,13 +72,14 @@ public class MainMenu : MonoBehaviour
             }
         }
 
-        // Debug.Log(_selectedButton );
+        Debug.Log(_isSetting);
 
 
         if(InputManager.instance.PauseInput && _isSetting == true)
         {
             settingGameObject.SetActive(false);
             _selectedButton = sceneButtons[0].button.gameObject;
+            EventSystem.current.SetSelectedGameObject(_selectedButton);
         }
     }
 
