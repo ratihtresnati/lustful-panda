@@ -96,6 +96,9 @@ public class conditionalObjectInteract : MonoBehaviour
             // }
             // InteractDoor();
         break;
+        case 3: //final door
+            Destroy(gameObject);
+        break;
         }
         Destroy(_taskItem);
         Destroy(_dialogAsset);
