@@ -30,7 +30,19 @@ public class TabManager : MonoBehaviour
 
             for (int i = handlers.Length - 1; i >= 0; i--)
             {
-                if (handlers[i].gameObject.name != "Settings Menu")
+                if(FindObjectOfType<MainMenu>() != null)
+                {
+                    if(FindObjectOfType<MainMenu>().IsSetting == true)
+                    {
+                        if (handlers[i].gameObject.name != "MainMenu")
+                        {
+                            selectButtonHandler = handlers[i - 1];
+                            break; 
+                        }
+                    } 
+                }
+                
+                if (FindObjectOfType<MainMenu>() == null && handlers[i].gameObject.name != "Settings Menu")
                 {
                     selectButtonHandler = handlers[i];
                     break; 

@@ -55,6 +55,7 @@ public class SettingsManager : MonoBehaviour
         if(InputManager.instance.ResumeInput && IsSetting == false)
         {
             PauseManager.instance.CloseSettingMenu();
+            AudioManager.Instance.Play("OpenMenu");
         }
 
         selectButtonHandler.SelectButton();
@@ -78,8 +79,10 @@ public class SettingsManager : MonoBehaviour
         {
             if (InputManager.instance.ButtonClickInput)
             {
+                AudioManager.Instance.Play("ButtonClick");
                 if (selectedButton.gameObject.name == "Audio Button")
                 {  
+                    OpenControlAudio();
                     Debug.Log("hai");
                 }
 
@@ -91,6 +94,7 @@ public class SettingsManager : MonoBehaviour
 
                 if (selectedButton.gameObject.name == "Display Button")
                 {  
+                    OpenControlDisplay();
                     Debug.Log("hai");
                 }
             } 
@@ -98,24 +102,27 @@ public class SettingsManager : MonoBehaviour
         
         if(_isControlAudio == true && IsSetting == true)
         {
-            if(InputManager.instance.ResumeInput)
+            if(InputManager.instance.ResumeInput || InputManager.instance.PauseInput)
             {
+                AudioManager.Instance.Play("OpenMenu");
                 CloseControlAudio();
             }                
         }
 
         if(_isControlDisplay == true && IsSetting == true)
         {
-            if(InputManager.instance.ResumeInput)
+            if(InputManager.instance.ResumeInput || InputManager.instance.PauseInput)
             {
+                AudioManager.Instance.Play("OpenMenu");
                 CloseControlDisplay();
             }                
         }
 
         if(_isControlMap == true && IsSetting == true)
         {
-            if(InputManager.instance.ResumeInput)
+            if(InputManager.instance.ResumeInput || InputManager.instance.PauseInput)
             {
+                AudioManager.Instance.Play("OpenMenu");
                 CloseControlMap();
             }                
         }
