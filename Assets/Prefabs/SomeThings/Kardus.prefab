@@ -252,6 +252,9 @@ PrefabInstance:
       addedObject: {fileID: 8632935047334710093}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 109b832cc1fde4844af6c2f7f693b736, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 2829902449539724115}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 109b832cc1fde4844af6c2f7f693b736, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 5157038468341663204}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 109b832cc1fde4844af6c2f7f693b736, type: 3}
       insertIndex: -1
@@ -311,6 +314,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!208 &2829902449539724115
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5779884919375115164}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.50200003, y: 0.509, z: 0.51600003}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0, y: 0.509, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!65 &5157038468341663204
 BoxCollider:
   m_ObjectHideFlags: 0

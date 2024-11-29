@@ -57,7 +57,10 @@ public class conditionalObjectInteract : MonoBehaviour
             }
             else if(_questDoor == true)
             {
-                _dialogAsset.SetActive(false);
+                if(_dialogAsset != null)
+                {
+                    _dialogAsset.SetActive(false);
+                }
             }
         
     }
@@ -78,7 +81,11 @@ public class conditionalObjectInteract : MonoBehaviour
 
         if(_questDoor == true)
         {
-            ShowQuestDoorDialog();
+            if(_dialogAsset != null)
+            {
+                ShowQuestDoorDialog(); 
+            }
+            
         }
     }
 
@@ -134,9 +141,12 @@ public class conditionalObjectInteract : MonoBehaviour
         {
             _itemRequireOutline.ApplyOutline(true);
         }   
-                    
-        _dialogAsset.transform.position = _parentPosition.PositionParent().position + _dialogPosition;
-        _dialogAsset.SetActive(true);
+
+        if(_dialogAsset != null)
+        {
+            _dialogAsset.transform.position = _parentPosition.PositionParent().position + _dialogPosition;
+            _dialogAsset.SetActive(true);
+        }
                     // QuestManager.instance.NextQuest();
 
         if(_questDoor == true)
