@@ -34,20 +34,31 @@ public class SaveSystemJSON : MonoBehaviour
     
     public void LoadGame()
     {
-       
-        if (File.Exists(saveFilePath))
+        string path = Application.persistentDataPath + "/savegame.json";
+        if (File.Exists(path))
         {
-            string json = File.ReadAllText(saveFilePath);
+            string json = File.ReadAllText(path);
+
+            
             SaveData data = JsonUtility.FromJson<SaveData>(json);
 
             
-            player.position = new Vector3(data.playerX, data.playerY, data.playerZ);
+            GameObject panda = GameObject.Find("Player");
+            if (panda != null)
+            {
+                
+                panda.transform.position = new Vector3(data.playerX, data.playerY, data.playerZ);
 
-            Debug.Log("Game Loaded! Data: " + json);
+                Debug.Log("Game Loaded! Panda position: " + panda.transform.position);
+            }
+            else
+            {
+                Debug.LogError("Panda object not found in scene!");
+            }
         }
         else
         {
-            Debug.LogWarning("No save file found at: " + saveFilePath);
+            Debug.LogError("Save file not found at " + path);
         }
     }
 }
