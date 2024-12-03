@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     public GameObject box;
 
     public bool InBox;
+    public bool PickHT;
     public bool GameOver;
     public bool PlayerSee;
     public bool IsCatch = false;
@@ -67,12 +68,13 @@ public class PlayerController : MonoBehaviour
    
     void Update()
     {
+        Debug.Log(_ySpeed);
         StartCoroutine(HanddleGameOver());
         //HanddleGameOver();
 
         if (!IsCatch)
         {
-
+           
             HanddleMovements();
 
             TransformBox();
@@ -81,7 +83,7 @@ public class PlayerController : MonoBehaviour
                 {
                     if (!IsRooling)
                     {
-                        if (!IsJump)
+                        if (_characterController.isGrounded)
                         {
                             if (_velocity.magnitude != 0) StartCoroutine(Rolling());
                         }
@@ -129,7 +131,7 @@ public class PlayerController : MonoBehaviour
         if (GameOver)
         {
             transform.gameObject.layer = 9;
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.1f);
             rb.isKinematic = true;
             _velocity.y = 0;
             IsCatch = true;
@@ -175,6 +177,12 @@ public class PlayerController : MonoBehaviour
             }
 
         }
+
+        else if (PickHT)
+        {
+            transform.gameObject.layer = 16;
+        }
+
         else
         {
             panda.SetActive(true);
@@ -195,24 +203,27 @@ public class PlayerController : MonoBehaviour
 
         Move = new Vector3(_inputVector.x, 0, _inputVector.y);
 
-        if (IsRun && Stamina > 0)
-        {
-            _speed = _runSpeed;
-                Stamina -= RunCost * Time.deltaTime;
-                if (Stamina < 0)
+            if (IsRun && Stamina > 0)
+            {
+                if (!IsJump)
                 {
-                    Stamina = 0;
-                }
-                else
-                {
-                    StaminaBar.fillAmount = Stamina / MaxStamina;
+                    _speed = _runSpeed;
+                    Stamina -= RunCost * Time.deltaTime;
+                    if (Stamina < 0)
+                    {
+                        Stamina = 0;
+                    }
+                    else
+                    {
+                        StaminaBar.fillAmount = Stamina / MaxStamina;
+                    }
                 }
             }
-        else
-        {
-            IsRun = false;
-            _speed = _walkSpeed;
-        }
+            else
+            {
+                IsRun = false;
+                _speed = _walkSpeed;
+            }
 
         magnitude = Mathf.Clamp01(Move.magnitude) * _speed;
         Move.Normalize();
@@ -269,16 +280,19 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
 
-        IsRooling = true;
         gameObject.tag = "PandaRolling";
         float timer = 0;
         while (timer < _rollTimer) {
+            IsRooling = true;
             float _rollSpeed = _rollCurve.Evaluate(timer);
             Vector3 dir = (transform.forward * _rollSpeed);
             _characterController.Move(dir * Time.deltaTime);
             timer += Time.deltaTime;
             yield return null;
         }
+
+        IsRooling = true;
+        yield return new WaitForSeconds(0.1f);
         IsRooling = false;
     }
 
@@ -289,7 +303,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(_jumpDelayDuration);
         
         _ySpeed = _jumpSpeed;
-        while (_ySpeed > -0.05) {
+        while (_ySpeed > 0) {
             IsJump = true;
 
             yield return null;

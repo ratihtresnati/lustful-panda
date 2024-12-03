@@ -71,7 +71,7 @@ public class NPCPandaStateController : MonoBehaviour
                     if (_velocity > _idleTime)
                     {   
                         VelocityReset();
-                        _currentState = NPCPanda.UpSit;
+                        StartCoroutine(SitToUpSitCoroutine());
                     }
                 }
                 else if (_isIdleWithTime == true)
@@ -137,20 +137,29 @@ public class NPCPandaStateController : MonoBehaviour
                 _animator.SetFloat("speed", _agent.velocity.magnitude);
 
                 float distance = Vector3.Distance(_targetMove.position, transform.position);
-                if(distance < maxDistance + 0.5f)
-                {
-                    //rotation
-                    Quaternion tr = Quaternion.Euler(0, _targetRotation, 0);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, tr, Time.deltaTime * _rotationSpeed);
 
-                    if (Mathf.Abs(transform.rotation.eulerAngles.y - tr.eulerAngles.y) < 0.001f)
-                    {
-                        _isQuest = false;
-                        _currentState = NPCPanda.Sit;
-                    }
+                if(distance < maxDistance)
+                {
+                    StartCoroutine(Rotation());
                 }
                 break;
         }
+    }
+
+    private IEnumerator Rotation()
+    {
+        yield return new WaitForSeconds(1f);
+
+        //rotation
+        Quaternion tr = Quaternion.Euler(0, _targetRotation, 0);
+        transform.rotation = Quaternion.Slerp(transform.rotation, tr, Time.deltaTime * _rotationSpeed);
+
+        if (Mathf.Abs(transform.rotation.eulerAngles.y - tr.eulerAngles.y) < 0.001f)
+        {
+            _isQuest = false;
+            _currentState = NPCPanda.Sit;
+        }
+                
     }
 
     private void RandomIdles()
@@ -175,6 +184,12 @@ public class NPCPandaStateController : MonoBehaviour
     private void VelocityCounting()
     {
         _velocity += Time.deltaTime * _acceleration;
+    }
+
+    private IEnumerator SitToUpSitCoroutine()
+    {
+        yield return new WaitForSeconds(1f); 
+        _currentState = NPCPanda.UpSit;
     }
 }
 
