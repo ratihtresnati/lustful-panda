@@ -21,7 +21,7 @@ public class DebugQuestLog : MonoBehaviour
 
     void Start()
     {
-        AddQuests(5); 
+        // AddQuests(4); 
     }
 
     private QuestSystem getNext(int i)
@@ -45,7 +45,7 @@ public class DebugQuestLog : MonoBehaviour
 
     private void AddQuests(int iter)
     {
-        for (int i = 0; i < iter; i++)
+        for (int i = 1; i < iter; i++)
         {
             QuestLog.AddQuest(getNext(i));
         }

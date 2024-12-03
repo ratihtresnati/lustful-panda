@@ -12,10 +12,10 @@ public class UIQuestLog : MonoBehaviour
     public RectTransform questDescription;
     public TMP_Text questNameText;
     public TMP_Text questDescriptionText;
-    public TMP_Text questGoldRewardText;
-    public TMP_Text questExpRewardText;
-    public TMP_Text questObjectiveText;
-    public RectTransform rewardsContent;
+    // public TMP_Text questGoldRewardText;
+    // public TMP_Text questExpRewardText;
+    // public TMP_Text questObjectiveText;
+    // public RectTransform rewardsContent;
 
     private GameObject questLogObject;
     private Button[] questButtons;
@@ -140,7 +140,7 @@ public class UIQuestLog : MonoBehaviour
             return; // Hindari akses ke tombol null
         }
 
-        questButton.image.color = active ? Color.green : new Color(0, 0, 0, 0);
+        questButton.image.color = active ? new Color(0.7f, 0.6f, 0.4f) : new Color(0, 0, 0, 0);
     }
 
     private void QuestPress(Button questButton) {
