@@ -11,11 +11,9 @@ public class ControlDisplay : MonoBehaviour
     {
         Screen.fullScreen = isFullscreen;
 
-        // Simpan status fullscreen ke PlayerPrefs
         PlayerPrefs.SetInt("IsFullscreen", isFullscreen ? 1 : 0);
         PlayerPrefs.Save();
 
-        // Sinkronkan toggle setelah perubahan
         SyncFullscreenToggle();
     }
 
@@ -32,11 +30,9 @@ public class ControlDisplay : MonoBehaviour
     {
         resolutions = Screen.resolutions;
         filteredResolutions = new List<Resolution>();
-
         resolutionDropdown.ClearOptions();
+        //refreshrate?
         currentRefreshRate = (float)Screen.currentResolution.refreshRateRatio.value;
-
-        // Sinkronkan toggle fullscreen terlebih dahulu
         SyncFullscreenToggle();
 
         for (int i = 0; i < resolutions.Length; i++)
@@ -44,8 +40,6 @@ public class ControlDisplay : MonoBehaviour
             if ((float)resolutions[i].refreshRateRatio.value == currentRefreshRate)
             {
                 float aspectRatio = (float)resolutions[i].width / resolutions[i].height;
-
-                // Hanya masukkan resolusi dengan aspect ratio 16:9
                 if (Mathf.Approximately(aspectRatio, 16f / 9f))
                 {
                     filteredResolutions.Add(resolutions[i]);
@@ -69,11 +63,8 @@ public class ControlDisplay : MonoBehaviour
         }
 
         resolutionDropdown.AddOptions(options);
-
-        // Ambil resolusi dari PlayerPrefs jika ada
         currentResolutionIndex = PlayerPrefs.GetInt("ResolutionIndex", 0);
 
-        // Pastikan indeks valid
         if (currentResolutionIndex < 0 || currentResolutionIndex >= filteredResolutions.Count)
         {
             currentResolutionIndex = 0;
@@ -82,10 +73,8 @@ public class ControlDisplay : MonoBehaviour
         resolutionDropdown.value = currentResolutionIndex;
         resolutionDropdown.RefreshShownValue();
 
-        // Atur resolusi berdasarkan pengaturan yang tersimpan
         SetResolution(currentResolutionIndex);
 
-        // Tambahkan listener ke toggle
         if (fullscreenToggle != null)
         {
             fullscreenToggle.onValueChanged.AddListener(SetFullScreen);
@@ -98,7 +87,6 @@ public class ControlDisplay : MonoBehaviour
         bool isFullscreen = Screen.fullScreen;
         Screen.SetResolution(resolution.width, resolution.height, isFullscreen);
 
-        // Simpan pengaturan ke PlayerPrefs
         PlayerPrefs.SetInt("ResolutionIndex", resolutionIndex);
         PlayerPrefs.Save();
     }
@@ -107,7 +95,6 @@ public class ControlDisplay : MonoBehaviour
     {
         if (fullscreenToggle != null)
         {
-            // Ambil status fullscreen dari PlayerPrefs atau gunakan default Screen.fullScreen
             bool isFullscreen = PlayerPrefs.GetInt("IsFullscreen", Screen.fullScreen ? 1 : 0) == 1;
             fullscreenToggle.isOn = isFullscreen;
         }
@@ -148,4 +135,3 @@ public class ControlDisplay : MonoBehaviour
         }
     }
 }
-
