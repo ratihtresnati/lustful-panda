@@ -22,6 +22,7 @@ public class SaveSystemJSON : MonoBehaviour
             playerX = player.position.x,
             playerY = player.position.y,
             playerZ = player.position.z,
+            sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name 
         };
 
         
@@ -34,31 +35,41 @@ public class SaveSystemJSON : MonoBehaviour
     
     public void LoadGame()
     {
-        string path = Application.persistentDataPath + "/savegame.json";
-        if (File.Exists(path))
+        if (File.Exists(saveFilePath))
         {
-            string json = File.ReadAllText(path);
-
-            
+            string json = File.ReadAllText(saveFilePath);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
 
             
-            GameObject panda = GameObject.Find("Player");
-            if (panda != null)
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != data.sceneName)
             {
-                
-                panda.transform.position = new Vector3(data.playerX, data.playerY, data.playerZ);
+                UnityEngine.SceneManagement.SceneManager.LoadScene(data.sceneName);
+            }
 
-                Debug.Log("Game Loaded! Panda position: " + panda.transform.position);
-            }
-            else
-            {
-                Debug.LogError("Panda object not found in scene!");
-            }
+            
+            StartCoroutine(SetPlayerPositionAfterSceneLoad(data));
         }
         else
         {
-            Debug.LogError("Save file not found at " + path);
+            Debug.LogError("Save file not found at " + saveFilePath);
+        }
+    }
+
+    private IEnumerator SetPlayerPositionAfterSceneLoad(SaveData data)
+    {
+        
+        yield return new WaitUntil(() => UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == data.sceneName);
+
+        
+        GameObject panda = GameObject.Find("Player");
+        if (panda != null)
+        {
+            panda.transform.position = new Vector3(data.playerX, data.playerY, data.playerZ);
+            Debug.Log("Game Loaded! Panda position: " + panda.transform.position);
+        }
+        else
+        {
+            Debug.LogError("Player object not found in the new scene!");
         }
     }
 }
