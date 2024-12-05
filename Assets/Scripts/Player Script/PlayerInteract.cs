@@ -64,7 +64,7 @@ public class PlayerInteract : MonoBehaviour
             } 
         }
 
-        Debug.Log(_isPlayed);
+        // Debug.Log(_isPlayed);
 
         if (_findInteractable == false) 
         {
