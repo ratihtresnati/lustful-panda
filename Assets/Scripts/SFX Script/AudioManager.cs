@@ -12,10 +12,7 @@ public class AudioManager : MonoBehaviour
     public SoundClip[] soundClips;
 
     public AudioClip BGM;
-    public AudioClip BGMChase;
     public AudioClip SFXButtonClick;
-    
-    private bool _played = false;
 
     private void Awake()
     {
@@ -43,28 +40,6 @@ public class AudioManager : MonoBehaviour
     }
     
     private void Start() {
-        PlayBGM();
-    }
-
-    public void StopBGM()
-    {
-        musicSource.Stop();
-    }
-
-    public void Chase()
-    {
-        musicSource.clip = BGMChase;
-
-        if(_played == false) 
-        {
-            _played = true;
-            musicSource.Play();
-        }
-    }
-
-    public void PlayBGM()
-    {
-        _played = false;
         musicSource.clip = BGM;
         musicSource.Play();
     }
