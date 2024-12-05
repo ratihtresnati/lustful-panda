@@ -1,20 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+using System.Collections; 
+using System.IO; 
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.IO;
 
 public class SaveSystemJSON : MonoBehaviour
 {
+    public static SaveSystemJSON Instance; 
     public Transform player; 
     private string saveFilePath;
 
-    private void Start()
+    private void Awake()
     {
         
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); 
+        }
+        else
+        {
+            Destroy(gameObject); 
+        }
+    }
+
+    private void Start()
+    {
         saveFilePath = Application.persistentDataPath + "/savegame.json";
     }
 
-   
     public void SaveGame()
     {
         SaveData data = new SaveData
@@ -22,17 +36,15 @@ public class SaveSystemJSON : MonoBehaviour
             playerX = player.position.x,
             playerY = player.position.y,
             playerZ = player.position.z,
-            sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name 
+            sceneName = SceneManager.GetActiveScene().name 
         };
 
-        
-        string json = JsonUtility.ToJson(data, true); // true = format indented (rapi)
+        string json = JsonUtility.ToJson(data, true); 
         File.WriteAllText(saveFilePath, json);
 
-        Debug.Log("Game Saved! File path: " + saveFilePath);
+        Debug.Log($"Game Saved! Panda position: {player.position.x}, {player.position.y}, {player.position.z}, Scene: {SceneManager.GetActiveScene().name}");
     }
 
-    
     public void LoadGame()
     {
         if (File.Exists(saveFilePath))
@@ -40,14 +52,13 @@ public class SaveSystemJSON : MonoBehaviour
             string json = File.ReadAllText(saveFilePath);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
 
-            
-            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != data.sceneName)
-            {
-                UnityEngine.SceneManagement.SceneManager.LoadScene(data.sceneName);
-            }
+            Debug.Log($"Loaded Data: {json}");
 
             
-            StartCoroutine(SetPlayerPositionAfterSceneLoad(data));
+            SceneManager.LoadScene(data.sceneName); 
+
+           
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
@@ -55,17 +66,24 @@ public class SaveSystemJSON : MonoBehaviour
         }
     }
 
-    private IEnumerator SetPlayerPositionAfterSceneLoad(SaveData data)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        
-        yield return new WaitUntil(() => UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == data.sceneName);
+        SceneManager.sceneLoaded -= OnSceneLoaded; 
+        StartCoroutine(SetPlayerPositionAfterSceneLoad());
+    }
 
-        
-        GameObject panda = GameObject.Find("Player");
+    private IEnumerator SetPlayerPositionAfterSceneLoad()
+    {
+        yield return new WaitForSeconds(0.1f); 
+
+        string json = File.ReadAllText(saveFilePath);
+        SaveData data = JsonUtility.FromJson<SaveData>(json);
+
+        GameObject panda = GameObject.FindWithTag("PandaMC");
         if (panda != null)
         {
             panda.transform.position = new Vector3(data.playerX, data.playerY, data.playerZ);
-            Debug.Log("Game Loaded! Panda position: " + panda.transform.position);
+            Debug.Log($"Panda moved to saved position: {panda.transform.position}");
         }
         else
         {

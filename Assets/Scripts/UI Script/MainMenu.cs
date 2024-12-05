@@ -1,7 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using DG.Tweening;
@@ -27,11 +26,14 @@ public class MainMenu : MonoBehaviour
     public bool IsMouse { get; set; }
 
     AudioManager audioManager;
+    private SaveSystemJSON saveSystem; // Tambahkan referensi untuk SaveSystemJSON
 
     private void Awake() 
     {
         audioManager = GameObject.FindObjectOfType<AudioManager>();
+        saveSystem = GameObject.FindObjectOfType<SaveSystemJSON>(); // Temukan SaveSystemJSON
     }
+
     void Start()
     {
         InitializeButtonSelect();
@@ -41,7 +43,6 @@ public class MainMenu : MonoBehaviour
 
     private void Update()
     {
-        //harus pake ini, karna kalo engga dia bakalan auto klik button padahal dia masih loading  
         if (Loading.instance.IsLoading == true) 
         {
             _resetTimer += Time.deltaTime; 
@@ -52,7 +53,7 @@ public class MainMenu : MonoBehaviour
 
         foreach (SceneButton sceneButton in sceneButtons)
         {
-            int index = sceneButton.sceneIndex; // Simpan indeks lokal untuk digunakan dalam lambda
+            int index = sceneButton.sceneIndex; 
 
             UpdateButtonSelected(sceneButton);
 
@@ -76,6 +77,7 @@ public class MainMenu : MonoBehaviour
                     }
                     else
                     {
+                        // Load Scene dan load data jika ada
                         LoadScene(index);
                         Debug.Log("load");
                     }
@@ -136,14 +138,25 @@ public class MainMenu : MonoBehaviour
             DOTween.Kill(sceneButton.button.gameObject.transform);
         }
 
-        menuGameObject.SetActive(false);   
-        Loading.instance.LoadScene(sceneIndex);
-    }
+        menuGameObject.SetActive(false);
 
+        // Muat game data sebelum scene dimuat
+        if (saveSystem != null)
+        {
+            Debug.Log("Load game data.");
+            saveSystem.LoadGame();  // Muat game
+        }
+        else
+        {
+            Debug.LogError("SaveSystemJSON not found! Cannot load saved data.");
+        }
+
+        Loading.instance.LoadScene(sceneIndex); // Memuat scene setelah data game dimuat
+    }
     // Fungsi untuk keluar dari aplikasi
     public void ExitApplication()
     {
         Application.Quit();
-        Debug.Log("Application has been exited."); // Hanya berfungsi di editor atau build yang didukung
+        Debug.Log("Application has been exited.");
     }
 }
