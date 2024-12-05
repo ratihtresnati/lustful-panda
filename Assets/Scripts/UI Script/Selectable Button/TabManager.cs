@@ -4,14 +4,61 @@ using UnityEngine;
 
 public class TabManager : MonoBehaviour
 {
+    public static TabManager instance;
     public SelectButtonHandler selectButtonHandler;
+
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        } 
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Update()
     {
-        selectButtonHandler = FindObjectOfType<SelectButtonHandler>();
-        if (selectButtonHandler != null)
+        SelectButtonHandler[] handlers = FindObjectsOfType<SelectButtonHandler>();
+
+        if (handlers.Length > 0)
         {
-            Debug.Log(" " + selectButtonHandler.gameObject.name);
+            selectButtonHandler = null;
+
+            for (int i = handlers.Length - 1; i >= 0; i--)
+            {
+                if(FindObjectOfType<MainMenu>() != null)
+                {
+                    if(FindObjectOfType<MainMenu>().IsSetting == true)
+                    {
+                        if (handlers[i].gameObject.name != "MainMenu" && handlers[i].gameObject.name != "Settings Menu")
+                        {
+                            selectButtonHandler = handlers[i];
+                            break; 
+                        }
+                    }else
+                    {
+                        if(handlers[i].gameObject.name == "MainMenu")
+                        {
+                            selectButtonHandler = handlers[i]; 
+                            break;
+                        }
+                    }
+                }
+                
+                if (FindObjectOfType<MainMenu>() == null && handlers[i].gameObject.name != "Settings Menu")
+                {
+                    selectButtonHandler = handlers[i];
+                    break; 
+                }
+            }
+        }
+        else
+        {
+            selectButtonHandler = null;
         }
     }
 }

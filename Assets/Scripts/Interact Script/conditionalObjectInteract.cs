@@ -97,11 +97,11 @@ public class conditionalObjectInteract : MonoBehaviour
             InteractDoor();
         break;
         case 2: //final door
-            // BoxCollider boxCollider = GetComponent<BoxCollider>();
-            // if (boxCollider != null){
-            //     boxCollider.enabled = false;
-            // }
-            // InteractDoor();
+             BoxCollider boxCollider = GetComponent<BoxCollider>();
+            if (boxCollider != null){
+                boxCollider.enabled = false;
+            }
+            InteractDoor();
         break;
         case 3: //final door
             Destroy(gameObject);

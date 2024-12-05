@@ -25,8 +25,6 @@ public class MenuManager : MonoBehaviour
     public float scaleMultiplier = 1.1f;
     public float animationDuration = 0.2f;
 
-    AudioManager audioManager;
-
     private void Awake()
     {
         _mainMenu = GameObject.Find("PauseMenu");
