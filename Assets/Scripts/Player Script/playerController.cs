@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
    
     void Update()
     {
-        Debug.Log(_ySpeed);
+        // Debug.Log(_ySpeed);
         StartCoroutine(HanddleGameOver());
         //HanddleGameOver();
 
