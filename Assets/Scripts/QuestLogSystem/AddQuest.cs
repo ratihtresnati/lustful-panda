@@ -75,17 +75,33 @@ public class AddQuest : MonoBehaviour
         // }
 
         
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.M))
         {
             // OnMonsterKilled(1);
             // OnItemCollected(1);
-            SceneTrigger(3);
+            SceneTrigger(2);
             Debug.Log("collect");
         }
 
-        if (Input.GetKeyDown(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.N))
         {
-            SceneTrigger(2);
+            SceneTrigger(3);
+            // OnMonsterKilled(1);
+            // OnItemCollected(3);
+            Debug.Log("kill");
+        }
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            SceneTrigger(4);
+            // OnMonsterKilled(1);
+            // OnItemCollected(3);
+            Debug.Log("kill");
+        }
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            SceneTrigger(5);
             // OnMonsterKilled(1);
             // OnItemCollected(3);
             Debug.Log("kill");

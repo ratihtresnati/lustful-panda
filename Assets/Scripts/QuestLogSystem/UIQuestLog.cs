@@ -49,6 +49,10 @@ public class UIQuestLog : MonoBehaviour
         HandleSizeChange(active.Count + completed.Count);
         UpdateQuestNames(active, completed);
         UpdateSelectedQuest();
+
+        for (int i = 0; i < completed.Count; i++) {
+            MoveCompletedQuestButtonToTop(i + active.Count);
+        }
     }
 
     private void HandleSizeChange(int newCount) {
@@ -139,6 +143,8 @@ public class UIQuestLog : MonoBehaviour
         }
     }
 
+    
+
     private Color GetColorFromCategory(short category) {
         return Color.black; // Anda dapat membuat logika kategori warna di sini
     }
@@ -171,6 +177,18 @@ public class UIQuestLog : MonoBehaviour
         if (currentQuest.completed == true)
         {
             ShowQuestDetails(currentQuest);
+        }
+    }
+
+    public void MoveCompletedQuestButtonToTop(int index) {
+        if (index < 0 || index >= questButtons.Length) {
+            Debug.LogWarning("Index out of range, cannot move button.");
+            return;
+        }
+
+        Button completedButton = questButtons[index];
+        if (completedButton != null) {
+            completedButton.transform.SetAsFirstSibling();
         }
     }
 

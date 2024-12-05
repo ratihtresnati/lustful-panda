@@ -38,14 +38,9 @@ public static class QuestLog
         questList.Add(quest);
         // HandleOwnedItems(quest);
         onQuestChange.Invoke(questList, completedQuest);
+        
+        // onQuestChange.Invoke(completedQuest, questList);
     }
-
-    // public static void CheckQuestObjective(QuestSystem.Objective.Type type, int id) {
-    //     foreach (QuestSystem quest in questList)
-    //         if (quest.objective.CheckObjectiveCompleted(type, id))
-    //             CompleteQuest(quest);
-    //     onQuestChange.Invoke(questList, completedQuest);
-    // }
     
     public static void CheckQuestObjective(QuestSystem.Objective.Type type, int id) 
     {
@@ -56,36 +51,20 @@ public static class QuestLog
             {
                 CompleteQuest(quest);
                 quest.completed = true;
+                // UIQuestLoginstance.MoveCompletedQuestButtonToTop(quest);
             }
         }
+
         onQuestChange.Invoke(questList, completedQuest);
+        // onQuestChange.Invoke(completedQuest, questList);
     }
-
-    // public static void CheckQuestObjective(QuestSystem.Objective.Type type, int id) 
-    // {
-    //     for (int i = questList.Count - 1; i >= 0; i++) 
-    //     {
-    //         QuestSystem quest = questList[i];
-    //         if (type == QuestSystem.Objective.Type.trigger && quest.objective.type == QuestSystem.Objective.Type.trigger) 
-    //         {
-    //             if (quest.objective.CheckTriggerObjectiveCompleted()) 
-    //             {
-    //                 CompleteQuest(quest);
-    //             }
-    //         }
-    //         else if (quest.objective.CheckObjectiveCompleted(type, id)) 
-    //         {
-    //             CompleteQuest(quest);
-    //         }
-    //     }
-    //     onQuestChange.Invoke(questList, completedQuest);
-    // }
-
     public static void CompleteQuest(QuestSystem quest) {
-        questList.Remove(quest);
         completedQuest.Add(quest);
+        questList.Remove(quest);
         
         onQuestChange.Invoke(questList, completedQuest);
+        
+        // onQuestChange.Invoke(completedQuest, questList);
     }
 
     private static void HandleOwnedItems(QuestSystem quest) {
@@ -100,7 +79,6 @@ public static class QuestLog
         if (quest.objective.type != QuestSystem.Objective.Type.trigger)
             return;
 
-        // quest.objective.AddScriptable();
         quest.objective.UpdateStageNum(1);
         int amount = 0; 
         if (quest.objective.CheckTriggerObjectiveCompleted(amount))
