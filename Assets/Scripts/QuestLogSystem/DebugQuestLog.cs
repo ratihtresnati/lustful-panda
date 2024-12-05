@@ -28,17 +28,15 @@ public class DebugQuestLog : MonoBehaviour
     {
         QuestSystem q = new QuestSystem();
         q.questName = "Stage " + i;
-
-        
         q.questDescription = questDescriptions[i % questDescriptions.Length];
 
-        q.expReward = Random.Range(100, 1000);
-        q.goldReward = Random.Range(5, 20);
+        // q.expReward = Random.Range(100, 1000);
+        // q.goldReward = Random.Range(5, 20);
         q.questCategory = 0;
 
         q.objective = new QuestSystem.Objective();
         q.objective.type = (QuestSystem.Objective.Type)Random.Range(0, 3); 
-        q.objective.amount = Random.Range(2, 10);
+        // q.objective.amount = Random.Range(2, 10);
 
         return q;
     }

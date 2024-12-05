@@ -11,22 +11,75 @@ public static class QuestLog
     public static event OnQuestChange onQuestChange;
 
     public static void Initialize() {
-        questList = new List<QuestSystem>();
         completedQuest = new List<QuestSystem>();
+        questList = new List<QuestSystem>();
+        // completedQuest = new List<QuestSystem>();
     }
+
+    // public static bool HasQuest(QuestSystem quest)
+    // {
+    //     return questList.Contains(quest);
+    // }
 
     public static void AddQuest(QuestSystem quest) {
+
+        if (quest == null)
+        {
+            Debug.LogError("Cannot add null QuestSystem to QuestLog.");
+            return;
+        }
+
+        if (questList == null)
+        {
+            Debug.LogError("QuestList is null. Please initialize it.");
+            return;
+        }
+
         questList.Add(quest);
-        HandleOwnedItems(quest);
+        // HandleOwnedItems(quest);
         onQuestChange.Invoke(questList, completedQuest);
     }
 
-    public static void CheckQuestObjective(QuestSystem.Objective.Type type, int id) {
-        foreach (QuestSystem quest in questList)
-            if (quest.objective.CheckObjectiveCompleted(type, id))
+    // public static void CheckQuestObjective(QuestSystem.Objective.Type type, int id) {
+    //     foreach (QuestSystem quest in questList)
+    //         if (quest.objective.CheckObjectiveCompleted(type, id))
+    //             CompleteQuest(quest);
+    //     onQuestChange.Invoke(questList, completedQuest);
+    // }
+    
+    public static void CheckQuestObjective(QuestSystem.Objective.Type type, int id) 
+    {
+        for (int i = questList.Count - 1; i >= 0; i--) 
+        {
+            QuestSystem quest = questList[i];
+            if (quest.objective.CheckObjectiveCompleted(type, id)) 
+            {
                 CompleteQuest(quest);
+                quest.completed = true;
+            }
+        }
         onQuestChange.Invoke(questList, completedQuest);
     }
+
+    // public static void CheckQuestObjective(QuestSystem.Objective.Type type, int id) 
+    // {
+    //     for (int i = questList.Count - 1; i >= 0; i++) 
+    //     {
+    //         QuestSystem quest = questList[i];
+    //         if (type == QuestSystem.Objective.Type.trigger && quest.objective.type == QuestSystem.Objective.Type.trigger) 
+    //         {
+    //             if (quest.objective.CheckTriggerObjectiveCompleted()) 
+    //             {
+    //                 CompleteQuest(quest);
+    //             }
+    //         }
+    //         else if (quest.objective.CheckObjectiveCompleted(type, id)) 
+    //         {
+    //             CompleteQuest(quest);
+    //         }
+    //     }
+    //     onQuestChange.Invoke(questList, completedQuest);
+    // }
 
     public static void CompleteQuest(QuestSystem quest) {
         questList.Remove(quest);
@@ -43,10 +96,26 @@ public static class QuestLog
             CompleteQuest(quest);
     }
 
+    private static void StageChanged(QuestSystem quest) {
+        if (quest.objective.type != QuestSystem.Objective.Type.trigger)
+            return;
+
+        // quest.objective.AddScriptable();
+        quest.objective.UpdateStageNum(1);
+        int amount = 0; 
+        if (quest.objective.CheckTriggerObjectiveCompleted(amount))
+            CompleteQuest(quest);
+    }
+
     public static QuestSystem getQuestNo(int index) {
         if (index < questList.Count)
             return questList[index];
         else
             return completedQuest[index - questList.Count];
+    }
+
+    public static List<QuestSystem> GetActiveQuests() 
+    {
+        return new List<QuestSystem>(questList); 
     }
 }

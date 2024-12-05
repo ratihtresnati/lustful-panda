@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
 public class UIQuestLog : MonoBehaviour
 {
+    public static UIQuestLog instance;
     public GameObject questInListPrefab;
     public RectTransform listTransform;
 
@@ -18,12 +20,23 @@ public class UIQuestLog : MonoBehaviour
     // public RectTransform rewardsContent;
 
     private GameObject questLogObject;
-    private Button[] questButtons;
+    [SerializeField] private Button[] questButtons;
 
-    private QuestSystem currentQuest;
-    private int previousButtonIndex;
+    [SerializeField] private QuestSystem currentQuest;
+    private int previousButtonIndex = 0;
+    
+    private SelectButtonHandler selectButtonHandler;
+    private ButtonSelected buttonSelected;
+    GameObject selectedButton;
+    private bool _isPause = false;
+    private bool isSelectedButtonFound = false;
 
     private void Awake() {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        
         questLogObject = transform.GetChild(0).gameObject;
         questButtons = new Button[0];
         QuestLog.Initialize();
@@ -31,19 +44,11 @@ public class UIQuestLog : MonoBehaviour
         UpdateQuests(new List<QuestSystem>(), new List<QuestSystem>());
     }
 
-    private void Update() {
-        if (Input.GetKeyDown(KeyCode.Q))
-            questLogObject.SetActive(!questLogObject.activeSelf);
-        if (questLogObject.activeSelf && Input.GetKeyDown(KeyCode.Escape))
-            questLogObject.SetActive(false);
-    }
-
-    public void UpdateQuests(List<QuestSystem> active, List<QuestSystem> completed) {
+    private void UpdateQuests(List<QuestSystem> active, List<QuestSystem> completed) {
         CleanupDestroyedButtons(); // Membersihkan tombol yang telah dihancurkan
         HandleSizeChange(active.Count + completed.Count);
         UpdateQuestNames(active, completed);
         UpdateSelectedQuest();
-        ShowQuestDetails(currentQuest);
     }
 
     private void HandleSizeChange(int newCount) {
@@ -96,7 +101,7 @@ public class UIQuestLog : MonoBehaviour
         }
     }
 
-   private void ShowQuestDetails(QuestSystem quest) {
+   public void ShowQuestDetails(QuestSystem quest) {
         questDescription.gameObject.SetActive(quest != null);
         if (quest == null)
             return;
@@ -109,9 +114,13 @@ public class UIQuestLog : MonoBehaviour
 
     private Button InitializeButton(int index) {
         Button button = Instantiate(questInListPrefab, listTransform).GetComponent<Button>();
+        button.gameObject.name = "00" + (index + 1);
         button.image.rectTransform.sizeDelta = new Vector2(0, 80);
         button.image.rectTransform.anchoredPosition = new Vector2(0, -80 * index);
         button.onClick.AddListener(delegate { QuestPress(button); });
+
+        button.gameObject.AddComponent<SelectableObject>();
+
         return button;
     }
 
@@ -124,7 +133,7 @@ public class UIQuestLog : MonoBehaviour
         TMP_Text text = questButton.GetComponentInChildren<TMP_Text>();
         if (text != null) {
             text.text = quest.questName; // Perbarui nama quest pada tombol
-            text.color = isCompleted ? Color.gray : GetColorFromCategory(quest.questCategory); // Update warna jika quest sudah selesai
+            text.color = isCompleted || quest.completed ? GetColorFromCategory(quest.questCategory) : Color.gray ;// GetColorFromCategory(quest.questCategory); // Update warna jika quest sudah selesai
         } else {
             Debug.LogWarning("Text component not found in quest button.");
         }
@@ -140,10 +149,10 @@ public class UIQuestLog : MonoBehaviour
             return; // Hindari akses ke tombol null
         }
 
-        questButton.image.color = active ? new Color(0.7f, 0.6f, 0.4f) : new Color(0, 0, 0, 0);
+        // questButton.image.color = active ? new Color(0.7f, 0.6f, 0.4f) : new Color(0, 0, 0, 0);
     }
 
-    private void QuestPress(Button questButton) {
+    public void QuestPress(Button questButton) {
         if (questButton == null) {
             Debug.LogWarning("Quest button is null or destroyed, skipping quest press.");
             return; // Hindari error jika tombol null
@@ -158,7 +167,11 @@ public class UIQuestLog : MonoBehaviour
         }
 
         currentQuest = QuestLog.getQuestNo(previousButtonIndex);
-        ShowQuestDetails(currentQuest);
+
+        if (currentQuest.completed == true)
+        {
+            ShowQuestDetails(currentQuest);
+        }
     }
 
     private void CleanupDestroyedButtons() {
@@ -168,5 +181,18 @@ public class UIQuestLog : MonoBehaviour
                 questButtons[i] = null; // Pastikan referensinya null
             }
         }
+    }
+
+    public ButtonQuest[] GetQuestInfos()
+    {
+        List<ButtonQuest> buttonQuest = new List<ButtonQuest>();
+        foreach (Button button in questButtons)
+        {
+            if (button != null)
+            {
+                buttonQuest.Add(button.gameObject.GetComponent<ButtonQuest>());
+            }
+        }
+        return buttonQuest.ToArray();
     }
 }

@@ -7,23 +7,29 @@ using UnityEngine.EventSystems;
 
 public class StatisticManager : MonoBehaviour
 {
+    public static StatisticManager instance;
     public ButtonZooKeeper[] npc;
     [SerializeField] private GameObject _statisticCanvas;
-    private int _num;
+    // private int _num;
+    private bool _isPause = false;
 
     GameObject selectedButton;
     private SelectButtonHandler selectButtonHandler;
     private ButtonSelected buttonSelected;
 
-    void Start()
+    private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+
         selectButtonHandler = gameObject.GetComponent<SelectButtonHandler>();
         buttonSelected = gameObject.GetComponent<ButtonSelected>(); 
     }
 
     private void Update()
     {
-
         selectButtonHandler.SelectButton();
 
         if(selectButtonHandler.SelectedButton != null)
@@ -54,11 +60,28 @@ public class StatisticManager : MonoBehaviour
             {
                 npc[i].ShowData();
             }
-            // else
-            // {
-            //     npc[i].Button(false);
-            // }
         }
+    }
+
+    public void FirstButton()
+    {
+        SelectButton(0);
+    }
+
+    public void OpenMenu()
+    {
+        FirstButton();
+        _isPause = true;
+        Time.timeScale = 0f;
+        InputManager.PlayerInput.SwitchCurrentActionMap("UI");
+    }
+
+    public void CloseMenu()
+    {
+        _isPause = false;
+        Time.timeScale = 1f;
+        InputManager.PlayerInput.SwitchCurrentActionMap("Player");
+        EventSystem.current.SetSelectedGameObject(null);
     }
 
 }

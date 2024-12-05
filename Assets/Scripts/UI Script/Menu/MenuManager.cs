@@ -11,6 +11,9 @@ public class MenuManager : MonoBehaviour
 {
     [SerializeField] private GameObject _mainMenu;
     [SerializeField] private GameObject _settingMenu;
+    [SerializeField] private GameObject _zooKeeperMenu;
+    [SerializeField] private GameObject _questMenu;
+
     [SerializeField] private GameObject _resumeButton;
     [SerializeField] private GameObject _settingButton;
     [SerializeField] private GameObject _backButton;
@@ -18,6 +21,9 @@ public class MenuManager : MonoBehaviour
     private GameObject[] pauseButtons;
     
     [SerializeField] private bool _isPaused;
+    
+    [SerializeField] private bool _menuOpen = false;
+    [SerializeField] private bool _openQuest = false;
     public bool IsMouse { get; set; }
     private Mouse _mouse;
 
@@ -38,6 +44,8 @@ public class MenuManager : MonoBehaviour
     {
         _mainMenu.SetActive(false);
         _settingMenu.SetActive(false);
+        _zooKeeperMenu.SetActive(false);
+        _questMenu.SetActive(false);
     }
 
     private void Update()
@@ -46,12 +54,39 @@ public class MenuManager : MonoBehaviour
         
         if(InputManager.instance.PauseInput)
         {
-            if(!PauseManager.instance.IsPause)
+            if(_menuOpen != true)
             {
-                Pause();
-                AudioManager.Instance.Play("OpenMenu");
+                if(!PauseManager.instance.IsPause)
+                {
+                    Pause();
+                    AudioManager.Instance.Play("OpenMenu");
+                }
             }
         }
+        
+        if ((_menuOpen == true || _openQuest == true) && InputManager.instance.CloseMenu)
+        {
+            _menuOpen = false;
+            _openQuest = false;
+            CloseMenu();
+        }
+        
+        if(_menuOpen == false && InputManager.instance.MenuInfo)
+        {
+            _menuOpen = true;
+            OpenMenuInfo();
+        } 
+
+        if(InputManager.instance.MenuQuest && _openQuest == false)
+        {
+            _openQuest = true;
+            // UIQuestLog.instance.FirstButton();
+            OpenMenuQuest();
+        }
+
+        //  Debug.Log("hai" + UIQuestLog.instance.quest.Length + "" );
+
+        // Debug.Log("Current action map: " + InputManager.PlayerInput.currentActionMap.name);
     }
 
     public void Pause()
@@ -64,5 +99,24 @@ public class MenuManager : MonoBehaviour
     {
         _mainMenu.SetActive(true);
         _settingMenu.SetActive(false);
+    }
+
+    public void OpenMenuInfo()
+    {
+        StatisticManager.instance.OpenMenu();
+        _zooKeeperMenu.SetActive(true);
+    }
+    public void OpenMenuQuest()
+    {
+        QuestManager.instance.OpenMenu();
+        _questMenu.SetActive(true);
+    }
+
+    public void CloseMenu()
+    {
+        StatisticManager.instance.CloseMenu();
+        QuestManager.instance.CloseMenu();
+        _zooKeeperMenu.SetActive(false);
+        _questMenu.SetActive(false);
     }
 }

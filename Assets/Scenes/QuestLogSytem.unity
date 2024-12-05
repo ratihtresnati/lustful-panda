@@ -1120,7 +1120,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1180002311}
   - component: {fileID: 1180002310}
+  - component: {fileID: 1180002315}
   - component: {fileID: 1180002312}
+  - component: {fileID: 1180002314}
+  - component: {fileID: 1180002313}
   m_Layer: 0
   m_Name: QuestLog
   m_TagString: Untagged
@@ -1145,10 +1148,16 @@ MonoBehaviour:
   questDescription: {fileID: 843458076}
   questNameText: {fileID: 147074799}
   questDescriptionText: {fileID: 501919023}
-  questGoldRewardText: {fileID: 0}
-  questExpRewardText: {fileID: 0}
-  questObjectiveText: {fileID: 0}
-  rewardsContent: {fileID: 0}
+  questButtons: []
+  currentQuest:
+    questName: 
+    questDescription: 
+    objective:
+      objectiveId: 0
+      amount: 0
+      currentAmount: 0
+      type: 0
+    questCategory: 0
 --- !u!4 &1180002311
 Transform:
   m_ObjectHideFlags: 0
@@ -1174,9 +1183,68 @@ MonoBehaviour:
   m_GameObject: {fileID: 1180002309}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b53ed037dc55483489abbd754c47c875, type: 3}
+  m_Script: {fileID: 11500000, guid: 867d32f48b88a974cb58c1eb5fd4766e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialQuests:
+  - questName: raksjf
+    questDescription: kdjfks
+    objective:
+      objectiveId: 1
+      amount: 3
+      currentAmount: 0
+      type: 2
+    questCategory: 0
+  quest:
+  - {fileID: 11400000, guid: fcb9dcf40fda63b47a0907e368f1babf, type: 2}
+  - {fileID: 11400000, guid: 5d62ca3b612aacb4891ab516bbcdc56d, type: 2}
+  - {fileID: 11400000, guid: fa569a6d63b353643a81a95efee3a53d, type: 2}
+  - {fileID: 11400000, guid: b105c78e1d0a0064d961841e750863bb, type: 2}
+  - {fileID: 11400000, guid: e95ad3289743b7d45a9d085d5e5f5392, type: 2}
+--- !u!114 &1180002313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180002309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85a95aa0934bba14aa66525692ed8ca5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scaleMultiplier: 1.1
+  animationDuration: 0.2
+  buttonSelected: {fileID: 0}
+  _lastButton: {fileID: 0}
+--- !u!114 &1180002314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180002309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08db5febdb0d89248b6ecb2fb5b77c90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  namePage: 
+  buttonPage: []
+--- !u!114 &1180002315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180002309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff248623e06f66b40baace547077d963, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  quest: []
+  _questCanvas: {fileID: 0}
 --- !u!1 &1247540015
 GameObject:
   m_ObjectHideFlags: 0
