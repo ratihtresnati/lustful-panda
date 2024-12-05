@@ -10,9 +10,15 @@ public class ControlDisplay : MonoBehaviour
     public void SetFullScreen(bool isFullscreen)
     {
         Screen.fullScreen = isFullscreen;
+
+        PlayerPrefs.SetInt("IsFullscreen", isFullscreen ? 1 : 0);
+        PlayerPrefs.Save();
+
+        SyncFullscreenToggle();
     }
 
     [SerializeField] private TMP_Dropdown resolutionDropdown;
+    [SerializeField] private Toggle fullscreenToggle;
 
     private Resolution[] resolutions;
     private List<Resolution> filteredResolutions;
@@ -24,15 +30,20 @@ public class ControlDisplay : MonoBehaviour
     {
         resolutions = Screen.resolutions;
         filteredResolutions = new List<Resolution>();
-
         resolutionDropdown.ClearOptions();
+        //refreshrate?
         currentRefreshRate = (float)Screen.currentResolution.refreshRateRatio.value;
+        SyncFullscreenToggle();
 
         for (int i = 0; i < resolutions.Length; i++)
         {
             if ((float)resolutions[i].refreshRateRatio.value == currentRefreshRate)
             {
-                filteredResolutions.Add(resolutions[i]);
+                float aspectRatio = (float)resolutions[i].width / resolutions[i].height;
+                if (Mathf.Approximately(aspectRatio, 16f / 9f))
+                {
+                    filteredResolutions.Add(resolutions[i]);
+                }
             }
         }
 
@@ -47,28 +58,46 @@ public class ControlDisplay : MonoBehaviour
         List<string> options = new List<string>();
         for (int i = 0; i < filteredResolutions.Count; i++)
         {
-            // Hanya menampilkan resolusi dalam format "Width x Height"
             string resolutionOption = filteredResolutions[i].width + "x" + filteredResolutions[i].height;
             options.Add(resolutionOption);
-
-            if (filteredResolutions[i].width == Screen.width &&
-                filteredResolutions[i].height == Screen.height &&
-                (float)filteredResolutions[i].refreshRateRatio.value == currentRefreshRate)
-            {
-                currentResolutionIndex = i;
-            }
         }
 
         resolutionDropdown.AddOptions(options);
-        resolutionDropdown.value = currentResolutionIndex = 0;
+        currentResolutionIndex = PlayerPrefs.GetInt("ResolutionIndex", 0);
+
+        if (currentResolutionIndex < 0 || currentResolutionIndex >= filteredResolutions.Count)
+        {
+            currentResolutionIndex = 0;
+        }
+
+        resolutionDropdown.value = currentResolutionIndex;
         resolutionDropdown.RefreshShownValue();
+
         SetResolution(currentResolutionIndex);
+
+        if (fullscreenToggle != null)
+        {
+            fullscreenToggle.onValueChanged.AddListener(SetFullScreen);
+        }
     }
 
     public void SetResolution(int resolutionIndex)
     {
         Resolution resolution = filteredResolutions[resolutionIndex];
-        Screen.SetResolution(resolution.width, resolution.height, true);
+        bool isFullscreen = Screen.fullScreen;
+        Screen.SetResolution(resolution.width, resolution.height, isFullscreen);
+
+        PlayerPrefs.SetInt("ResolutionIndex", resolutionIndex);
+        PlayerPrefs.Save();
+    }
+
+    private void SyncFullscreenToggle()
+    {
+        if (fullscreenToggle != null)
+        {
+            bool isFullscreen = PlayerPrefs.GetInt("IsFullscreen", Screen.fullScreen ? 1 : 0) == 1;
+            fullscreenToggle.isOn = isFullscreen;
+        }
     }
 
     public static ControlDisplay instance;
@@ -78,10 +107,8 @@ public class ControlDisplay : MonoBehaviour
     {
         if (InputManager.instance.ButtonClickInput && SettingsManager.instance.IsSetting == true)
         {
-            // EventSystem.current.SetSelectedGameObject(SettingsManager.instance._firstButtonCD);
-            
             GameObject selectedButton = EventSystem.current.currentSelectedGameObject;
-            
+
             if (selectedButton != null)
             {
                 int index = System.Array.IndexOf(Inputs, selectedButton);
