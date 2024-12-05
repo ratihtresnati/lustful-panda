@@ -119,7 +119,11 @@ public class AIPatrollingHT: MonoBehaviour
 
     void Chase()
     {
-        PlayerController.InBox = false;
+        if (PlayerController.InBox)
+        {
+            StartCoroutine(BecomeBox());
+        }
+
         GetComponent<NavMeshAgent>().speed = RunSpeed;
         agent.SetDestination(player.position);
 
@@ -144,7 +148,7 @@ public class AIPatrollingHT: MonoBehaviour
         if (!Sensor.canSeePlayer)
         {
             //idleTimer = 2f;
-
+            PlayerController.PlayerSee = false;
             currentState = ZooKeeperState.AfterChase;
 
         }
@@ -207,6 +211,13 @@ public class AIPatrollingHT: MonoBehaviour
         {
             currentState = ZooKeeperState.Chase;
         }
+    }
+
+    IEnumerator BecomeBox()
+    {
+        PlayerController.SmokeVFX.Play();
+        yield return new WaitForSeconds(0.3f);
+        PlayerController.PlayerSee = true;
     }
 
     public enum ZooKeeperState
