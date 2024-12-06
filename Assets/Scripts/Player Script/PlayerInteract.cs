@@ -10,7 +10,7 @@ public class PlayerInteract : MonoBehaviour
     public Rig boxAnim;
     public bool PushBox { get; private set; }
     [SerializeField] private float _pushForce = 5f; // Kekuatan dorongan pada objek
-    [SerializeField] private float _duration = 0.3f;
+    [SerializeField] private float _duration = 2f;
     private Transform _panda; // Referensi ke posisi panda
     private GameObject _currentObject;
     private bool _findInteractable = false;
@@ -64,7 +64,7 @@ public class PlayerInteract : MonoBehaviour
             } 
         }
 
-        Debug.Log(_isPlayed);
+        // Debug.Log(_isPlayed);
 
         if (_findInteractable == false) 
         {

@@ -10,7 +10,7 @@ public class conditionalObjectInteract : MonoBehaviour
     [SerializeField] private float _interactionRadius = 3f;
     [SerializeField] private GameObject _taskItem;
     [SerializeField] private GameObject _dialogAsset;
-    [SerializeField] Vector3 _dialogPosition = new Vector3(0.5f, 2.0f, 0f);
+    [SerializeField] Vector3 _dialogPosition = new Vector3(0f, 2.0f, 0f);
     private GameObject _player;
     private bool _isCarryingTheItem = false;
     private Outline _outlineGameObject;
@@ -20,6 +20,9 @@ public class conditionalObjectInteract : MonoBehaviour
     [SerializeField] private bool _questDoor = false;
     private Rigidbody _rigidbody;
 
+    public bool IsInteract { get; private set; }
+    public bool IsGiveItem { get; private set; }
+
 
     void Start()
     {
@@ -27,12 +30,16 @@ public class conditionalObjectInteract : MonoBehaviour
         _outlineGameObject = gameObject.GetComponent<Outline>();
         _itemRequireOutline = _taskItem.GetComponent<Outline>();
         _parentPosition = gameObject.GetComponent<ParentPosition>();
+
         _rigidbody = GetComponent<Rigidbody>();
 
         if (_dialogAsset != null)
         {
             _dialogAsset.SetActive(false);
         }
+
+        // IsInteract = false;
+        // IsGiveItem = false;
 
         _player = GameObject.Find("Panda Bayik");
     }
@@ -49,33 +56,43 @@ public class conditionalObjectInteract : MonoBehaviour
         }
         // Menghitung jarak pemain n objek
         float distance = Vector3.Distance(_player.transform.position, transform.position);
-        if (distance <= _interactionRadius && InputManager.instance.InteractInput)
+        
+            if (distance <= _interactionRadius)
+            {
+                Interaction();
+            }
+            else if(_questDoor == true)
+            {
+                if(_dialogAsset != null)
+                {
+                    _dialogAsset.SetActive(false);
+                }
+            }
+        
+    }
+
+    private void Interaction()
+    {
+        if(InputManager.instance.InteractInput)
         {
+            // if (isCarryingTheItem == true && IsInteract == true)
             if (_isCarryingTheItem)
             {
                 Interact();
             }
-            else
+            else if (_isCarryingTheItem == false)
             {
-                if(_itemRequireOutline != null)
-                {
-                    _itemRequireOutline.ApplyOutline(true);
-                }   
-                
-                _dialogAsset.transform.position = _parentPosition.PositionParent().position + _dialogPosition;
-                _dialogAsset.SetActive(true);
-                // QuestManager.instance.NextQuest();
-
-                if(_questDoor == true)
-                {
-                    AudioManager.Instance.Play("BukaKunci");
-                }
-                else
-                {
-                    AudioManager.Instance.Play("NPCPanda");
-                }
-
+                ShowDialogAfterInteract();
             }
+        }
+
+        if(_questDoor == true)
+        {
+            if(_dialogAsset != null)
+            {
+                ShowQuestDoorDialog(); 
+            }
+            
         }
     }
 
@@ -83,32 +100,82 @@ public class conditionalObjectInteract : MonoBehaviour
     {
         switch (_questNum) {
         case 1: //npc panda
-            NPCPandaStateController npcPanda = GetComponent<NPCPandaStateController>();
-            if (npcPanda != null)
-            {
-                npcPanda._isComplete = true;
-                // QuestManager.instance.NextQuest();
-                _outlineGameObject.ApplyOutline(false);
-            }
-            else
-            {
-                Debug.LogWarning("NPCPandaStateController tidak ditemukan pada objek ini.");
-            }
-
-            if(_questDoor == true)
-            {
-                _rigidbody.isKinematic = false;
-                AudioManager.Instance.Play("BukaPintu");
-            }
+            InteractNPC();
+            InteractDoor();
         break;
         case 2: //final door
-            BoxCollider boxCollider = GetComponent<BoxCollider>();
+             BoxCollider boxCollider = GetComponent<BoxCollider>();
             if (boxCollider != null){
                 boxCollider.enabled = false;
             }
+            InteractDoor();
+        break;
+        case 3: //final door
+            Destroy(gameObject);
         break;
         }
         Destroy(_taskItem);
         Destroy(_dialogAsset);
     }
+
+    private void InteractNPC()
+    {
+        // IsGiveItem = true;
+        NPCPandaStateController npcPanda = GetComponent<NPCPandaStateController>();
+        if (npcPanda != null)
+        {
+            npcPanda._isComplete = true;
+                // QuestManager.instance.NextQuest();
+            _outlineGameObject.ApplyOutline(false);
+        }
+        else
+        {
+            Debug.LogWarning("NPCPandaStateController tidak ditemukan pada objek ini.");
+        }
+    }
+
+    private void InteractDoor()
+    {
+        if(_questDoor == true)
+        {
+            _rigidbody.isKinematic = false;
+            AudioManager.Instance.Play("BukaPintu");
+        }
+    }
+
+    private void ShowDialogAfterInteract()
+    {
+        if(_itemRequireOutline != null)
+        {
+            _itemRequireOutline.ApplyOutline(true);
+        }   
+
+        if(_dialogAsset != null)
+        {
+            _dialogAsset.transform.position = _parentPosition.PositionParent().position + _dialogPosition;
+            _dialogAsset.SetActive(true);
+        }
+                    // QuestManager.instance.NextQuest();
+
+        if(_questDoor == true)
+        {
+            AudioManager.Instance.Play("BukaKunci");
+        }
+        else
+        {
+            AudioManager.Instance.Play("NPCPanda");
+        }
+    }
+
+    private void ShowQuestDoorDialog()
+    {
+        var position = _player.GetComponent<ParentPosition>();
+        _dialogAsset.transform.position = position.PositionParent().position + _dialogPosition;
+        _dialogAsset.transform.SetParent(position.PositionParent());
+        _dialogAsset.SetActive(true);
+
+        Debug.Log("ya allah");
+    }
+    
+    
 }
