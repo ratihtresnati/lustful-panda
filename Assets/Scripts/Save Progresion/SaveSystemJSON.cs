@@ -7,8 +7,8 @@ using System.IO;
 public class SaveSystemJSON : MonoBehaviour
 {
     public static SaveSystemJSON Instance; 
-    public Transform player; 
     private string saveFilePath;
+    private Transform player;
 
     private void Awake()
     {
@@ -27,10 +27,14 @@ public class SaveSystemJSON : MonoBehaviour
     private void Start()
     {
         saveFilePath = Application.persistentDataPath + "/savegame.json";
+        Debug.Log("" + saveFilePath);
     }
 
     public void SaveGame()
     {
+        GameObject panda = GameObject.FindWithTag("PandaMC");
+
+        player = panda.transform;
         SaveData data = new SaveData
         {
             playerX = player.position.x,
@@ -89,5 +93,10 @@ public class SaveSystemJSON : MonoBehaviour
         {
             Debug.LogError("Player object not found in the new scene!");
         }
+    }
+
+    public bool CheckData()
+    {
+        return saveFilePath != null;
     }
 }
