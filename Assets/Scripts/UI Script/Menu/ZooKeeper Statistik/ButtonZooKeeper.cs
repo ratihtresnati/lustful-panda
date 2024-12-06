@@ -14,9 +14,9 @@ public class ButtonZooKeeper : MonoBehaviour
     public void Button(bool on)
     {
         buttonOn.SetActive(on);
-        Tab.SetActive(on);
+        // Tab.SetActive(on);
         buttonOff.SetActive(!on); 
-        ShowData();
+        // ShowData();
     }
 
     public void ShowData()

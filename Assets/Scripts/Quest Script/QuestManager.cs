@@ -51,8 +51,6 @@ public class QuestManager : MonoBehaviour
                 break;
             }
         }
-
-        // if()
     }
 
     public void SelectButton(int index)
@@ -60,44 +58,28 @@ public class QuestManager : MonoBehaviour
         selectedButton = quest[index].gameObject;
         EventSystem.current.SetSelectedGameObject(quest[index].gameObject);
 
-        for (int i = 0; i <= quest.Length; i++)
+        for (int i = 0; i < quest.Length; i++)
         {
+            // if (i == index)
+            // {
+            //     // Debug.Log(i + " " + currentStage);
+            //     UIQuestLog.instance.QuestPress(quest[index].button);
+            // }
+
             if (i == index)
             {
-                // Debug.Log(i + " " + currentStage);
                 UIQuestLog.instance.QuestPress(quest[index].button);
+                quest[i].Button(true);
+            }
+            else
+            {
+                if(quest[index] != null)
+                {
+                    quest[i].Button(false);
+                }
             }
         }
-
-        // var selectableQuests = GetSelectableQuests().ToList();
-
-        // selectedButton = quest[index].gameObject;
-        // EventSystem.current.SetSelectedGameObject(quest[index].gameObject);
-
-        // foreach (var item in selectableQuests)
-        // {
-        //     Debug.Log(item);
-        // }
-
-
-        // Debug.Log(selectableQuests.Count);
-
-        // for (int i = 0; i <= quest.Length; i++)
-        // {
-        //     if (i == index)
-        //     {
-        //         if (index < selectableQuests.Count)
-        //         {
-        //             UIQuestLog.instance.QuestPress(quest[index].button);
-        //         }
-        //     }
-        // }
     }
-
-    // private IEnumerable<ButtonQuest> GetSelectableQuests()
-    // {
-    //     return quest.Where(q => q.scriptableQuest != null && q.scriptableQuest.idQuest == currentStage);
-    // }
 
     public void FirstButton()
     {
@@ -134,8 +116,6 @@ public class QuestManager : MonoBehaviour
                 this.buttonSelected.buttonPage.Add(questButton.gameObject);
             }
         }
-
-        // FirstButton();
     }
 
 #region 
