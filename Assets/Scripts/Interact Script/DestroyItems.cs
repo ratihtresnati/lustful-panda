@@ -40,7 +40,6 @@ public class DestroyItems : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("PandaRolling"))
         {
-            AudioManager.Instance.Play("HancurBox");
             Destroy();
         }
     }

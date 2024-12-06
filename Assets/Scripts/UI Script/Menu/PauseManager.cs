@@ -52,20 +52,22 @@ public class PauseManager : MonoBehaviour
             {
                 if(InputManager.instance.ButtonClickInput)
                 {
-                    AudioManager.Instance.Play("ButtonClick");
                     if (_selectedButton.gameObject.name == "Settings Button")
                     {    
                         OnSettingPress();
+                        AudioManager.Instance.Play("ButtonClick");
                     }
                     
                     if (_selectedButton.gameObject.name == "Resume Button") 
                     {
                         OnResumePress();
+                        AudioManager.Instance.Play("ButtonClick");
                     }
                         
                     if (_selectedButton.gameObject.name == "Back Button")
                     {
                         OnBackPress();
+                        AudioManager.Instance.Play("ButtonClick");
                     }
                 }
             }

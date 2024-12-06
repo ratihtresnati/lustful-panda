@@ -8,7 +8,7 @@ using DG.Tweening;
 
 public class MainMenu : MonoBehaviour
 {
-    public SelectButtonHandler selectButtonHandler;
+    private SelectButtonHandler selectButtonHandler;
     private ButtonSelected buttonSelected;
     public GameObject settingGameObject;
     private bool exit = false;
@@ -17,11 +17,14 @@ public class MainMenu : MonoBehaviour
     // Daftar tombol dan scene yang akan dimuat
     public SceneButton[] sceneButtons;
     private GameObject _selectedButton;
-    public bool IsSetting { get; set; }
+    private bool _isSetting;
     public bool IsMouse { get; set; }
+
+    AudioManager audioManager;
 
     private void Awake() 
     {
+        audioManager = GameObject.FindObjectOfType<AudioManager>();
         selectButtonHandler = gameObject.GetComponent<SelectButtonHandler>();
         buttonSelected = gameObject.GetComponent<ButtonSelected>();
     }
@@ -47,7 +50,7 @@ public class MainMenu : MonoBehaviour
             {
                 if (InputManager.instance.ButtonClickInput)
                 {   
-                    AudioManager.Instance.Play("ButtonClick");
+                    audioManager.Play("ButtonClick");
                     if (sceneButton.isExitButton == true)
                     {
                         ExitApplication();
@@ -56,7 +59,7 @@ public class MainMenu : MonoBehaviour
                     }
                     else if (sceneButton.isSettingButton == true)
                     {
-                        IsSetting = true;
+                        _isSetting = true;
                         settingGameObject.SetActive(true);
                         SettingsManager.instance.FirstSelected();
                     }
@@ -69,15 +72,13 @@ public class MainMenu : MonoBehaviour
             }
         }
 
-        Debug.Log(IsSetting);
+        // Debug.Log(_selectedButton );
 
 
-        if(InputManager.instance.PauseInput && SettingsManager.instance.IsSetting == false)
+        if(InputManager.instance.PauseInput && _isSetting == true)
         {
             settingGameObject.SetActive(false);
             _selectedButton = sceneButtons[0].button.gameObject;
-            EventSystem.current.SetSelectedGameObject(_selectedButton);
-            AudioManager.Instance.Play("OpenMenu");
         }
     }
 
