@@ -53,14 +53,20 @@ public class CatchSensor : MonoBehaviour
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMaskCatch))
                 {
                     catchPlayer = true;
-                    PlayerController.GameOver = true;
+                    //PlayerController.GameOver = true;
                 }
                 else
-                    PlayerController.GameOver = false;
+                {
+                    catchPlayer = false;
+                    //PlayerController.GameOver = false;
+                }
             }
 
         }
         else
-            PlayerController.GameOver = false;
+        {
+            catchPlayer = false;
+            //PlayerController.GameOver = false;
+        }
     }
 }
