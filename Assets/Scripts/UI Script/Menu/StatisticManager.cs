@@ -56,9 +56,19 @@ public class StatisticManager : MonoBehaviour
 
         for (int i = 0; i < npc.Length; i++)
         {
+            // if (i == index)
+            // {
+            //     // npc[i].ShowData();
+            // }
+
             if (i == index)
             {
+                npc[i].Button(true);
                 npc[i].ShowData();
+            }
+            else
+            {
+                npc[i].Button(false);
             }
         }
     }
