@@ -18,12 +18,13 @@ public class MainMenu : MonoBehaviour
     public SceneButton[] sceneButtons;
     private GameObject _selectedButton;
     public bool IsSetting { get; set; }
-    public bool IsMouse { get; set; }
+    private SaveSystemJSON saveSystem;
 
     private void Awake() 
     {
         selectButtonHandler = gameObject.GetComponent<SelectButtonHandler>();
         buttonSelected = gameObject.GetComponent<ButtonSelected>();
+        saveSystem = GameObject.FindObjectOfType<SaveSystemJSON>(); // Temukan SaveSystemJSON
     }
     void Start()
     {

@@ -8,6 +8,7 @@ public class Loading : MonoBehaviour
     public static Loading instance;
     public GameObject LoadingScreen;
     public bool IsLoading;
+    private SaveSystemJSON saveSystem; // Tambahkan referensi untuk SaveSystemJSON
     private void Awake()
     {
         if(instance == null)
@@ -21,10 +22,22 @@ public class Loading : MonoBehaviour
         }
 
         Debug.Log(IsLoading);
+        saveSystem = GameObject.FindObjectOfType<SaveSystemJSON>(); // Temukan SaveSystemJSON
     }
 
     public void LoadScene (int i )
     {
+        // Muat game data sebelum scene dimuat
+        if (saveSystem != null)
+        {
+            Debug.Log("Load game data.");
+            saveSystem.LoadGame();  // Muat game
+        }
+        else
+        {
+            Debug.LogError("SaveSystemJSON not found! Cannot load saved data.");
+        }
+
         // InputManager.PlayerInput.enabled = false; 
         IsLoading = true;
         StartCoroutine(LoadSceneAsync(i));
