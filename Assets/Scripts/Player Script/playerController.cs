@@ -1,155 +1,332 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Xml.Serialization;
+//using UnityEditor.ShaderGraph.Drawing;
+
+// using System.Xml.Serialization;
+// using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
-public class playerController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
+
+
+    [Header("Movement")]
+    [SerializeField] private float _jumpSpeed = 3f;
+    [SerializeField] private float _walkSpeed = 3f;
+    [SerializeField] private float _runSpeed = 6f;
+    [SerializeField] private float _rotationSpeed = 90f;
+    private float _rollTimer;
+    private float _speed;
+    private float _ySpeed;
+    [SerializeField] private float _jumpDelayDuration = 0.2f;
+    [SerializeField] AnimationCurve _rollCurve;
+    private CharacterController _characterController;
+
+    public GameObject panda;
+    public GameObject box;
+
+    public bool InBox;
+    public bool PickHT;
+    public bool GameOver;
+    public bool PlayerSee;
+    public bool IsCatch = false;
+    
     [SerializeField]
-    private float _jumpSpeed = 3f;
+    private Vector2 _inputVector;
+    private Vector3 _velocity;
+    public Vector3 Move { get; private set; }
+    public bool IsJump { get; private set; }
+    public bool IsRun { get; private set; }
+    public bool IsRooling { get; private set; }
+    public bool isGrounded { get; private set; }
 
-    [SerializeField]
-    private float _walkSpeed = 3f;
+    public Image StaminaBar;
+    public float Stamina, MaxStamina;
+    public float RunCost;
+    public float ChargeRate;
+    public float magnitude;
 
-    [SerializeField]
-    private float _runSpeed = 6f;
+    Rigidbody rb;
 
-    [SerializeField]
-    private float _rotationSpeed = 90f;
+    private Coroutine recharge;
 
-    private CharacterController characterController;
-
-    private float ySpeed;
-
-    private bool _isRun;
-
-
-    public CharacterAnimatorController CharacterAnimatorController;
-    [SerializeField] private float _animeSmoothSpeed = 2;
-    [SerializeField] private float _animHorizontal, _animVertical;
+    public ParticleSystem SmokeVFX;
 
     void Start()
     {
-        characterController = GetComponent<CharacterController>();
-        CharacterAnimatorController = GetComponent<CharacterAnimatorController>();
-    }
+        _characterController = GetComponent<CharacterController>();
+       // GameOver = FindObjectOfType<GameOver>();
+        panda = GameObject.Find("Panda");
 
-    // Update is called once per frame
+        rb = GetComponent<Rigidbody>();
+
+        Keyframe roll_lastFrame = _rollCurve[_rollCurve.length - 1];
+        _rollTimer = roll_lastFrame.time;
+
+        SmokeVFX.playbackSpeed = 1.5f;
+        SmokeVFX.Stop();
+    }
+   
     void Update()
     {
-        float hInput = Input.GetAxis("Horizontal");
-        float vInput = Input.GetAxis("Vertical");
+        // Debug.Log(_ySpeed);
+        StartCoroutine(HanddleGameOver());
+        //HanddleGameOver();
 
-        float speed = _walkSpeed;
-
-        //Vector3 rotation = new Vector3(0, hInput);
-        
-
-        //Run
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (!IsCatch)
         {
-            speed = _runSpeed;
-    
-            _isRun = true;
-        }
+           
+            HanddleMovements();
 
-        Vector3 move = new Vector3(hInput, 0, vInput);
-        float magnitude = Mathf.Clamp01(move.magnitude) * speed;
-        move.Normalize();
+            TransformBox();
 
-        ySpeed += Physics.gravity.y * Time.deltaTime;
-
-        //Jump
-        if (characterController.isGrounded)
-        {
-            jump();
-        }
-
-        Vector3 velocity = move * magnitude;
-
-        velocity.y = ySpeed;
-
-
-        characterController.Move(velocity * Time.deltaTime);
-
-        if (move != Vector3.zero)
-        {
-            Quaternion toRotation = Quaternion.LookRotation(move, Vector3.up);
-
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, _rotationSpeed * Time.deltaTime);
-        }
-
-        AnimateWalkRun(new Vector3(hInput, vInput, 0));
-        AnimateJump();
-
-        if(Input.GetKey(KeyCode.E))
-        {
-            ySpeed = 0;
-            vInput = 0;
-            hInput = 0;
-            speed = 0;
-        }
-
-        //transform.Rotate(rotation * Time.deltaTime * _rotationSpeed);
-    }
-
-    private void jump()
-    {
-        ySpeed = 0f;
-
-        if (Input.GetKey(KeyCode.Space))
-        {
-            ySpeed = _jumpSpeed;
-            _isJump = true;
-        }
-    }
-
-#region animation
-    private JumpState _currentState = JumpState.Grounded;
-    private bool _isJump = false;
-
-    private void AnimateJump()
-    {
-        switch (_currentState)
-        {
-            case JumpState.Grounded:
-                if(_isJump == true)
+                if (InputManager.instance.RollInput)
                 {
-                    _currentState = JumpState.Jump;
+                    if (!IsRooling)
+                    {
+                        if (_characterController.isGrounded)
+                        {
+                            if (_velocity.magnitude != 0) StartCoroutine(Rolling());
+                        }
+                    }
                 }
-                break;
-            case JumpState.Jump:
-                CharacterAnimatorController.Jump();
-                _currentState = JumpState.Falling;
-                Debug.Log("jump");
-                break;
-            case JumpState.Falling:
-                CharacterAnimatorController.Land();
-                _isJump = false;
-                _currentState = JumpState.Grounded;
-                Debug.Log("tidak jump");
-                break;
+
+            if (!InBox)
+            {
+
+                //moveset
+                if (InputManager.instance.JumpInput)
+                {
+                    if (!IsRooling)
+                    {
+                        if (_characterController.isGrounded && !IsJump)
+                        {
+                            StartCoroutine(Jumping());
+                        }
+                    }
+                }
+
+
+                if (InputManager.instance.RunPressed)
+                {
+                    IsRun = true;
+                    if (recharge != null)
+                    {
+                        StopCoroutine(recharge);
+                    }
+                }
+
+                if (InputManager.instance.RunReleased)
+                {
+                    IsRun = false;
+                    recharge = StartCoroutine(RechargeStamina());
+                }
+            }
+        }
+        //Debug.Log(ySpeed);
+        // Debug.Log(_IsJump);
+    }
+
+    IEnumerator HanddleGameOver()
+    {
+        if (GameOver)
+        {
+            transform.gameObject.layer = 9;
+            yield return new WaitForSeconds(0.1f);
+            rb.isKinematic = true;
+            _velocity.y = 0;
+            IsCatch = true;
         }
     }
 
-    private void AnimateWalkRun(Vector3 input) 
+    /*
+    private void HanddleGameOver()
     {
-        float multiplier = Input.GetKey(KeyCode.LeftShift) ? 3 : 1.5f;
-        float targetHorizontal = input.x * multiplier;
-        float targetVertical = input.y * multiplier;
+        if (GameOver)
+        {
 
-        _animHorizontal = Mathf.Lerp(_animHorizontal, targetHorizontal, Time.deltaTime * _animeSmoothSpeed);
-        _animVertical = Mathf.Lerp(_animVertical, targetVertical, Time.deltaTime * _animeSmoothSpeed);
-
-        CharacterAnimatorController.WalkSpeed(_animHorizontal, _animVertical);
+            rb.isKinematic = true;
+            _velocity.y = 0;
+            IsCatch = true;
+        }
     }
-#endregion
+    */
+
+    private void TransformBox()
+    {
+
+        // Player ketahuan ketika terlihat Zoo Keeper
+        if (InBox)
+        {
+            if (PlayerSee || IsRooling)
+            {
+                //SmokeVFX.Play();
+                StartCoroutine(BecomeBox());
+            }
+        }
+
+
+        // Ketika sedang dalam kondisi menjadi box
+        if (InBox)
+        {
+            panda.SetActive(false); // objek panda hilang
+            box.SetActive(true); // diganti object kardus
+            transform.gameObject.layer = 0;
+            
+
+            if (magnitude > 0)
+            {
+                transform.gameObject.layer = 10; // layer mask berubah menjadi terget
+            }
+            else
+            {
+                transform.gameObject.layer = 0; // layer mask berubah menjadi default
+            }
+
+        }
+
+        else if (PickHT)
+        {
+            transform.gameObject.layer = 16;
+        }
+
+        
+    }
+
+    IEnumerator BecomeBox()
+    {
+        yield return new WaitForSeconds(0.5f);
+        InBox = false;
+        panda.SetActive(true);
+        box.SetActive(false);
+        transform.gameObject.layer = 10;
+    }
+
+    private void HanddleMovements()
+    {
+        if (!IsRooling)
+        {
+        gameObject.tag = "PandaMC";
+
+        //_inputVector = gameInput.GetMovementControl();
+        _inputVector = InputManager.instance.MoveInput;
+
+        Move = new Vector3(_inputVector.x, 0, _inputVector.y);
+
+            if (IsRun && Stamina > 0)
+            {
+                if (!IsJump)
+                {
+                    _speed = _runSpeed;
+                    Stamina -= RunCost * Time.deltaTime;
+                    if (Stamina < 0)
+                    {
+                        Stamina = 0;
+                    }
+                    else
+                    {
+                        StaminaBar.fillAmount = Stamina / MaxStamina;
+                    }
+                }
+            }
+            else
+            {
+                IsRun = false;
+                _speed = _walkSpeed;
+            }
+
+        magnitude = Mathf.Clamp01(Move.magnitude) * _speed;
+        Move.Normalize();
+
+        _ySpeed += Physics.gravity.y * Time.deltaTime;
+
+        _velocity = Move * magnitude;
+
+        _velocity.y = _ySpeed;
+
+        _characterController.Move(_velocity * Time.deltaTime);
+
+        if (Move != Vector3.zero)
+        {
+            Quaternion toRotation = Quaternion.LookRotation(Move, Vector3.up);
+
+            float rotationStep = _rotationSpeed * Time.deltaTime;
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationStep);
+        }
+
+            if (_characterController.isGrounded)
+            {
+                isGrounded = true;
+                _ySpeed = 0;
+            }
+        }
+    }
+
+    private IEnumerator RechargeStamina()
+    {
+        yield return new WaitForSeconds(1f);
+
+        while (Stamina < MaxStamina)
+        {
+            Stamina += ChargeRate * Time.deltaTime;
+            if (Stamina > MaxStamina)
+            {
+                Stamina = MaxStamina;
+            }
+            else
+            {
+                StaminaBar.fillAmount = Stamina / MaxStamina;
+            }
+            yield return new WaitForSeconds(.1f);
+        }
+    }
+
+
+    IEnumerator Rolling()
+    {
+        //selagi jump dia gak bisa roll
+        if (IsJump == true) 
+        { 
+            yield return null;
+        }
+        if (InBox)
+        {
+            SmokeVFX.Play();
+        }
+
+        gameObject.tag = "PandaRolling";
+        float timer = 0;
+        while (timer < _rollTimer) {
+            IsRooling = true;
+            float _rollSpeed = _rollCurve.Evaluate(timer);
+            Vector3 dir = (transform.forward * _rollSpeed);
+            _characterController.Move(dir * Time.deltaTime);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        IsRooling = true;
+        yield return new WaitForSeconds(0.1f);
+        IsRooling = false;
+    }
+
+    IEnumerator Jumping()
+    {
+        IsJump = true;
+        //pake delay, biar animasi jump jalan dulu sebelum character jump 
+        yield return new WaitForSeconds(_jumpDelayDuration);
+        
+        _ySpeed = _jumpSpeed;
+        while (_ySpeed > 0) {
+            IsJump = true;
+
+            yield return null;
+        }
+        IsJump = false;
+    }
 }
 
-public enum JumpState
-{
-    Grounded,
-    Jump,
-    Falling
-}

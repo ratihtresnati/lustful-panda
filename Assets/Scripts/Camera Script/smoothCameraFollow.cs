@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class smoothCameraFollow : MonoBehaviour
 {
-    private Vector3 _offset;
 
     [SerializeField]
     private Transform target;
+    [SerializeField]
+
+
+    private Vector3 _offset;
 
     private float smoothTime = 0f;
 
     private Vector3 _currentVelocity = Vector3.zero;
 
-        [SerializeField] private Vector3 minValue, maxValue;
+    [SerializeField] 
+    private Vector3 minValue, maxValue;
 
     private void Awake()
     {
@@ -27,5 +31,6 @@ public class smoothCameraFollow : MonoBehaviour
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref _currentVelocity, smoothTime);
         
         transform.position = new Vector3(Mathf.Clamp(targetPosition.x, minValue.x, maxValue.x),Mathf.Clamp(targetPosition.y, minValue.y, maxValue.y),Mathf.Clamp(targetPosition.z, minValue.z, maxValue.z));
+
     }
 }
