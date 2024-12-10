@@ -8,23 +8,23 @@ using DG.Tweening;
 
 public class MainMenu : MonoBehaviour
 {
-    private SelectButtonHandler selectButtonHandler;
+    public SelectButtonHandler selectButtonHandler;
     private ButtonSelected buttonSelected;
     public GameObject settingGameObject;
     private bool exit = false;
+
+    public GameObject MenuData;
+    public GameObject MenuNoData;
 
     
     // Daftar tombol dan scene yang akan dimuat
     public SceneButton[] sceneButtons;
     private GameObject _selectedButton;
-    private bool _isSetting;
-    public bool IsMouse { get; set; }
-
-    AudioManager audioManager;
+    public bool IsSetting { get; set; }
+    private bool hasData = false;
 
     private void Awake() 
     {
-        audioManager = GameObject.FindObjectOfType<AudioManager>();
         selectButtonHandler = gameObject.GetComponent<SelectButtonHandler>();
         buttonSelected = gameObject.GetComponent<ButtonSelected>();
     }
@@ -32,6 +32,22 @@ public class MainMenu : MonoBehaviour
     {
         settingGameObject.SetActive(false);
         selectButtonHandler.FirstButton(buttonSelected);
+
+        if (SaveSystemJSON.Instance.CheckData())
+        {
+            Debug.Log("ada data");
+            MenuData.SetActive(true);
+            MenuNoData.SetActive(false);
+            hasData = true;
+
+        }
+        else
+        {
+            hasData = false;
+            Debug.Log("gak ada");
+            MenuData.SetActive(false);
+            MenuNoData.SetActive(true);
+        }
     }
 
     private void Update()
@@ -50,7 +66,7 @@ public class MainMenu : MonoBehaviour
             {
                 if (InputManager.instance.ButtonClickInput)
                 {   
-                    audioManager.Play("ButtonClick");
+                    AudioManager.Instance.Play("ButtonClick");
                     if (sceneButton.isExitButton == true)
                     {
                         ExitApplication();
@@ -59,9 +75,14 @@ public class MainMenu : MonoBehaviour
                     }
                     else if (sceneButton.isSettingButton == true)
                     {
-                        _isSetting = true;
+                        IsSetting = true;
                         settingGameObject.SetActive(true);
                         SettingsManager.instance.FirstSelected();
+                    }
+                    else if(sceneButton.isNewButton == true)
+                    {
+                        SaveSystemJSON.Instance.DeleteSaveData();
+                        selectButtonHandler.LoadScene(index);
                     }
                     else
                     {
@@ -72,13 +93,21 @@ public class MainMenu : MonoBehaviour
             }
         }
 
-        // Debug.Log(_selectedButton );
+        Debug.Log(IsSetting);
 
+        if(hasData == true)
+        {
+            _selectedButton = sceneButtons[4].button.gameObject;
+            EventSystem.current.SetSelectedGameObject(_selectedButton);
+            hasData = false;
+        }
 
-        if(InputManager.instance.PauseInput && _isSetting == true)
+        if(InputManager.instance.PauseInput && SettingsManager.instance.IsSetting == false)
         {
             settingGameObject.SetActive(false);
             _selectedButton = sceneButtons[0].button.gameObject;
+            EventSystem.current.SetSelectedGameObject(_selectedButton);
+            AudioManager.Instance.Play("OpenMenu");
         }
     }
 

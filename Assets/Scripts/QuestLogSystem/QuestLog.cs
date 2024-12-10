@@ -92,8 +92,9 @@ public static class QuestLog
             return completedQuest[index - questList.Count];
     }
 
-    public static List<QuestSystem> GetActiveQuests() 
+    public static void UpdateList()
     {
-        return new List<QuestSystem>(questList); 
+        onQuestChange.Invoke(questList, completedQuest);
     }
+    
 }

@@ -17,6 +17,7 @@ public class BackToMainMenu : MonoBehaviour
     public void Restart()
     {
         Debug.Log("Restart");
+        SaveSystemJSON.Instance.LoadGame();
     }
 
     #region selectedbutton

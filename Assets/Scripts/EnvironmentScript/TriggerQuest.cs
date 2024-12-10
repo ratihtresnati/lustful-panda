@@ -12,6 +12,7 @@ public class TriggerQuest : MonoBehaviour
         if (other.CompareTag("PandaMC") && !hasTriggered) 
         {
             AddQuest.instance.SceneTrigger(questId);
+            SaveSystemJSON.Instance.SaveGame();
             Debug.Log("hii");
             hasTriggered = true;
         }

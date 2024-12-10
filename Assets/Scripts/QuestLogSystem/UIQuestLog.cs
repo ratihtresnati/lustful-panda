@@ -105,7 +105,7 @@ public class UIQuestLog : MonoBehaviour
         }
     }
 
-   public void ShowQuestDetails(QuestSystem quest) {
+   private void ShowQuestDetails(QuestSystem quest) {
         questDescription.gameObject.SetActive(quest != null);
         if (quest == null)
             return;

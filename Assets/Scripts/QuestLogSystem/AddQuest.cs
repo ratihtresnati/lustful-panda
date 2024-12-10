@@ -15,18 +15,6 @@ public class AddQuest : MonoBehaviour
             instance = this;
         }
 
-        // foreach (QuestSystem quest in initialQuests)
-        // {
-        //     if (quest != null)
-        //     {
-        //         QuestLog.AddQuest(quest);
-        //     }
-        //     else
-        //     {
-        //         Debug.LogWarning("Encountered a null QuestSystem in initialQuests. Skipping...");
-        //     }
-        // }
-
         foreach (QuestScriptable questData in quest)
         {
             QuestSystem newQuest = new QuestSystem();
@@ -51,60 +39,24 @@ public class AddQuest : MonoBehaviour
             QuestLog.AddQuest(quest);
         }
     }
-
-    // private void Update()
-    // {
-    //     // QuestLog.CheckQuestObjective(QuestSystem.Objective.Type.collect, 1);
-    // }
-
-    // void OnApplicationQuit()
-    // {
-    //     foreach (QuestSystem quest in initialQuests)
-    //     {
-    //         Destroy(quest);
-    //     }
-    // }
-
     
     private void Update()
     {
 
-        // foreach (QuestSystem quest in initialQuests)
-        // {
-        //     QuestLog.AddQuest(quest);
-        // }
-
-        
-        if (Input.GetKeyDown(KeyCode.M))
+        foreach (var itemQuestSystem in initialQuests)
         {
-            // OnMonsterKilled(1);
-            // OnItemCollected(1);
-            SceneTrigger(2);
-            Debug.Log("collect");
+            foreach (var item in quest)
+            {
+                if(itemQuestSystem.objective.objectiveId == item.idQuest)
+                {
+                    item.isComplete = itemQuestSystem.completed;
+                }
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.N))
+        if (SaveSystemJSON.Instance.saved == false)
         {
-            SceneTrigger(3);
-            // OnMonsterKilled(1);
-            // OnItemCollected(3);
-            Debug.Log("kill");
-        }
-
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            SceneTrigger(4);
-            // OnMonsterKilled(1);
-            // OnItemCollected(3);
-            Debug.Log("kill");
-        }
-
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            SceneTrigger(5);
-            // OnMonsterKilled(1);
-            // OnItemCollected(3);
-            Debug.Log("kill");
+            QuestManage();
         }
     }
 
@@ -121,5 +73,15 @@ public class AddQuest : MonoBehaviour
     public void SceneTrigger(int sceneId)
     {
         QuestLog.CheckQuestObjective(QuestSystem.Objective.Type.trigger, sceneId);
+    }
+
+    public void QuestManage()
+    {
+        foreach (var item in initialQuests)
+        {
+            item.completed = false;
+        }
+        
+        QuestLog.UpdateList();
     }
 }
