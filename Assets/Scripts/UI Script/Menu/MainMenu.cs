@@ -12,9 +12,6 @@ public class MainMenu : MonoBehaviour
     private ButtonSelected buttonSelected;
     public GameObject settingGameObject;
     private bool exit = false;
-
-    
-    // Daftar tombol dan scene yang akan dimuat
     public SceneButton[] sceneButtons;
     private GameObject _selectedButton;
     public bool IsSetting { get; set; }
@@ -30,19 +27,19 @@ public class MainMenu : MonoBehaviour
         settingGameObject.SetActive(false);
         selectButtonHandler.FirstButton(buttonSelected);
     }
-
     private void Update()
     {
+        if(IsSetting == false){
         selectButtonHandler.SelectButton();
 
         if(selectButtonHandler.SelectedButton != null)
         {
             _selectedButton = selectButtonHandler.SelectedButton;
         }
-
+        
         foreach (SceneButton sceneButton in sceneButtons)
         {
-            int index = sceneButton.sceneIndex; 
+        int index = sceneButton.sceneIndex; 
             if (_selectedButton == sceneButton.button.gameObject)
             {
                 if (InputManager.instance.ButtonClickInput)
@@ -68,25 +65,22 @@ public class MainMenu : MonoBehaviour
                 }
             }
         }
-
-        Debug.Log(IsSetting);
-
-
+        }
+        else if(IsSetting == true){
+            
+        }
         if(InputManager.instance.PauseInput && SettingsManager.instance.IsSetting == false)
         {
             settingGameObject.SetActive(false);
             _selectedButton = sceneButtons[0].button.gameObject;
             EventSystem.current.SetSelectedGameObject(_selectedButton);
             AudioManager.Instance.Play("OpenMenu");
+            IsSetting = false;
         }
     }
 
-    // Fungsi untuk keluar dari aplikasi
     public void ExitApplication()
-    {
-        Application.Quit();
-        Debug.Log("Application has been exited."); // Hanya berfungsi di editor atau build yang didukung
-    }
+    {Application.Quit();}
 
     public void FirstButton()
     {
