@@ -8,7 +8,6 @@ public class Loading : MonoBehaviour
     public static Loading instance;
     public GameObject LoadingScreen;
     public bool IsLoading;
-    private SaveSystemJSON saveSystem; // Tambahkan referensi untuk SaveSystemJSON
     private void Awake()
     {
         if(instance == null)
@@ -22,16 +21,15 @@ public class Loading : MonoBehaviour
         }
 
         Debug.Log(IsLoading);
-        saveSystem = GameObject.FindObjectOfType<SaveSystemJSON>(); // Temukan SaveSystemJSON
     }
 
     public void LoadScene (int i )
     {
         // Muat game data sebelum scene dimuat
-        if (saveSystem != null)
+        if (SaveSystemJSON.Instance.CheckData() != null)
         {
             Debug.Log("Load game data.");
-            saveSystem.LoadGame();  // Muat game
+            SaveSystemJSON.Instance.LoadGame();  // Muat game
         }
         else
         {

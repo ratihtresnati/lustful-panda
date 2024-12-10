@@ -9,6 +9,7 @@ public class SaveSystemJSON : MonoBehaviour
     public static SaveSystemJSON Instance; 
     private string saveFilePath;
     private Transform player;
+    public bool saved { get; private set; }
 
     private void Awake()
     {
@@ -45,6 +46,7 @@ public class SaveSystemJSON : MonoBehaviour
 
         string json = JsonUtility.ToJson(data, true); 
         File.WriteAllText(saveFilePath, json);
+        saved = true;
 
         Debug.Log($"Game Saved! Panda position: {player.position.x}, {player.position.y}, {player.position.z}, Scene: {SceneManager.GetActiveScene().name}");
     }
@@ -63,6 +65,21 @@ public class SaveSystemJSON : MonoBehaviour
 
            
             SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+        else
+        {
+            Debug.LogError("Save file not found at " + saveFilePath);
+        }
+    }
+
+    public void DeleteSaveData()
+    {
+        if (File.Exists(saveFilePath))
+        {
+            File.Delete(saveFilePath);
+            AddQuest.instance.QuestManage();
+            saved = false;
+            Debug.Log("Save data deleted!");
         }
         else
         {

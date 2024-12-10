@@ -22,13 +22,11 @@ public class MainMenu : MonoBehaviour
     private GameObject _selectedButton;
     public bool IsSetting { get; set; }
     private bool hasData = false;
-    private SaveSystemJSON saveSystem;
 
     private void Awake() 
     {
         selectButtonHandler = gameObject.GetComponent<SelectButtonHandler>();
         buttonSelected = gameObject.GetComponent<ButtonSelected>();
-        saveSystem = GameObject.FindObjectOfType<SaveSystemJSON>(); // Temukan SaveSystemJSON
     }
     void Start()
     {
@@ -41,6 +39,7 @@ public class MainMenu : MonoBehaviour
             MenuData.SetActive(true);
             MenuNoData.SetActive(false);
             hasData = true;
+
         }
         else
         {
@@ -79,6 +78,11 @@ public class MainMenu : MonoBehaviour
                         IsSetting = true;
                         settingGameObject.SetActive(true);
                         SettingsManager.instance.FirstSelected();
+                    }
+                    else if(sceneButton.isNewButton == true)
+                    {
+                        SaveSystemJSON.Instance.DeleteSaveData();
+                        selectButtonHandler.LoadScene(index);
                     }
                     else
                     {
