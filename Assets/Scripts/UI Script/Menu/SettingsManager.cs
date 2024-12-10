@@ -52,10 +52,9 @@ public class SettingsManager : MonoBehaviour
 
     private void Update()
     {
-        if(InputManager.instance.ResumeInput && IsSetting == false)
+        if(InputManager.instance.ResumeInput)
         {
             PauseManager.instance.CloseSettingMenu();
-            AudioManager.Instance.Play("OpenMenu");
         }
 
         selectButtonHandler.SelectButton();
@@ -79,10 +78,8 @@ public class SettingsManager : MonoBehaviour
         {
             if (InputManager.instance.ButtonClickInput)
             {
-                AudioManager.Instance.Play("ButtonClick");
                 if (selectedButton.gameObject.name == "Audio Button")
                 {  
-                    OpenControlAudio();
                     Debug.Log("hai");
                 }
 
@@ -94,41 +91,10 @@ public class SettingsManager : MonoBehaviour
 
                 if (selectedButton.gameObject.name == "Display Button")
                 {  
-                    OpenControlDisplay();
                     Debug.Log("hai");
                 }
             } 
         }
-        
-        if(_isControlAudio == true && IsSetting == true)
-        {
-            if(InputManager.instance.ResumeInput || InputManager.instance.PauseInput)
-            {
-                AudioManager.Instance.Play("OpenMenu");
-                CloseControlAudio();
-            }                
-        }
-
-        if(_isControlDisplay == true && IsSetting == true)
-        {
-            if(InputManager.instance.ResumeInput || InputManager.instance.PauseInput)
-            {
-                AudioManager.Instance.Play("OpenMenu");
-                CloseControlDisplay();
-            }                
-        }
-
-        if(_isControlMap == true && IsSetting == true)
-        {
-            if(InputManager.instance.ResumeInput || InputManager.instance.PauseInput)
-            {
-                AudioManager.Instance.Play("OpenMenu");
-                CloseControlMap();
-            }                
-        }
-
-        // if(_controlMapButton.Buttons)
-
 
             // if (selectedButton != null)
             // {
@@ -183,21 +149,14 @@ public class SettingsManager : MonoBehaviour
     }
 
     private void OpenControlMap(){
-        // _controlMapMenu.SetActive(true);
+        _controlMapMenu.SetActive(true);
         _isControlMap = true;
         IsSetting = true;
-
-        selectedButton = TabManager.instance.selectButtonHandler.buttonSelected.buttonPage[0];
-        EventSystem.current.SetSelectedGameObject(selectedButton);
     }
 
     private void OpenControlDisplay(){
         // _controlDisplayMenu.SetActive(true);
         _isControlDisplay = true;
-        IsSetting = true;
-
-        selectedButton = TabManager.instance.selectButtonHandler.buttonSelected.buttonPage[0];
-        EventSystem.current.SetSelectedGameObject(selectedButton);
 
         // EventSystem.current.SetSelectedGameObject(_firstButtonCD);
     }
@@ -205,29 +164,19 @@ public class SettingsManager : MonoBehaviour
         // _controlAudioMenu.SetActive(true);
         _isControlAudio = true;
 
-        IsSetting = true;
-        
-        selectedButton = TabManager.instance.selectButtonHandler.buttonSelected.buttonPage[0];
-        EventSystem.current.SetSelectedGameObject(selectedButton);
         // EventSystem.current.SetSelectedGameObject(_firstButtonCA);
     }
     private void CloseControlMap(){
         // _controlMapMenu.SetActive(false);
-        IsSetting = false;
         _isControlMap = false;
         Debug.Log("hai");
-        SelectButton(2);
     }
     private void CloseControlDisplay(){
         // _controlDisplayMenu.SetActive(false);
         _isControlDisplay = false;
-        IsSetting = false;
-        SelectButton(1);
     }
     public void CloseControlAudio(){
         // _controlAudioMenu.SetActive(false);
-        IsSetting = false;
         _isControlAudio = false;
-        SelectButton(0);
     }
 }
