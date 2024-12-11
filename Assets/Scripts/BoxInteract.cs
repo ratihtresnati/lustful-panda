@@ -9,7 +9,7 @@ public class BoxInteract : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         if (!PlayerController.InBox) 
-        { 
+        {
             if (InputManager.instance.InteractInput)
             {
                 StartCoroutine(BecomeBox());
