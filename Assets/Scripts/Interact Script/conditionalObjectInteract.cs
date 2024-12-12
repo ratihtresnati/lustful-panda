@@ -150,7 +150,7 @@ public class conditionalObjectInteract : MonoBehaviour
             _itemRequireOutline.ApplyOutline(true);
         }   
 
-        if(_dialogAsset != null)
+        if(_dialogAsset != null && _questDoor == false)
         {
             _dialogAsset.transform.position = _parentPosition.PositionParent().position + _dialogPosition;
             _dialogAsset.SetActive(true);
@@ -173,8 +173,6 @@ public class conditionalObjectInteract : MonoBehaviour
         _dialogAsset.transform.position = position.PositionParent().position + _dialogPosition;
         _dialogAsset.transform.SetParent(position.PositionParent());
         _dialogAsset.SetActive(true);
-
-        Debug.Log("ya allah");
     }
     
     

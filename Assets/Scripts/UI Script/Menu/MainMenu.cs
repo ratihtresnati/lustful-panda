@@ -39,7 +39,6 @@ public class MainMenu : MonoBehaviour
             MenuData.SetActive(true);
             MenuNoData.SetActive(false);
             hasData = true;
-
         }
         else
         {
@@ -48,6 +47,8 @@ public class MainMenu : MonoBehaviour
             MenuData.SetActive(false);
             MenuNoData.SetActive(true);
         }
+
+        Debug.Log(SaveSystemJSON.Instance.CheckData());
     }
     private void Update()
     {

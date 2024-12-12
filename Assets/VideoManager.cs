@@ -6,7 +6,7 @@ using UnityEngine.UI; // Import untuk manipulasi UI
 public class VideoManager : MonoBehaviour
 {
     public VideoPlayer videoPlayer; // Drag VideoPlayer object here in the Inspector
-    public string nextSceneName;   // The name of the next scene
+    public int nextSceneName;   // The name of the next scene
     public GameObject skipButton;  // Drag Skip button GameObject here in the Inspector
 
     private bool inputReceived = false; // Track if player has given input
@@ -43,13 +43,15 @@ public class VideoManager : MonoBehaviour
     public void SkipVideo()
     {
         // Langsung pindah ke scene berikutnya
-        SceneManager.LoadScene(nextSceneName);
+        // SceneManager.LoadScene(nextSceneName);
+        Loading.instance.LoadScene(nextSceneName);
     }
 
     void OnVideoEnd(VideoPlayer vp)
     {
         // Pindah scene saat video selesai
-        SceneManager.LoadScene(nextSceneName);
+        // SceneManager.LoadScene(nextSceneName);
+        Loading.instance.LoadScene(nextSceneName);
     }
 
     void ShowSkipButton()

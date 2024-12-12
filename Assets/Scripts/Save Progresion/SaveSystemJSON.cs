@@ -112,8 +112,23 @@ public class SaveSystemJSON : MonoBehaviour
         }
     }
 
+    // public bool CheckData()
+    // {
+    //     return saveFilePath != null;
+    // }
+
     public bool CheckData()
     {
-        return saveFilePath != null;
+        if (string.IsNullOrEmpty(saveFilePath))
+        {
+            return false;
+        }
+
+        if (!File.Exists(saveFilePath))
+        {
+            return false;
+        }
+
+        return true;
     }
 }

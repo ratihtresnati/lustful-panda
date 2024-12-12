@@ -73,6 +73,7 @@ public class AIPatrollingGroupLeader : MonoBehaviour
             case ZooKeeperState.Chase:
                 Chase();
                 AIAnimatorController.Run();
+                AudioManager.Instance.Chase();
                 break;
             case ZooKeeperState.Catch:
                 Catch();
@@ -190,6 +191,8 @@ public class AIPatrollingGroupLeader : MonoBehaviour
             patrolPointIndex = 0;
             target = patrolPoint[patrolPointIndex].position;
             agent.SetDestination(target);
+
+            AudioManager.Instance.PlayBGM();
 
             currentState = ZooKeeperState.Patrol;
         }

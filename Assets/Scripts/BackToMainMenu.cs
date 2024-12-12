@@ -12,12 +12,15 @@ public class BackToMainMenu : MonoBehaviour
     {
         Time.timeScale = 1;
         SceneManager.LoadScene(0);
+        InputManager.PlayerInput.SwitchCurrentActionMap("Player");
     }
 
     public void Restart()
     {
         Debug.Log("Restart");
         SaveSystemJSON.Instance.LoadGame();
+        Time.timeScale = 1;
+        InputManager.PlayerInput.SwitchCurrentActionMap("Player");
     }
 
     #region selectedbutton
@@ -35,6 +38,7 @@ public class BackToMainMenu : MonoBehaviour
     void Start()
     {
         FirstButton();
+        InputManager.PlayerInput.SwitchCurrentActionMap("UI");
     }
 
     private void Update()
