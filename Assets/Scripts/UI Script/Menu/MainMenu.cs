@@ -12,10 +12,16 @@ public class MainMenu : MonoBehaviour
     private ButtonSelected buttonSelected;
     public GameObject settingGameObject;
     private bool exit = false;
+
+    public GameObject MenuData;
+    public GameObject MenuNoData;
+
+    
+    // Daftar tombol dan scene yang akan dimuat
     public SceneButton[] sceneButtons;
     private GameObject _selectedButton;
     public bool IsSetting { get; set; }
-    public bool IsMouse { get; set; }
+    private bool hasData = false;
 
     private void Awake() 
     {
@@ -26,6 +32,22 @@ public class MainMenu : MonoBehaviour
     {
         settingGameObject.SetActive(false);
         selectButtonHandler.FirstButton(buttonSelected);
+
+        if (SaveSystemJSON.Instance.CheckData())
+        {
+            Debug.Log("ada data");
+            MenuData.SetActive(true);
+            MenuNoData.SetActive(false);
+            hasData = true;
+
+        }
+        else
+        {
+            hasData = false;
+            Debug.Log("gak ada");
+            MenuData.SetActive(false);
+            MenuNoData.SetActive(true);
+        }
     }
     private void Update()
     {
@@ -57,6 +79,11 @@ public class MainMenu : MonoBehaviour
                         settingGameObject.SetActive(true);
                         SettingsManager.instance.FirstSelected();
                     }
+                    else if(sceneButton.isNewButton == true)
+                    {
+                        SaveSystemJSON.Instance.DeleteSaveData();
+                        selectButtonHandler.LoadScene(index);
+                    }
                     else
                     {
                         selectButtonHandler.LoadScene(index);
@@ -69,6 +96,16 @@ public class MainMenu : MonoBehaviour
         else if(IsSetting == true){
             
         }
+
+        Debug.Log(IsSetting);
+
+        if(hasData == true)
+        {
+            _selectedButton = sceneButtons[4].button.gameObject;
+            EventSystem.current.SetSelectedGameObject(_selectedButton);
+            hasData = false;
+        }
+
         if(InputManager.instance.PauseInput && SettingsManager.instance.IsSetting == false)
         {
             settingGameObject.SetActive(false);
