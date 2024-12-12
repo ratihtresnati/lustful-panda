@@ -269,7 +269,7 @@ public partial class @PlayerInputManager: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""8bc8eb1e-21c6-48d3-baca-f4bf7dd952e0"",
-                    ""path"": ""<Keyboard>/#(I)"",
+                    ""path"": ""<Keyboard>/tab"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -280,7 +280,7 @@ public partial class @PlayerInputManager: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""f52ab3e2-dcf9-4a80-aec4-4756ca1b540b"",
-                    ""path"": ""<Keyboard>/#(H)"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -878,7 +878,7 @@ public partial class @PlayerInputManager: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""bf7779fa-4720-4566-a875-db5afc129368"",
-                    ""path"": ""<Keyboard>/#(I)"",
+                    ""path"": ""<Keyboard>/tab"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -889,7 +889,7 @@ public partial class @PlayerInputManager: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""5e93f40f-4c20-4df2-bd4e-bb56c55cad45"",
-                    ""path"": ""<Keyboard>/#(H)"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",

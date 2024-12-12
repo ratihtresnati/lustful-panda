@@ -27,9 +27,7 @@ public class UIQuestLog : MonoBehaviour
     
     private SelectButtonHandler selectButtonHandler;
     private ButtonSelected buttonSelected;
-    GameObject selectedButton;
-    private bool _isPause = false;
-    private bool isSelectedButtonFound = false;
+ 
 
     private void Awake() {
         if (instance == null)
