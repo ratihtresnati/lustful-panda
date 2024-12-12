@@ -22,7 +22,7 @@ public class AIPatrollingStay : MonoBehaviour
     public float RunSpeed = 4f;
 
     NavMeshAgent agent;
-    public Transform patrolPoint;
+    public Transform[] patrolPoint;
     int patrolPointIndex;
     Vector3 target;
     ZooKeeperState currentState;
@@ -43,7 +43,7 @@ public class AIPatrollingStay : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         Sensor = GetComponent<AISensor>();
 
-        target = patrolPoint.position;
+        target = patrolPoint[patrolPointIndex].position;
         catchSensor = GetComponent<CatchSensor>();
         currentState = ZooKeeperState.Idle;
     }
@@ -116,11 +116,7 @@ public class AIPatrollingStay : MonoBehaviour
 
     void Chase()
     {
-        if (PlayerController.InBox)
-        {
-            StartCoroutine(BecomeBox());
-        }
-
+        PlayerController.InBox = false;
         GetComponent<NavMeshAgent>().speed = RunSpeed;
         agent.SetDestination(player.position);
 
@@ -142,7 +138,7 @@ public class AIPatrollingStay : MonoBehaviour
         if (!Sensor.canSeePlayer)
         {
             //idleTimer = 2f;
-            PlayerController.PlayerSee = false;
+
             currentState = ZooKeeperState.AfterChase;
 
         }
@@ -150,15 +146,25 @@ public class AIPatrollingStay : MonoBehaviour
 
     private void Idle()
     {
-        if (agent.remainingDistance > 0.1f)
+
+        idleTimer -= Time.deltaTime;
+
+        if (idleTimer <= 0f)
         {
-            currentState = ZooKeeperState.Patrol;
+           
+                agent.SetDestination(target);
+
+                GetComponent<NavMeshAgent>().speed = walkSpeed;
+                //currentState = ZooKeeperState.Patrol;
+            
         }
+
         if (Sensor.canSeePlayer)
         {
             currentState = ZooKeeperState.Chase;
 
-        } 
+        }
+        
     }
 
     private void Search()
@@ -168,7 +174,7 @@ public class AIPatrollingStay : MonoBehaviour
 
         if (idleTimer <= 0f)
         {
-            //target = patrolPoint[patrolPointIndex].position;
+            target = patrolPoint[patrolPointIndex].position;
             agent.SetDestination(target);
 
             currentState = ZooKeeperState.Patrol;
@@ -182,7 +188,7 @@ public class AIPatrollingStay : MonoBehaviour
     private void Patrol()
     {
         GetComponent<NavMeshAgent>().speed = walkSpeed;
-        if (agent.remainingDistance <= 0.1f)
+        if (agent.remainingDistance <= 0.5f)
         {
             currentState = ZooKeeperState.Idle;
         }
@@ -190,13 +196,6 @@ public class AIPatrollingStay : MonoBehaviour
         {
             currentState = ZooKeeperState.Chase;
         }
-    }
-
-    IEnumerator BecomeBox()
-    {
-        PlayerController.SmokeVFX.Play();
-        yield return new WaitForSeconds(0.3f);
-        PlayerController.PlayerSee = true;
     }
 
     public enum ZooKeeperState

@@ -86,12 +86,8 @@ public class SelectButtonHandler : MonoBehaviour, ISelectButton, IPointerEnterHa
 
     public void OnPointerEnter(GameObject sceneButton)
     {
-        if(sceneButton != null)
-        {
-            sceneButton.transform.DOKill(); 
-            sceneButton.transform.DOScale(new Vector3(scaleMultiplier, scaleMultiplier, scaleMultiplier), animationDuration).SetUpdate(true);
-        }
-        
+        sceneButton.transform.DOKill(); 
+        sceneButton.transform.DOScale(new Vector3(scaleMultiplier, scaleMultiplier, scaleMultiplier), animationDuration).SetUpdate(true);
     }
 
     public void OnPointerExit(GameObject sceneButton)

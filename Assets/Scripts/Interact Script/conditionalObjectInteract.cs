@@ -20,9 +20,6 @@ public class conditionalObjectInteract : MonoBehaviour
     [SerializeField] private bool _questDoor = false;
     private Rigidbody _rigidbody;
 
-    public bool IsInteract { get; private set; }
-    public bool IsGiveItem { get; private set; }
-
 
     void Start()
     {
@@ -37,9 +34,6 @@ public class conditionalObjectInteract : MonoBehaviour
         {
             _dialogAsset.SetActive(false);
         }
-
-        // IsInteract = false;
-        // IsGiveItem = false;
 
         _player = GameObject.Find("Panda Bayik");
     }
@@ -75,12 +69,11 @@ public class conditionalObjectInteract : MonoBehaviour
     {
         if(InputManager.instance.InteractInput)
         {
-            // if (isCarryingTheItem == true && IsInteract == true)
             if (_isCarryingTheItem)
             {
                 Interact();
             }
-            else if (_isCarryingTheItem == false)
+            else
             {
                 ShowDialogAfterInteract();
             }
@@ -120,7 +113,6 @@ public class conditionalObjectInteract : MonoBehaviour
 
     private void InteractNPC()
     {
-        // IsGiveItem = true;
         NPCPandaStateController npcPanda = GetComponent<NPCPandaStateController>();
         if (npcPanda != null)
         {
@@ -176,6 +168,4 @@ public class conditionalObjectInteract : MonoBehaviour
 
         Debug.Log("ya allah");
     }
-    
-    
 }

@@ -10,7 +10,7 @@ using UnityEngine.EventSystems;
     {
         public string namePage;
         public List<GameObject> buttonPage = new List<GameObject>();
-        private void Awake()//awalnya awake 
+        private void Awake()
         {
             foreach (var button in gameObject.GetComponentsInChildren<SelectableObject>())
             {

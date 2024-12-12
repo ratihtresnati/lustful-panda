@@ -123,14 +123,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mainMenu: {fileID: 1975174516537909855}
   _settingMenu: {fileID: 3742918084096709146}
-  _zooKeeperMenu: {fileID: 0}
-  _questMenu: {fileID: 0}
   _resumeButton: {fileID: 4874554455765991892}
   _settingButton: {fileID: 7251689160714220304}
   _backButton: {fileID: 8719625927755728965}
   _isPaused: 0
-  _menuOpen: 0
-  _openQuest: 0
   scaleMultiplier: 1.1
   animationDuration: 0.2
 --- !u!1001 &8468743292487535304
@@ -291,6 +287,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3905442953933094320, guid: dcc9fe8d3b087ae4dae6307461b51914, type: 3}
       propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3925542763265916747, guid: dcc9fe8d3b087ae4dae6307461b51914, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3932911024776321442, guid: dcc9fe8d3b087ae4dae6307461b51914, type: 3}
@@ -1466,6 +1466,7 @@ MonoBehaviour:
   selectButtonHandler: {fileID: 0}
   buttonSelected: {fileID: 0}
   interactItems: {fileID: 0}
+  pandaQuest: {fileID: 0}
   _settingMenu: {fileID: 3742918084096709146}
   _mainMenu: {fileID: 1975174516537909855}
 --- !u!114 &5903432806251670162

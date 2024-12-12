@@ -8,7 +8,7 @@ public class PauseManager : MonoBehaviour
     public ButtonSelected buttonSelected;
     public static PauseManager instance;
     public interactItem interactItems;
-    // public PandaQuest pandaQuest;
+    public PandaQuest pandaQuest;
     private GameObject _selectedButton;
     
     [SerializeField] private GameObject _settingMenu;
@@ -23,7 +23,7 @@ public class PauseManager : MonoBehaviour
         {
             instance = this;
         }
-        // pandaQuest = FindObjectOfType<PandaQuest>();
+        pandaQuest = FindObjectOfType<PandaQuest>();
 
         selectButtonHandler = gameObject.GetComponent<SelectButtonHandler>();
         buttonSelected = gameObject.GetComponent<ButtonSelected>();
@@ -52,22 +52,20 @@ public class PauseManager : MonoBehaviour
             {
                 if(InputManager.instance.ButtonClickInput)
                 {
+                    AudioManager.Instance.Play("ButtonClick");
                     if (_selectedButton.gameObject.name == "Settings Button")
                     {    
                         OnSettingPress();
-                        AudioManager.Instance.Play("ButtonClick");
                     }
                     
                     if (_selectedButton.gameObject.name == "Resume Button") 
                     {
                         OnResumePress();
-                        AudioManager.Instance.Play("ButtonClick");
                     }
                         
                     if (_selectedButton.gameObject.name == "Back Button")
                     {
                         OnBackPress();
-                        AudioManager.Instance.Play("ButtonClick");
                     }
                 }
             }
@@ -83,7 +81,7 @@ public class PauseManager : MonoBehaviour
 
         InputManager.PlayerInput.SwitchCurrentActionMap("UI");
 
-        // pandaQuest.enabled = false;
+        pandaQuest.enabled = false;
     }
 
     public void UnpauseGame()

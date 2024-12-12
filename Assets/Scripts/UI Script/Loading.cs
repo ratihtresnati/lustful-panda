@@ -25,17 +25,6 @@ public class Loading : MonoBehaviour
 
     public void LoadScene (int i )
     {
-        // Muat game data sebelum scene dimuat
-        if (SaveSystemJSON.Instance.CheckData() != null)
-        {
-            Debug.Log("Load game data.");
-            SaveSystemJSON.Instance.LoadGame();  // Muat game
-        }
-        else
-        {
-            Debug.LogError("SaveSystemJSON not found! Cannot load saved data.");
-        }
-
         // InputManager.PlayerInput.enabled = false; 
         IsLoading = true;
         StartCoroutine(LoadSceneAsync(i));

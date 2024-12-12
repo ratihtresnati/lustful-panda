@@ -54,8 +54,6 @@ public class PlayerController : MonoBehaviour
 
     private Coroutine recharge;
 
-    public ParticleSystem SmokeVFX;
-
     void Start()
     {
         _characterController = GetComponent<CharacterController>();
@@ -66,14 +64,11 @@ public class PlayerController : MonoBehaviour
 
         Keyframe roll_lastFrame = _rollCurve[_rollCurve.length - 1];
         _rollTimer = roll_lastFrame.time;
-
-        SmokeVFX.playbackSpeed = 1.5f;
-        SmokeVFX.Stop();
     }
    
     void Update()
     {
-        // Debug.Log(_ySpeed);
+        Debug.Log(_ySpeed);
         StartCoroutine(HanddleGameOver());
         //HanddleGameOver();
 
@@ -160,15 +155,10 @@ public class PlayerController : MonoBehaviour
     {
 
         // Player ketahuan ketika terlihat Zoo Keeper
-        if (InBox)
+        if (PlayerSee || IsRooling)
         {
-            if (PlayerSee || IsRooling)
-            {
-                //SmokeVFX.Play();
-                StartCoroutine(BecomeBox());
-            }
+            InBox = false;
         }
-
 
         // Ketika sedang dalam kondisi menjadi box
         if (InBox)
@@ -176,7 +166,6 @@ public class PlayerController : MonoBehaviour
             panda.SetActive(false); // objek panda hilang
             box.SetActive(true); // diganti object kardus
             transform.gameObject.layer = 0;
-            
 
             if (magnitude > 0)
             {
@@ -194,16 +183,13 @@ public class PlayerController : MonoBehaviour
             transform.gameObject.layer = 16;
         }
 
+        else
+        {
+            panda.SetActive(true);
+            box.SetActive(false);
+            transform.gameObject.layer = 10;
+        }
         
-    }
-
-    IEnumerator BecomeBox()
-    {
-        yield return new WaitForSeconds(0.5f);
-        InBox = false;
-        panda.SetActive(true);
-        box.SetActive(false);
-        transform.gameObject.layer = 10;
     }
 
     private void HanddleMovements()
@@ -292,10 +278,6 @@ public class PlayerController : MonoBehaviour
         if (IsJump == true) 
         { 
             yield return null;
-        }
-        if (InBox)
-        {
-            SmokeVFX.Play();
         }
 
         gameObject.tag = "PandaRolling";

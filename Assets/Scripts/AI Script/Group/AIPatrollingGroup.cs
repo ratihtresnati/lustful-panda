@@ -120,11 +120,7 @@ public class AIPatrollingGroup : MonoBehaviour
 
     void Chase()
     {
-        if (PlayerController.InBox)
-        {
-            StartCoroutine(BecomeBox());
-        }
-
+        PlayerController.InBox = false;
         GetComponent<NavMeshAgent>().speed = RunSpeed;
         agent.SetDestination(player.position);
 
@@ -147,7 +143,6 @@ public class AIPatrollingGroup : MonoBehaviour
         if (!Sensor.canSeePlayer)
         {
             //idleTimer = 2f;
-            PlayerController.PlayerSee = false;
             currentState = ZooKeeperState.AfterChase;
 
         }
@@ -221,14 +216,6 @@ public class AIPatrollingGroup : MonoBehaviour
             currentState = ZooKeeperState.Chase;
         }
     }
-
-    IEnumerator BecomeBox()
-    {
-        PlayerController.SmokeVFX.Play();
-        yield return new WaitForSeconds(0.3f);
-        PlayerController.PlayerSee = true;
-    }
-
 
     public enum ZooKeeperState
     {

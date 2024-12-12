@@ -71,6 +71,7 @@ public class AIPatrolling : MonoBehaviour
             case ZooKeeperState.Chase:
                 Chase();
                 AIAnimatorController.Run();
+                AudioManager.Instance.Chase();
                 break;
             case ZooKeeperState.Catch:
                 Catch();
@@ -115,11 +116,7 @@ public class AIPatrolling : MonoBehaviour
 
     void Chase()
     {
-        if (PlayerController.InBox)
-        {
-            StartCoroutine(BecomeBox());
-        }
-
+        PlayerController.InBox = false;
         GetComponent<NavMeshAgent>().speed = RunSpeed;
         agent.SetDestination(player.position);
 
@@ -141,7 +138,7 @@ public class AIPatrolling : MonoBehaviour
         if (!Sensor.canSeePlayer)
         {
             //idleTimer = 2f;
-            PlayerController.PlayerSee = false;
+
             currentState = ZooKeeperState.AfterChase;
 
         }
@@ -184,6 +181,8 @@ public class AIPatrolling : MonoBehaviour
                 currentState = ZooKeeperState.Chase;
             }
 
+            AudioManager.Instance.PlayBGM();
+
             patrolPointIndex = 0;
             target = patrolPoint[patrolPointIndex].position;
             agent.SetDestination(target);
@@ -216,13 +215,6 @@ public class AIPatrolling : MonoBehaviour
         {
             currentState = ZooKeeperState.Chase;
         }
-    }
-
-    IEnumerator BecomeBox()
-    {
-        PlayerController.SmokeVFX.Play();
-        yield return new WaitForSeconds(0.3f);
-        PlayerController.PlayerSee = true;
     }
 
     public enum ZooKeeperState

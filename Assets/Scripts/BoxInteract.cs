@@ -8,19 +8,11 @@ public class BoxInteract : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (!PlayerController.InBox) 
-        { 
-            if (InputManager.instance.InteractInput)
-            {
-                StartCoroutine(BecomeBox());
-            }
+        if (InputManager.instance.ButtonClickInput)
+        {
+            PlayerController.InBox = true;
+            Debug.Log("Getbox");
         }
     }
 
-    IEnumerator BecomeBox()
-    {
-        PlayerController.SmokeVFX.Play();
-        yield return new WaitForSeconds(0.5f);
-        PlayerController.InBox = true;
-    }
 }
