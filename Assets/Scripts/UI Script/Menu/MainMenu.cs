@@ -49,19 +49,19 @@ public class MainMenu : MonoBehaviour
             MenuNoData.SetActive(true);
         }
     }
-
     private void Update()
     {
+        if(IsSetting == false){
         selectButtonHandler.SelectButton();
 
         if(selectButtonHandler.SelectedButton != null)
         {
             _selectedButton = selectButtonHandler.SelectedButton;
         }
-
+        
         foreach (SceneButton sceneButton in sceneButtons)
         {
-            int index = sceneButton.sceneIndex; 
+        int index = sceneButton.sceneIndex; 
             if (_selectedButton == sceneButton.button.gameObject)
             {
                 if (InputManager.instance.ButtonClickInput)
@@ -92,6 +92,10 @@ public class MainMenu : MonoBehaviour
                 }
             }
         }
+        }
+        else if(IsSetting == true){
+            
+        }
 
         Debug.Log(IsSetting);
 
@@ -108,15 +112,12 @@ public class MainMenu : MonoBehaviour
             _selectedButton = sceneButtons[0].button.gameObject;
             EventSystem.current.SetSelectedGameObject(_selectedButton);
             AudioManager.Instance.Play("OpenMenu");
+            IsSetting = false;
         }
     }
 
-    // Fungsi untuk keluar dari aplikasi
     public void ExitApplication()
-    {
-        Application.Quit();
-        Debug.Log("Application has been exited."); // Hanya berfungsi di editor atau build yang didukung
-    }
+    {Application.Quit();}
 
     public void FirstButton()
     {
