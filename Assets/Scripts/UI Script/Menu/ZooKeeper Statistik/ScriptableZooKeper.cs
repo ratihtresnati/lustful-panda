@@ -11,5 +11,6 @@ public class ScriptableZooKeper : ScriptableObject
     public string nameNPC;
     public float radiusView;
     public float speed;
+    public float angle;
     public string keterangan;
 }

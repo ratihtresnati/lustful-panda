@@ -13,12 +13,15 @@ public class PanelStatistik : MonoBehaviour
     public TextMeshProUGUI name;
     public TextMeshProUGUI radiusPercent;
     public TextMeshProUGUI speedPercent;
+    public TextMeshProUGUI anglePercent;
     public TextMeshProUGUI keterangan;
     public Image radiusBar;
     public Image speedBar;
+    public Image angleBar;
 
     public float maxRadius = 100f; 
     public float maxSpeed = 100f; 
+    public float maxAngle = 100f; 
     
     private void Awake()
     {
@@ -33,8 +36,10 @@ public class PanelStatistik : MonoBehaviour
         
         radiusBar.fillAmount = npc.radiusView / maxRadius; 
         speedBar.fillAmount = npc.speed / maxSpeed;
+        angleBar.fillAmount = npc.angle / maxAngle;
 
         radiusPercent.text = $"{npc.radiusView / 100 :P00}";
         speedPercent.text = $"{npc.speed / 100 :P0}";
+        anglePercent.text = $"{npc.angle / 100 :P0}";
     }
 }

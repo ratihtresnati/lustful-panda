@@ -85,7 +85,7 @@ public class SettingsManager : MonoBehaviour
 
                 if (selectedButton.gameObject.name == "Control Button")
                 {  
-                    OpenControlMap();
+                    // OpenControlMap();
                     Debug.Log("hai");
                 }
 
