@@ -5,16 +5,27 @@ using UnityEngine;
 public class BoxInteract : MonoBehaviour
 {
     public PlayerController PlayerController;
+    public GameObject InterectDialogue;
 
     private void OnTriggerStay(Collider other)
     {
-        if (!PlayerController.InBox) 
+        if (!PlayerController.InBox)
         {
+            InterectDialogue.SetActive(true);
             if (InputManager.instance.InteractInput)
             {
                 StartCoroutine(BecomeBox());
             }
         }
+        else
+        {
+            InterectDialogue.SetActive(false);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        InterectDialogue.SetActive(false);
     }
 
     IEnumerator BecomeBox()
