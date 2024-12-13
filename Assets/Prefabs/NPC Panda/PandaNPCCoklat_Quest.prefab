@@ -497,9 +497,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e79a8326698de524280698fa01281e24, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2508375566050299373}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e79a8326698de524280698fa01281e24, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2206104026338830101}
   m_SourcePrefab: {fileID: 100100000, guid: e79a8326698de524280698fa01281e24, type: 3}
 --- !u!1 &5798181423970155037 stripped
 GameObject:
@@ -548,8 +545,8 @@ MonoBehaviour:
   _isSit: 1
   _targetMove: {fileID: 0}
   _agent: {fileID: 5987928116585516336}
-  _targetRotation: -200
-  _rotationSpeed: 2.5
+  _targetRotation: -183.2
+  _rotationSpeed: 1
   maxDistance: 2
   _isQuest: 1
   _isComplete: 0
@@ -565,13 +562,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f4ed952866b7b54db298667a976b999, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactionRadius: 3
-  player: {fileID: 0}
-  taskItem: {fileID: 0}
-  dialogAsset: {fileID: 0}
-  _outline: {fileID: 1905993300760580081}
-  _itemOutline: {fileID: 0}
-  questNum: 1
+  _questNum: 1
+  _interactionRadius: 3
+  _taskItem: {fileID: 0}
+  _dialogAsset: {fileID: 0}
+  _dialogPosition: {x: 0.5, y: 2, z: 0}
+  _questDoor: 0
 --- !u!114 &1905993300760580081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -655,27 +651,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.2347014, y: 1.4531381, z: 2.518653}
   m_Center: {x: -0.11735343, y: 0.90046036, z: -0.9583192}
---- !u!65 &2206104026338830101
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5798181423970155037}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 0.9476104, z: 0.9760965}
-  m_Center: {x: 0.00000051575086, y: 1.3732445, z: 0.96228254}
 --- !u!4 &6574296563402809511 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e79a8326698de524280698fa01281e24, type: 3}

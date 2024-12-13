@@ -5,24 +5,27 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class interactItem : MonoBehaviour
-{
-    [SerializeField] private GameInput gameInput;
+{    
     public float pickupRadius;
     private bool canPickup = false;
     bool isCarryingItem = false;
     public GameObject player;
     public GameObject destinedObject;
     public GameObject obstacleObject; 
-    public Vector3 grabOffsetPlayer; // jarak objek setelah diambil karakter
+    // public Vector3 grabOffsetPlayer; // jarak objek setelah diambil karakter
     public Vector3 dropOffsetPosPlayer; // jarak objek setelah ditaro karakter
     public Vector3 dropOffsetRotPlayer; // rotasi objek setelah ditaro karakter
     public Outline outline;
     private PlayerHoldPosition _playerHoldPosition;
 
+    public bool IsTakeItems { get; private set; }
+
     void Start()
     {
         player = GameObject.Find("Panda Bayik");
         _playerHoldPosition = player.GetComponent<PlayerHoldPosition>();
+
+        IsTakeItems = false;
     }
 
     void Update()
@@ -33,9 +36,13 @@ public class interactItem : MonoBehaviour
         // ngecek jarak pemain di debug
         if (distance <= pickupRadius){
             if (obstacleObject != null)
-            {return;}
-            else{
-                canPickup = true;}
+            {
+                return;
+            }
+            else
+            {
+                canPickup = true;
+            }
         }
         else{
             canPickup = false;
@@ -59,6 +66,8 @@ public class interactItem : MonoBehaviour
         if (outline != null){
             outline.ApplyOutline(false);
         }
+        IsTakeItems = true;
+
 
         transform.parent = _playerHoldPosition.PositionParent();
         transform.localPosition = Vector3.zero;
@@ -66,12 +75,14 @@ public class interactItem : MonoBehaviour
 
         isCarryingItem = true;
         canPickup = false;
+        AudioManager.Instance.Play("CollectItem");
     }
     void Drop()
     {
         if (outline != null){
             outline.ApplyOutline(true);
         }
+        IsTakeItems = false;
 
         // Positioning item
         transform.position = player.transform.TransformPoint(dropOffsetPosPlayer);
@@ -82,5 +93,6 @@ public class interactItem : MonoBehaviour
 
         isCarryingItem = false;
         canPickup = true;
+        AudioManager.Instance.Play("DropItem");
     }
 }

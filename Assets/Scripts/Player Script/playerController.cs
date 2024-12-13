@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using UnityEditor.ShaderGraph.Drawing;
+//using UnityEditor.ShaderGraph.Drawing;
 
 // using System.Xml.Serialization;
 // using UnityEditor.Experimental.GraphView;
@@ -12,8 +12,7 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("Game Obejact")]
-    public GameOver GameOver;
+
 
     [Header("Movement")]
     [SerializeField] private float _jumpSpeed = 3f;
@@ -31,6 +30,9 @@ public class PlayerController : MonoBehaviour
     public GameObject box;
 
     public bool InBox;
+    public bool PickHT;
+    public bool GameOver;
+    public bool PlayerSee;
     public bool IsCatch = false;
     
     [SerializeField]
@@ -48,34 +50,50 @@ public class PlayerController : MonoBehaviour
     public float ChargeRate;
     public float magnitude;
 
+    Rigidbody rb;
+
     private Coroutine recharge;
+
+    public ParticleSystem SmokeVFX;
 
     void Start()
     {
         _characterController = GetComponent<CharacterController>();
+       // GameOver = FindObjectOfType<GameOver>();
+        panda = GameObject.Find("Panda");
 
+        rb = GetComponent<Rigidbody>();
 
         Keyframe roll_lastFrame = _rollCurve[_rollCurve.length - 1];
         _rollTimer = roll_lastFrame.time;
 
-        
-
-        // gameInput.OnRunningEvent += OnRunEvent;
-        // gameInput.OutRunningEvent += OutRunEvent;
-        // gameInput.OnJumpingEvent += OnJumpEvent;
-        // gameInput.OnRollingEvent += OnRollEvent;
+        SmokeVFX.playbackSpeed = 1.5f;
+        SmokeVFX.Stop();
     }
    
     void Update()
     {
-        HanddleGameOver();
+        // Debug.Log(_ySpeed);
+        StartCoroutine(HanddleGameOver());
+        //HanddleGameOver();
 
         if (!IsCatch)
         {
-
+           
             HanddleMovements();
 
             TransformBox();
+
+                if (InputManager.instance.RollInput)
+                {
+                    if (!IsRooling)
+                    {
+                        if (_characterController.isGrounded)
+                        {
+                            if (_velocity.magnitude != 0) StartCoroutine(Rolling());
+                        }
+                    }
+                }
 
             if (!InBox)
             {
@@ -92,16 +110,6 @@ public class PlayerController : MonoBehaviour
                     }
                 }
 
-                if (InputManager.instance.RollInput)
-                {
-                    if (!IsRooling)
-                    {
-                        if (!IsJump)
-                        {
-                            if (_velocity.magnitude != 0) StartCoroutine(Rolling());
-                        }
-                    }
-                }
 
                 if (InputManager.instance.RunPressed)
                 {
@@ -123,39 +131,52 @@ public class PlayerController : MonoBehaviour
         // Debug.Log(_IsJump);
     }
 
-    private void HanddleGameOver()
+    IEnumerator HanddleGameOver()
     {
-        if (GameOver.GameEnd)
+        if (GameOver)
         {
+            transform.gameObject.layer = 9;
+            yield return new WaitForSeconds(0.1f);
+            rb.isKinematic = true;
             _velocity.y = 0;
             IsCatch = true;
         }
     }
 
+    /*
+    private void HanddleGameOver()
+    {
+        if (GameOver)
+        {
+
+            rb.isKinematic = true;
+            _velocity.y = 0;
+            IsCatch = true;
+        }
+    }
+    */
+
     private void TransformBox()
     {
-        if (Input.GetKey(KeyCode.F))
-        {
-            InBox = true;
-        }
-
-        if (Input.GetKey(KeyCode.J))
-        {
-            InBox = false;
-        }
 
         // Player ketahuan ketika terlihat Zoo Keeper
-        if (GameOver.PlayerSee)
+        if (InBox)
         {
-            InBox = false;
+            if (PlayerSee || IsRooling)
+            {
+                //SmokeVFX.Play();
+                StartCoroutine(BecomeBox());
+            }
         }
+
 
         // Ketika sedang dalam kondisi menjadi box
         if (InBox)
         {
-            panda.SetActive(false); // objexk panda hilang
+            panda.SetActive(false); // objek panda hilang
             box.SetActive(true); // diganti object kardus
             transform.gameObject.layer = 0;
+            
 
             if (magnitude > 0)
             {
@@ -167,13 +188,22 @@ public class PlayerController : MonoBehaviour
             }
 
         }
-        else
+
+        else if (PickHT)
         {
-            panda.SetActive(true);
-            box.SetActive(false);
-            transform.gameObject.layer = 10;
+            transform.gameObject.layer = 16;
         }
+
         
+    }
+
+    IEnumerator BecomeBox()
+    {
+        yield return new WaitForSeconds(0.5f);
+        InBox = false;
+        panda.SetActive(true);
+        box.SetActive(false);
+        transform.gameObject.layer = 10;
     }
 
     private void HanddleMovements()
@@ -187,24 +217,27 @@ public class PlayerController : MonoBehaviour
 
         Move = new Vector3(_inputVector.x, 0, _inputVector.y);
 
-        if (IsRun && Stamina > 0)
-        {
-            _speed = _runSpeed;
-                Stamina -= RunCost * Time.deltaTime;
-                if (Stamina < 0)
+            if (IsRun && Stamina > 0)
+            {
+                if (!IsJump)
                 {
-                    Stamina = 0;
-                }
-                else
-                {
-                    StaminaBar.fillAmount = Stamina / MaxStamina;
+                    _speed = _runSpeed;
+                    Stamina -= RunCost * Time.deltaTime;
+                    if (Stamina < 0)
+                    {
+                        Stamina = 0;
+                    }
+                    else
+                    {
+                        StaminaBar.fillAmount = Stamina / MaxStamina;
+                    }
                 }
             }
-        else
-        {
-            IsRun = false;
-            _speed = _walkSpeed;
-        }
+            else
+            {
+                IsRun = false;
+                _speed = _walkSpeed;
+            }
 
         magnitude = Mathf.Clamp01(Move.magnitude) * _speed;
         Move.Normalize();
@@ -260,17 +293,24 @@ public class PlayerController : MonoBehaviour
         { 
             yield return null;
         }
+        if (InBox)
+        {
+            SmokeVFX.Play();
+        }
 
-        IsRooling = true;
         gameObject.tag = "PandaRolling";
         float timer = 0;
         while (timer < _rollTimer) {
+            IsRooling = true;
             float _rollSpeed = _rollCurve.Evaluate(timer);
             Vector3 dir = (transform.forward * _rollSpeed);
             _characterController.Move(dir * Time.deltaTime);
             timer += Time.deltaTime;
             yield return null;
         }
+
+        IsRooling = true;
+        yield return new WaitForSeconds(0.1f);
         IsRooling = false;
     }
 
@@ -281,7 +321,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(_jumpDelayDuration);
         
         _ySpeed = _jumpSpeed;
-        while (_ySpeed > -0.05) {
+        while (_ySpeed > 0) {
             IsJump = true;
 
             yield return null;
