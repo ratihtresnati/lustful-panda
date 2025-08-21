@@ -5,7 +5,7 @@ using UnityEngine.Animations.Rigging;
 
 
 public class PlayerInteract : MonoBehaviour
-{    
+{
     public float interactDistance = 5f; // Jarak di mana panda bisa berinteraksi dengan objek
     public Rig boxAnim;
     public bool PushBox { get; private set; }
@@ -15,6 +15,7 @@ public class PlayerInteract : MonoBehaviour
     private GameObject _currentObject;
     private bool _findInteractable = false;
     private bool _isPlayed = false;
+    [SerializeField] bool keyframe;
 
     private void Start()
     {
@@ -23,19 +24,25 @@ public class PlayerInteract : MonoBehaviour
 
     void Update()
     {
-        if (PushBox == false)
+        if (keyframe)
         {
-            boxAnim.weight -= Time.deltaTime * _duration;
-            _isPlayed = false;
-        }else
-        {
-            boxAnim.weight += Time.deltaTime * _duration;
-            if (_isPlayed == false)
-            {
-                AudioManager.Instance.Play("DorongBox");
-                _isPlayed = true;
-            }
+            boxAnim.weight = 0f; 
         }
+        
+        if (PushBox == false)
+            {
+                boxAnim.weight -= Time.deltaTime * _duration;
+                _isPlayed = false;
+            }
+            else
+            {
+                boxAnim.weight += Time.deltaTime * _duration;
+                if (_isPlayed == false)
+                {
+                    AudioManager.Instance.Play("DorongBox");
+                    _isPlayed = true;
+                }
+            }
 
         // Mendeteksi jika ada beberapa box di sekitar _panda
         Collider[] hitColliders = Physics.OverlapSphere(_panda.position, interactDistance);

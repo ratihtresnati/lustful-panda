@@ -98,6 +98,33 @@ public partial class @PlayerInputManager: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Rest"",
+                    ""type"": ""Button"",
+                    ""id"": ""cc57b7db-2490-4bd5-8a74-ad7342a57c9d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Sit"",
+                    ""type"": ""Button"",
+                    ""id"": ""1c875bb1-7a0a-462a-8392-48df55c3c061"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Sneak"",
+                    ""type"": ""Button"",
+                    ""id"": ""baa3594d-42f0-465e-b64b-6eb2a59c94d4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -285,6 +312,39 @@ public partial class @PlayerInputManager: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""MenuQuest"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1afd5dd6-90be-4633-a101-2ee61da031b9"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Rest"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b3c0433b-eb3c-40cb-84f8-21b81f938e69"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Sit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""90b32cae-95c4-4073-a5f6-3f4eccc726e5"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Sneak"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -940,6 +1000,9 @@ public partial class @PlayerInputManager: IInputActionCollection2, IDisposable
         m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         m_Player_MenuInfo = m_Player.FindAction("MenuInfo", throwIfNotFound: true);
         m_Player_MenuQuest = m_Player.FindAction("MenuQuest", throwIfNotFound: true);
+        m_Player_Rest = m_Player.FindAction("Rest", throwIfNotFound: true);
+        m_Player_Sit = m_Player.FindAction("Sit", throwIfNotFound: true);
+        m_Player_Sneak = m_Player.FindAction("Sneak", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1024,6 +1087,9 @@ public partial class @PlayerInputManager: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Pause;
     private readonly InputAction m_Player_MenuInfo;
     private readonly InputAction m_Player_MenuQuest;
+    private readonly InputAction m_Player_Rest;
+    private readonly InputAction m_Player_Sit;
+    private readonly InputAction m_Player_Sneak;
     public struct PlayerActions
     {
         private @PlayerInputManager m_Wrapper;
@@ -1036,6 +1102,9 @@ public partial class @PlayerInputManager: IInputActionCollection2, IDisposable
         public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputAction @MenuInfo => m_Wrapper.m_Player_MenuInfo;
         public InputAction @MenuQuest => m_Wrapper.m_Player_MenuQuest;
+        public InputAction @Rest => m_Wrapper.m_Player_Rest;
+        public InputAction @Sit => m_Wrapper.m_Player_Sit;
+        public InputAction @Sneak => m_Wrapper.m_Player_Sneak;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1069,6 +1138,15 @@ public partial class @PlayerInputManager: IInputActionCollection2, IDisposable
             @MenuQuest.started += instance.OnMenuQuest;
             @MenuQuest.performed += instance.OnMenuQuest;
             @MenuQuest.canceled += instance.OnMenuQuest;
+            @Rest.started += instance.OnRest;
+            @Rest.performed += instance.OnRest;
+            @Rest.canceled += instance.OnRest;
+            @Sit.started += instance.OnSit;
+            @Sit.performed += instance.OnSit;
+            @Sit.canceled += instance.OnSit;
+            @Sneak.started += instance.OnSneak;
+            @Sneak.performed += instance.OnSneak;
+            @Sneak.canceled += instance.OnSneak;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1097,6 +1175,15 @@ public partial class @PlayerInputManager: IInputActionCollection2, IDisposable
             @MenuQuest.started -= instance.OnMenuQuest;
             @MenuQuest.performed -= instance.OnMenuQuest;
             @MenuQuest.canceled -= instance.OnMenuQuest;
+            @Rest.started -= instance.OnRest;
+            @Rest.performed -= instance.OnRest;
+            @Rest.canceled -= instance.OnRest;
+            @Sit.started -= instance.OnSit;
+            @Sit.performed -= instance.OnSit;
+            @Sit.canceled -= instance.OnSit;
+            @Sneak.started -= instance.OnSneak;
+            @Sneak.performed -= instance.OnSneak;
+            @Sneak.canceled -= instance.OnSneak;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1284,6 +1371,9 @@ public partial class @PlayerInputManager: IInputActionCollection2, IDisposable
         void OnPause(InputAction.CallbackContext context);
         void OnMenuInfo(InputAction.CallbackContext context);
         void OnMenuQuest(InputAction.CallbackContext context);
+        void OnRest(InputAction.CallbackContext context);
+        void OnSit(InputAction.CallbackContext context);
+        void OnSneak(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

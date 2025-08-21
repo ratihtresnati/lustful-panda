@@ -9,7 +9,6 @@ public class AIPatrolling : MonoBehaviour
     [SerializeField] private AISensor Sensor;
 
     [SerializeField] private PlayerController PlayerController;
-
     private AIAnimatorController AIAnimatorController;
 
     [SerializeField] private Transform player;

@@ -22,6 +22,8 @@ public class InputManager : MonoBehaviour
     public bool MenuInfo { get; private set; }
     public bool MenuQuest { get; private set; }
     public bool CloseMenu { get; private set; }
+    public bool RestInput { get; private set; }
+    public bool SitInput { get; private set; }
     private InputAction _pauseAction;
     private InputAction _resumeAction;
     private InputAction _selectAction;
@@ -33,26 +35,32 @@ public class InputManager : MonoBehaviour
     private InputAction _menuInfo;
     private InputAction _menuQuest;
     private InputAction _closeMenu;
-    
+    private InputAction _restAction;
+    private InputAction _sitAction;
+
+    [SerializeField] private bool _isSitting = false;
+    [SerializeField] private bool _isResting = false;
+    public bool IsAction = false;
     
     private void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
         }
 
-        PlayerInputManager = new PlayerInputManager(); 
+        PlayerInputManager = new PlayerInputManager();
         PlayerInput = gameObject.GetComponent<PlayerInput>();
 
         SetupInputAction();
     }
-    private void Update() 
+    private void Update()
     {
-        UpdateInputs();
+        UpdateInputs();      
     }
-    
-    private void SetupInputAction(){
+
+    private void SetupInputAction()
+    {
         _resumeAction = PlayerInput.actions["Resume"];
         _pauseAction = PlayerInput.actions["Pause"];
         _selectAction = PlayerInput.actions["Click"];
@@ -64,9 +72,39 @@ public class InputManager : MonoBehaviour
         _menuInfo = PlayerInput.actions["MenuInfo"];
         _menuQuest = PlayerInput.actions["MenuQuest"];
         _closeMenu = PlayerInput.actions["CLoseMenu"];
+        _restAction = PlayerInput.actions["Rest"];
+        _sitAction = PlayerInput.actions["Sit"];
         
     }
-    private void UpdateInputs(){
+    
+    private void UpdateInputs()
+    {
+        if (IsAction)
+        {
+            // Sit
+            if (_sitAction.WasPressedThisFrame())
+            {
+                _isSitting = !_isSitting;
+                _isResting = false; 
+            }
+            SitInput = _isSitting;
+
+            // Rest
+            if (_restAction.WasPressedThisFrame())
+            {
+                _isResting = !_isResting;
+                _isSitting = false;
+            }
+            RestInput = _isResting;
+
+            if (_isResting || _isSitting)
+            {
+                return;
+            }
+        }
+      
+        
+
         PauseInput = _pauseAction.WasPressedThisFrame();
         ResumeInput = _resumeAction.WasPressedThisFrame();
         ButtonClickInput = _selectAction.WasPressedThisFrame();
@@ -86,6 +124,8 @@ public class InputManager : MonoBehaviour
         JumpInput = _jumpAction.WasPressedThisFrame();
         RollInput = _rollAction.WasPressedThisFrame();
         PauseInput = _pauseAction.WasPressedThisFrame();
+        RestInput = _restAction.WasPressedThisFrame();
+        SitInput = _sitAction.WasPressedThisFrame();
     }
 
     private Vector2 _currentInputVector;
