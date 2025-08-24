@@ -51,21 +51,22 @@ public class CharacterAnimatorController : MonoBehaviour
             _landed = false;
             return LockState(Land, _jumpAnimationDuration);
         }
+
+        if (InputManager.instance.IsAction && _playerController.Move == Vector3.zero )
+        {
+            if (InputManager.instance.RestInput == true) return Rest;
+            if (InputManager.instance.SitInput == true) return Sit;
+        }
+
+        if (_currentState == Rest && !InputManager.instance.RestInput) return LockState(UpRest, _restAnimationDuration);
+        if (_currentState == Sit && !InputManager.instance.SitInput) return LockState(UpSit, _sitAnimationDuration);
+
        
         if (_playerController.isGrounded == true)
         {
             if (_playerController.IsRooling == true) return LockState(Roll, _rollAnimationDuration);
             if (_playerController.IsRun == true && _playerController.Move != Vector3.zero) return Run;
             if (_playerInteract.PushBox == true) return WalkSlow;
-
-            if (InputManager.instance.IsAction && _playerController.Move == Vector3.zero )
-            {
-                if (InputManager.instance.RestInput == true) return Rest;
-                if (InputManager.instance.SitInput == true) return Sit;
-            }
-
-            if (_currentState == Rest && !InputManager.instance.RestInput) return LockState(UpRest, _restAnimationDuration);
-            if (_currentState == Sit && !InputManager.instance.SitInput) return LockState(UpSit, _sitAnimationDuration);
 
             return _playerController.Move == Vector3.zero ? Idle : Walk;
         }
