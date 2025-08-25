@@ -40,7 +40,7 @@ public class AnimatorBlendTree : MonoBehaviour
             _characterAnimator.StopRoll();
         }
 
-         // Rest
+        // Rest
         if (InputManager.instance.RestInput)
         {
             _characterAnimator.Rest();
@@ -60,7 +60,7 @@ public class AnimatorBlendTree : MonoBehaviour
             _characterAnimator.UpSit();
         }
     }
-    private void AnimateWalkRun(Vector3 input) 
+    private void AnimateWalkRun(Vector3 input)
     {
         float multiplier = _playerController.IsRun ? 3 : 2f;
         float targetHorizontal = input.x * multiplier;
@@ -70,5 +70,37 @@ public class AnimatorBlendTree : MonoBehaviour
         _animVertical = Mathf.Lerp(_animVertical, targetVertical, Time.deltaTime * _animeSmoothSpeed);
 
         _characterAnimator.WalkSpeed(_animHorizontal, _animVertical);
+
+
+
+
+        // ---- hitung arah belok ----
+        Vector3 currentForward = transform.forward;
+        Quaternion toRotation = Quaternion.LookRotation(input, Vector3.up);
+        Vector3 newForward = toRotation * Vector3.forward;
+        Vector3 cross = Vector3.Cross(currentForward, newForward);
+
+        // hitung sudut belok relatif terhadap arah hadap
+        float angle = Vector3.SignedAngle(transform.forward, input, Vector3.up);
+
+        // normalisasi jadi -1 (kiri) sampai 1 (kanan)
+        float turn = 0f;
+        if (angle > 5f) turn = 1f;        // kanan
+        else if (angle < -5f) turn = -1f; // kiri
+
+        Debug.Log($"CrossY: {cross.y} | Turn: {turn}");
+
+
+        _characterAnimator.Turn(turn * 10f);
+
+
+        // float turn = 0f;
+        // if (cross.y > 0.2f) turn = 1f;       // kanan
+        // else if (cross.y < -0.2f) turn = -1f; // kiri
+
+        // Debug.Log(cross.y);
+        
+        // _characterAnimator.Turn(turn);
     }
+
 }

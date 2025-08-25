@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
 
 
     [SerializeField] bool scriptLama;
+    [SerializeField] bool keyframe;
     [SerializeField] private CharacterAnimatorControllerStateLama _characterAnimator;
 
     public GameObject panda;
@@ -209,6 +210,11 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    private Vector3 lastForward;
+public bool IsTurnLeft { get; private set; }
+public bool IsTurnRight { get; private set; }
+
+
     IEnumerator BecomeBox()
     {
         yield return new WaitForSeconds(0.5f);
@@ -262,13 +268,51 @@ public class PlayerController : MonoBehaviour
 
             _characterController.Move(_velocity * Time.deltaTime);
 
-            if (Move != Vector3.zero)
+            if (keyframe)
             {
-                Quaternion toRotation = Quaternion.LookRotation(Move, Vector3.up);
+                if (Move != Vector3.zero)
+                {
+                    Quaternion toRotation = Quaternion.LookRotation(Move, Vector3.up);
+                    float rotationStep = _rotationSpeed * Time.deltaTime;
 
-                float rotationStep = _rotationSpeed * Time.deltaTime;
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationStep);
+                    // simpan arah lama
+                    Vector3 currentForward = transform.forward;
+
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationStep);
+
+                    // deteksi arah belok
+                    Vector3 newForward = transform.forward;
+                    Vector3 cross = Vector3.Cross(currentForward, newForward);
+
+                    if (cross.y > 0.01f) // belok kiri
+                    {
+                        IsTurnLeft = false;
+                        IsTurnRight = true;
+                    }
+                    else if (cross.y < -0.01f) // belok kanan
+                    {
+                        IsTurnLeft = true;
+                        IsTurnRight = false;
+                    }
+                    else
+                    {
+                        IsTurnLeft = false;
+                        IsTurnRight = false;
+                    }
+
+                    lastForward = newForward;
+                }
             }
+            else
+            {
+                if (Move != Vector3.zero)
+                {
+                    Quaternion toRotation = Quaternion.LookRotation(Move, Vector3.up);
+
+                    float rotationStep = _rotationSpeed * Time.deltaTime;
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationStep);
+                }
+            }         
 
             if (_characterController.isGrounded)
             {

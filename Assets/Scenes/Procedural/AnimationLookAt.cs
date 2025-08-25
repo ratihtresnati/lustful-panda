@@ -85,7 +85,9 @@ public class AnimationLookAt : MonoBehaviour
     }
     public Turn TurnDirection()
     {
-        _currentDirection = InputManager.instance.GetMovementControl();
+        Vector2 rawInput = InputManager.instance.GetMovementControl();
+        if (rawInput.magnitude < 0.1f) rawInput = Vector2.zero;
+        _currentDirection = rawInput;
         
         // world direction berdasarkan input
         float angleInRadians = transform.eulerAngles.y * Mathf.Deg2Rad;

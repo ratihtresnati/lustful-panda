@@ -16,7 +16,7 @@ public class AnimatorKeyframe : MonoBehaviour
     private void Update()
     {
         // Idle / Walk / Run
-        if (_playerController.Move != Vector3.zero && _playerController.isGrounded && !_playerController.IsRooling && !_playerController.IsJump)
+        if (_playerController.Move.magnitude > 0.1f && _playerController.isGrounded && !_playerController.IsRooling && !_playerController.IsJump)
         {
             if (_playerController.IsRun)
             {
@@ -27,7 +27,8 @@ public class AnimatorKeyframe : MonoBehaviour
                 _characterAnimator.Walk();
             }
         }
-        else
+
+        if (InputManager.instance.IsAction)
         {
             _characterAnimator.Idle();
         }
@@ -71,5 +72,21 @@ public class AnimatorKeyframe : MonoBehaviour
         {
             _characterAnimator.UpSit();
         }
+
+        if (_playerController.IsTurnLeft)
+        {
+            _characterAnimator.Left();
+        }
+
+        if (_playerController.IsTurnRight)
+        {
+            _characterAnimator.Right();
+        }
+        
+        if (!_playerController.IsTurnLeft && !_playerController.IsTurnRight)
+        {
+            _characterAnimator.Noturn();
+        }
+
     }
 }

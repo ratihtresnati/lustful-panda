@@ -6,10 +6,15 @@ public class CharacterAnimatorControllerStateLama : MonoBehaviour
 {
     [SerializeField] private Animator _animator;
 
-    public void WalkSpeed(float horizontal,float vertical)
+    public void WalkSpeed(float horizontal, float vertical)
     {
         _animator.SetFloat("horizontal", horizontal);
         _animator.SetFloat("vertical", vertical);
+    }
+
+    public void Turn(float turns)
+    {
+        _animator.SetFloat("Turn", turns);
     }
 
     public void Idle()
@@ -27,12 +32,14 @@ public class CharacterAnimatorControllerStateLama : MonoBehaviour
     {
         _animator.SetBool("isWalk", true);
         _animator.SetBool("isRun", false);
+        _animator.SetBool("isIdle", false);
     }
 
     public void Running()
     {
         _animator.SetBool("isRun", true);
         _animator.SetBool("isWalk", false);
+        _animator.SetBool("isIdle", false);
     }
 
     public void Jump()
@@ -89,5 +96,22 @@ public class CharacterAnimatorControllerStateLama : MonoBehaviour
         yield return new WaitForSeconds(0.8f);
 
         _animator.SetBool("isCatch", true);
+    }
+
+    public void Left()
+    {
+        _animator.SetBool("turnLeft", true);
+        _animator.SetBool("turnRight", false);
+    }
+    public void Right()
+    {
+        _animator.SetBool("turnRight", true);
+        _animator.SetBool("turnLeft", false);
+    }
+
+    public void Noturn()
+    {
+        _animator.SetBool("turnRight", false);
+        _animator.SetBool("turnLeft", false);
     }
 }
