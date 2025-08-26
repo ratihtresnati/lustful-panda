@@ -30,19 +30,19 @@ public class PlayerInteract : MonoBehaviour
         }
         
         if (PushBox == false)
+        {
+            boxAnim.weight -= Time.deltaTime * _duration;
+            _isPlayed = false;
+        }
+        else
+        {
+            boxAnim.weight += Time.deltaTime * _duration;
+            if (_isPlayed == false)
             {
-                boxAnim.weight -= Time.deltaTime * _duration;
-                _isPlayed = false;
+                AudioManager.Instance.Play("DorongBox");
+                _isPlayed = true;
             }
-            else
-            {
-                boxAnim.weight += Time.deltaTime * _duration;
-                if (_isPlayed == false)
-                {
-                    AudioManager.Instance.Play("DorongBox");
-                    _isPlayed = true;
-                }
-            }
+        }
 
         // Mendeteksi jika ada beberapa box di sekitar _panda
         Collider[] hitColliders = Physics.OverlapSphere(_panda.position, interactDistance);

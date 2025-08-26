@@ -66,7 +66,7 @@ public class CharacterAnimatorController : MonoBehaviour
         {
             if (_playerController.IsRooling == true) return LockState(Roll, _rollAnimationDuration);
             if (_playerController.IsRun == true && _playerController.Move != Vector3.zero) return Run;
-            if (_playerInteract.PushBox == true) return WalkSlow;
+            if (_playerInteract.PushBox == true) return LockState(WalkSlow, 0.1f);
 
             return _playerController.Move == Vector3.zero ? Idle : Walk;
         }
