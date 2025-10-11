@@ -71,9 +71,6 @@ public class AnimatorBlendTree : MonoBehaviour
 
         _characterAnimator.WalkSpeed(_animHorizontal, _animVertical);
 
-
-
-
         // ---- hitung arah belok ----
         Vector3 currentForward = transform.forward;
         Quaternion toRotation = Quaternion.LookRotation(input, Vector3.up);
@@ -90,17 +87,7 @@ public class AnimatorBlendTree : MonoBehaviour
 
         Debug.Log($"CrossY: {cross.y} | Turn: {turn}");
 
-
         _characterAnimator.Turn(turn * 10f);
-
-
-        // float turn = 0f;
-        // if (cross.y > 0.2f) turn = 1f;       // kanan
-        // else if (cross.y < -0.2f) turn = -1f; // kiri
-
-        // Debug.Log(cross.y);
-        
-        // _characterAnimator.Turn(turn);
     }
 
 }

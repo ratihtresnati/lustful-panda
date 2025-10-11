@@ -18,10 +18,39 @@ public class AnimationLookAt : MonoBehaviour
     private bool _left = false;
     private float _resetTimer = 0f;
 
+    private GUIStyle guiStyle; 
+
     private void Awake()
     {
         sources = aimConstraint.data.sourceObjects;
         _previousDirection = Vector2.zero;
+    }
+
+    private void Start()
+    {
+        guiStyle = new GUIStyle();
+        guiStyle.fontSize = 25; // ubah ukuran font (default kecil, coba 18 atau 20)
+        guiStyle.normal.textColor = Color.white; // warna teks
+    }
+
+    private void OnGUI()
+    {
+        int x = Screen.width - 350;
+        int y = 15;
+        int height = 30;
+
+        GUI.Label(new Rect(x, y + (height * 0), 250, height), "Angle Difference: " + _angleDifference.ToString("F2"), guiStyle);
+        GUI.Label(new Rect(x, y + (height * 1), 250, height), "Current Direction: " + _currentDirection, guiStyle);
+        GUI.Label(new Rect(x, y + (height * 2), 250, height), "Previous Direction: " + _previousDirection, guiStyle);
+        GUI.Label(new Rect(x, y + (height * 3), 250, height), "Duration Timer: " + duration.ToString("F2"), guiStyle);
+        GUI.Label(new Rect(x, y + (height * 4), 250, height), "Reset Timer: " + _resetTimer.ToString("F2"), guiStyle);
+        GUI.Label(new Rect(x, y + (height * 5), 250, height), "Reset Delay: " + _resetDelay, guiStyle);
+        GUI.Label(new Rect(x, y + (height * 6), 250, height), "Right: " + _right, guiStyle);
+        GUI.Label(new Rect(x, y + (height * 7), 250, height), "Right Weight: " + sources.GetWeight(1), guiStyle);
+        GUI.Label(new Rect(x, y + (height * 8), 250, height), "Left: " + _left, guiStyle);
+        GUI.Label(new Rect(x, y + (height * 9), 250, height), "Left Weight: " + sources.GetWeight(0), guiStyle);
+        
+
     }
 
     private void Update()
@@ -92,7 +121,7 @@ public class AnimationLookAt : MonoBehaviour
         Vector2 rawInput = InputManager.instance.GetMovementControl();
         if (rawInput.magnitude < 0.1f) rawInput = Vector2.zero;
         _currentDirection = rawInput;
-        
+
         // world direction berdasarkan input
         float angleInRadians = transform.eulerAngles.y * Mathf.Deg2Rad;
         Vector2 worldDirection = new Vector2(
@@ -115,6 +144,20 @@ public class AnimationLookAt : MonoBehaviour
         _previousDirection = worldDirection;
 
         return turnDirection;
+    }
+
+    private void OnDrawGizmos()
+    {
+
+        Vector3 start = transform.position;
+
+        // current direction
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(start, start + new Vector3(_currentDirection.x, 0, _currentDirection.y) * 2f);
+
+        // previous direction
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawLine(start, start + new Vector3(_previousDirection.x, 0, _previousDirection.y) * 2f);
     }
 }
 
